@@ -1,0 +1,38 @@
+@import url("./reset.css");
+@import url("./_variables.css");
+@import url(//fonts.googleapis.com/earlyaccess/notosanstc.css);
+
+
+
+html, body {
+    font-family: 'Noto Sans TC', sans-serif;
+    font-size: var(--main-font-size);
+}
+
+header > .logo-wrapper {
+    text-align: center;
+    padding: 15px auto;
+    box-sizing: border-box;
+    box-shadow: 0 2px 2px 0 var(--main-shadow);
+}
+
+.logo-wrapper > #logo {
+    max-width: 150px;
+}
+
+#app {
+    margin: 5% 10%;
+}
+
+footer{
+    position: fixed;
+    bottom: 0;
+    width: 100%;
+    left: 0;
+    box-sizing: border-box;
+    background-color: var(--main-sup-priamry-color);
+    border-top: solid 1px var(--main-sup2-priamry-color);
+    color: var(--main-white);
+    text-align: center;
+    line-height: 28px;  
+}

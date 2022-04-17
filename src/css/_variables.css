@@ -1,0 +1,9 @@
+:root {
+    --main-font-size: 16px;
+    --main-primary-color: #000;
+    --main-sup-priamry-color: #13181c;
+    --main-sup2-priamry-color: #2b2f38;
+    --main-red-color: #81292d;
+    --main-shadow:  rgba(30,30,30,0.5);
+    --main-white: #fff;
+}

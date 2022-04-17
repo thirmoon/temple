@@ -1,0 +1,74 @@
+@import url("./base.css");
+
+
+#app .sold-out-wrapper, .onboard-wrapper{
+    font-size: var(--main-font-size);
+    color: var(--main-primary-color);   
+}
+#app .onboard-wrapper{
+    margin-top: 2em;
+}
+
+section > .title-wrap {
+    width: 100%;
+    background-image: url('../../assets/sushi-net.png');
+    height: 50px;
+    background-repeat: repeat no-repeat;
+    background-size: 12px 18px;
+    background-position-y: 32px;
+}
+section > .title-wrap > h1 {
+    font-weight: 800;
+    font-size: 1.5em;
+    line-height: 28px;
+}
+
+section > .product-wrap{
+    width: 100%;
+    margin-top: 1em;
+    font-size: 1em;
+    display: flex;
+    justify-content: start;
+    flex-direction: row;
+    align-content: stretch;
+    flex-wrap: wrap;
+}
+
+.product-card{
+    max-width: 192px;
+    flex-direction: column;
+    box-shadow: 0px 3px 3px 1px rgba(0, 0, 0, 0.3);
+    margin-right: 5px;
+    margin-left: 5px;
+    margin-top: 20px;
+    border-radius: 2px;
+}
+.product-card > img{
+    width: 100%;
+    font-size: 0;
+}
+
+.product-card > .product-info{
+    padding: 5px;
+    padding-bottom: 15px;
+}
+
+.product-info > .info_name{
+    width: 70%;
+    font-size: 1.25em;
+    line-height: 28px;
+    font-weight: 400;
+    display: inline-block;
+}
+
+.product-info > .info_type{
+    border: 1px solid var(--main-red-color);
+    font-size: 0.975em;
+    float: right;
+    display: inline-block;
+    padding: 2px 8px;
+    border-radius: 10px;
+    margin-top: 8px;
+    color: var(--main-white);
+    background-color: var(--main-red-color);
+}

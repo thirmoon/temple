@@ -1,0 +1,215 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>慈善亭</title>
+    <link rel="stylesheet" href="./src/css/headquaters.css" />
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="./dist/vuefire.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <section id="admin-wrapper">
+        <div id="form-wrapper">
+          <h1 class="page-title">慈善亭</h1>
+          <h1 class="page-title">
+            <a href="MemberCreate.html">新增信徒 |</a>
+            <a href="MemberOverview.html">信徒總覽 |</a>
+            <a href="EventOverview.html">法會報名總覽 |</a>
+
+
+          </h1>
+        </div>
+        <ul>
+          <li v-for="data in copyUserData">
+            <div id="form-wrapper">
+              姓名<input :name="data.name" v-model.trim="data.name" />
+              電話<input :name="data.phone" v-model.trim="data.phone" />
+              <br />
+              生時八字<br />
+              <select
+                v-model.trim="data.isChineeseYear"
+                value="data.isChineeseYear"
+              >
+                　
+                <option value="農曆">農曆</option>
+                　
+                <option value="國曆">國曆</option>
+              </select>
+              民國
+              <input :name="data.year" v-model.trim="data.year" id="time" />年
+              <input :name="data.month" v-model.trim="data.month" id="time" />月
+              <input :name="data.day" v-model.trim="data.day" id="time" />日
+              <input
+                :name="data.minute"
+                v-model.trim="data.minute"
+                id="time"
+              />時生
+              <br />
+              地址：<input
+                :name="data.address"
+                v-model.trim="data.address"
+                id="address"
+              />
+              <br />
+              <br />
+              <br />
+              備註：<input
+                :name="data.memo"
+                v-model.trim="data.memo"
+                id="memo"
+              />
+              <br />
+            </div>
+          </li>
+        </ul>
+        <h1 class="page-title">慈善亭 | 新增</h1>
+        <div id="form-wrapper">
+          姓名<input v-model.trim="newUser.name" placeholder="姓名" />
+          電話<input v-model.trim="newUser.phone" placeholder="電話" />
+          <br />
+          生時八字<br />
+          <select v-model.trim="newUser.isChineeseYear">
+            　
+            <option value="農曆">農曆</option>
+            　
+            <option value="國曆">國曆</option>
+          </select>
+          民國
+          <input v-model.trim="newUser.year" placeholder="年" id="time" />年
+          <input v-model.trim="newUser.month" placeholder="月" id="time" />月
+          <input v-model.trim="newUser.day" placeholder="日" id="time" />日
+          <input v-model.trim="newUser.minute" placeholder="時" id="time" />時生
+
+          <br />
+          地址：<input
+            v-model.trim="newUser.address"
+            placeholder="地址"
+            id="address"
+          />
+          <br />
+          備註：<input
+            v-model.trim="newUser.memo"
+            placeholder="備註"
+            id="address"
+          />
+          <br />
+          <button v-on:click="addUser">新增</button>
+          <button v-on:click="copyUser">複製</button>
+          <button
+            v-on:click="addMultipleUser"
+            v-bind:style="addMultipleUserStyle"
+          >
+            新增多筆
+          </button>
+        </div>
+      </section>
+    </div>
+
+    <script>
+      /* global Vue, firebase */
+
+      let config = {
+        apiKey: "AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g",
+        authDomain: "light-1a6d4.firebaseapp.com",
+        databaseURL: "https://light-1a6d4.firebaseio.com/",
+        projectId: "light-1a6d4",
+        storageBucket: "light-1a6d4.appspot.com",
+        messagingSenderId: "66654715141",
+      };
+      const urlSearchParams = new URLSearchParams(window.location.search);
+      const params = Object.fromEntries(urlSearchParams.entries());
+
+      let db = firebase.initializeApp(config).database();
+      let userRef = db.ref("Member");
+      new Vue({
+        el: "#app",
+        data: {
+          newUser: {
+            name: params.name != undefined ? params.name : "",
+            phone: "",
+            address: params.address != undefined ? params.address : "",
+            year: "",
+            month: "",
+            day: "",
+            hour: "0",
+            minute: "",
+            isChineeseYear: "農曆",
+            memo: ""
+          },
+          copyUserData: [],
+          addMultipleUserStyle: {
+            display: "none",
+          },
+        },
+        firebase: {
+          Users: userRef.limitToLast(25),
+        },
+        methods: {
+          addUserToFirebase: function (user) {
+            userRef.push({
+              name: user.name,
+              phone: user.phone,
+              address: user.address,
+              year: user.year,
+              month: user.month,
+              day: user.day,
+              hour: user.hour,
+              minute: user.minute,
+              isChineeseYear: user.isChineeseYear,
+              memo: user.memo,
+              modifyTime: Date.now(),
+              createdTime: Date.now(),
+            });
+          },
+          addUser: function () {
+            if (this.newUser) {
+              this.addUserToFirebase(this.newUser);
+              this.newUser = {
+                name: "",
+                phone: "",
+                address: "",
+                year: "",
+                month: "",
+                day: "",
+                hour: "0",
+                minute: "",
+                isChineeseYear: "農曆",
+                memo: ""
+              };
+              location.reload();
+            }
+          },
+          addMultipleUser: function () {
+            let self = this;
+            if (this.copyUserData) {
+              this.copyUserData.forEach(function (user) {
+                self.addUserToFirebase(user);
+              });
+              this.copyUserData = [];
+              location.reload();
+            }
+          },
+          copyUser: function () {
+            let user = {
+              name: "",
+              phone: "",
+              address: this.newUser.address,
+              year: "",
+              month: "",
+              day: "",
+              hour: "0",
+              minute: "",
+              isChineeseYear: "農曆",
+              memo: ""
+            };
+            this.copyUserData.push(user);
+            this.addMultipleUserStyle.display = "unset";
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
