@@ -70,52 +70,37 @@
             <template v-slot:item.name="{ item }">
               <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
             </template>
+            <template v-slot:item.eventName="{ item }">
+              <input  :name="item.eventName" id="overview_address" v-model.trim="item.eventName">
+            </template>
+            <template v-slot:item.firstName="{ item }">
+              <input  :name="item.firstName" id="overview_name" v-model.trim="item.firstName">
+            </template>
             <template v-slot:item.address="{ item }">
-              <input  :name="item.address" id="overview_address" v-model.trim="item.address">
+              <input  :name="item.address" v-model.trim="item.address" id="overview_address">
             </template>
             <template v-slot:item.phone="{ item }">
               <input  :name="item.phone" v-model.trim="item.phone" id="overview_phone">
             </template>
-            <template v-slot:item.amount="{ item }">
-              <input  :name="item.amount" v-model.trim="item.amount" id="overview_phone">
-            </template>
-            <template v-slot:item.isCash="{ item }">
-              <input type="checkbox"  v-model.trim="item.isCash">
-            </template>
-            <template v-slot:item.isBankTransfer="{ item }">
-              <input type="checkbox"  v-model.trim="item.isBankTransfer">
-            </template>
-            <template v-slot:item.item1="{ item }">
-              <input type="checkbox"  v-model.trim="item.item1">
-            </template>
-            <template v-slot:item.item2="{ item }">
-              <input type="checkbox"  v-model.trim="item.item2">
-            </template>
-            <template v-slot:item.item3="{ item }">
-              <input type="checkbox"  v-model.trim="item.item3">
-            </template>
-            <template v-slot:item.item4="{ item }">
-              <input type="checkbox"  v-model.trim="item.item4">
-            </template>
-            <template v-slot:item.item5="{ item }">
-              <input type="checkbox"  v-model.trim="item.item5">
-            </template>
-            <template v-slot:item.item6="{ item }">
-              <input type="checkbox"  v-model.trim="item.item6">
-            </template>
-            <template v-slot:item.item7="{ item }">
-              <input type="checkbox"  v-model.trim="item.item7">
-            </template>
             <template v-slot:item.memo="{ item }">
-              <input  :name="item.memo" v-model.trim="item.memo">
+              <input  :name="item.memo" v-model.trim="item.memo" id="overview_memo">
             </template>
-            <template v-slot:item.modifiedDate="{ item }">
-             {{getDisplayTime(item.modifyTime)}}
+            <template v-slot:item.isFinish="{ item }">
+              <input type="checkbox"  v-model.trim="item.isFinish">
+            </template>
+            <template v-slot:item.amount="{ item }">
+              <input  :name="item.amount" v-model.trim="item.amount">
+            </template>
+            <template v-slot:item.createdTime="{ item }">
+              {{getDisplayTime(item.createdTime)}}
+            </template>
+            <template v-slot:item.modifyTime="{ item }">
+              {{getDisplayTime(item.modifyTime)}}
             </template>
             <template v-slot:item.actions="{ item }">
-              <v-btn elevation="1"  v-on:click="updateDonation(item)" >更新</v-btn>
-              <v-btn elevation="1"  v-on:click="removeDonation(item)" >刪除</v-btn>
-              <v-btn elevation="1"  v-on:click="copyDonation(item)" >複製</v-btn>
+              <v-btn elevation="1"  v-on:click="updateEventDetail(item)" >更新</v-btn>
+              <v-btn elevation="1"  v-on:click="removeEventDetail(item)" >刪除</v-btn>
+              <v-btn elevation="1"  v-on:click="copyEventDetail(item)" >複製</v-btn>
 
             </template>
           </v-data-table>
@@ -152,9 +137,10 @@
               { text: "完成付款", value: "isFinish" },
               { text: "金額", value: "amount" },
               { text: "填寫日期", value: "createdTime" },
-              { text: "修改日期", value: "modifyTime" }
+              { text: "修改日期", value: "modifyTime" },
+              { text: "操作", value: "actions" },
+
             ],
-    
             search: "",
           };
         },
@@ -186,66 +172,7 @@
           addByAddress: function () {
             location.href = "Create.html?address=" + this.search;
           },
-          GetBalance: function () {
-            let self = this;
-            this.overviewData.forEach(function (donation) {
-              let index = 0;
-              
-              if (donation.amount > 0) {
-                if (donation.isCash) {
-                  index = 1;
-                } else if (donation.isBankTransfer) {
-                  index = 2;
-                };
-
-                self.balances[index].totalbalance += Number(donation.amount);
-
-                if (donation.item1) {
-                  self.balances[index].item1Balance += Number(donation.amount);
-                } else if (donation.item2) {
-                  self.balances[index].item2Balance += Number(donation.amount);
-                } else if (donation.item3) {
-                  self.balances[index].item3Balance += Number(donation.amount);
-                } else if (donation.item4) {
-                  self.balances[index].item4Balance += Number(donation.amount);
-                }else if (donation.item5) {
-                  self.balances[index].item5Balance += Number(donation.amount);
-                }else if (donation.item6) {
-                  self.balances[index].item6Balance += Number(donation.amount);
-                }else if (donation.item7) {
-                  if(donation.memo && donation.memo.includes("桌")){
-                    let tableValue = donation.memo.replace("桌","");
-                    self.tableCount+=Number(tableValue);
-                  }
-                  self.balances[index].item7Balance += Number(donation.amount);
-                }
-              
-              }
-
-
-              // if (donation.amount > 0) {
-              //   if (donation.item1) {
-              //     index = 1;
-              //   } else if (donation.item2) {
-              //     index = 2;
-              //   } else if (donation.item3) {
-              //     index = 3;
-              //   } else if (donation.item4) {
-              //     index = 4;
-              //   }
-              //   self.balances[index].balance += Number(donation.amount);
-              //   if (donation.isCash) {
-              //     self.balances[index].cashBalance += Number(donation.amount);
-              //   }
-              //   if (donation.isBankTransfer) {
-              //     self.balances[index].bankTransferBalance += Number(
-              //       donation.amount
-              //     );
-              //   }
-              // }
-            });
-          },
-          updateDonation: function (data) {
+          updateEventDetail: function (data) {
             data.modifyTime = Date.now();
             let key = data.key;
             delete data.key;
@@ -253,28 +180,23 @@
             alert("更新完成");
             this.loadData();
           },
-          removeDonation: function (data) {
+          removeEventDetail: function (data) {
             eventRef.child(data.key).remove();
             alert("刪除完成");
             this.loadData();
           },
-          copyDonation: function (donation ) {
+          copyEventDetail: function (eventDetail ) {
             eventRef.push({
-            name: donation.name,
-            phone: donation.phone,
-            address: donation.address,
-            memo: '',
-            isCash: false,
-            isBankTransfer : false,
-            item1 : false,
-            item2: false,
-            item3:false,
-            item4:false,
-            item5:false,
-            item6:false,
-            item7:false,
-            modifyTime: Date.now()
-          })
+              name:  eventDetail.name,
+              userId:  eventDetail.userId,
+              eventName: "",
+              firstName: "",
+              address: "",
+              phone: "",
+              memo: "",
+              isFinish: false,
+              amount: 0
+            })
             alert("複製完成");
             this.loadData();
           },
