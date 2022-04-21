@@ -36,8 +36,6 @@
             <a href="MemberCreate.html">新增信徒 |</a>
             <a href="MemberOverview.html">信徒總覽 |</a>
             <a href="EventOverview.html">法會報名總覽 |</a>
-
-
           </h1>
         </div>
       </section>
@@ -114,8 +112,21 @@
                       <v-container>
                         <v-row>
                           <v-col
+                          cols="12"
+                          sm="12"
+                        >
+                        <v-select
+                        :items="['梁皇寶懺超薦歷代祖先九玄七祖', '超薦歷代祖先', '超薦個人累世冤親債主', '超薦無緣子女嬰靈', '超薦親人+報恩(父、母、兄弟、姊妹、恩人)', '超薦動物靈(狗、貓寵物名)']"
+                        label="參加法會項目"
+                        v-model="eventDetail.eventName"
+                        required
+                        @change="changeRoute"
+                      ></v-select>
+                        </v-col>
+                          <v-col
+                            v-if="enableNameColumn[0]"
                             cols="12"
-                            sm="3"
+                            sm="4"
                           >
                             <v-text-field
                               v-model="eventDetail.name"
@@ -123,40 +134,123 @@
                               required
                             ></v-text-field>
                           </v-col>
-                          <v-col
-                            cols="12"
-                            sm="9"
-                          >
-                          <v-select
-                          :items="['梁皇寶懺超薦歷代祖先九玄七祖', '超薦歷代祖先', '超薦個人累世冤親債主', '超薦無緣子女嬰靈', '超薦親人+報恩(父、母、兄弟、姊妹、恩人)', '超薦動物靈(狗、貓寵物名)']"
-                          label="參加法會項目"
-                          v-model="eventDetail.eventName"
-                          required
-                        ></v-select>
-                          </v-col>
 
-                          <v-col cols="12"
+                          <v-col
+                          v-if="enableNameColumn[1]"
+                          cols="12"
+                          sm="4"
+                        >
+                          <v-text-field
+                            v-model="eventDetail.name2"
+                            label="功德主姓名"
+                            required
+                          ></v-text-field>
+                        </v-col>
+                        <v-col
+                        v-if="enableNameColumn[2]"
+                        cols="12"
+                        sm="4"
+                      >
+                        <v-text-field
+                          v-model="eventDetail.name3"
+                          label="功德主姓名"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                      <v-col
+                      v-if="enableNameColumn[3]"
+                      cols="12"
+                      sm="4"
+                    >
+                      <v-text-field
+                        v-model="eventDetail.name4"
+                        label="功德主姓名"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                    <v-col
+                    v-if="enableNameColumn[4]"
+                    cols="12"
+                    sm="4"
+                  >
+                    <v-text-field
+                      v-model="eventDetail.name5"
+                      label="功德主姓名"
+                      required
+                    ></v-text-field>
+                  </v-col>
+                  <v-col
+                  v-if="enableNameColumn[5]"
+                  cols="12"
+                  sm="4"
+                >
+                  <v-text-field
+                    v-model="eventDetail.name6"
+                    label="功德主姓名"
+                    required
+                  ></v-text-field>
+                </v-col>
+           
+                  <v-col cols="12">
+                    <v-text-field
+                      label="牌位或塔位地址"
+                      v-model="eventDetail.address"
+                      required
+                    ></v-text-field>
+                    <v-col cols="12"
+                    md="9">
+                     {{eventDescription}}
+                    </v-col>
+                  </v-col>
+                          <v-col 
+                          v-if="enableBlessedColumn[0]"
+                          cols="12"
                           sm="6"
                           md="3">
                             <v-text-field
-                              label="姓氏"
+                              label="姓氏或姓名"
                               v-model="eventDetail.firstName"
                               required
                             ></v-text-field>
                           </v-col>
                         </v-col>
-
-                        <v-col cols="12"
-                        md="9">
-                         說明
+                        <v-col 
+                        v-if="enableBlessedColumn[1]"
+                        cols="12"
+                        sm="6"
+                        md="3">
+                          <v-text-field
+                            label="姓氏或姓名"
+                            v-model="eventDetail.blessed2"
+                            required
+                          ></v-text-field>
                         </v-col>
-                          <v-col cols="12">
-                            <v-text-field
-                              label="地址"
-                              v-model="eventDetail.address"
-                              required
-                            ></v-text-field>
-                          </v-col>
+                      </v-col>
+                      <v-col 
+                      v-if="enableBlessedColumn[2]"
+                      cols="12"
+                      sm="6"
+                      md="3">
+                        <v-text-field
+                          label="姓氏或姓名"
+                          v-model="eventDetail.blessed3"
+                          required
+                        ></v-text-field>
+                      </v-col>
+                    </v-col>
+                    <v-col 
+                    v-if="enableBlessedColumn[3]"
+                    cols="12"
+                    sm="6"
+                    md="3">
+                      <v-text-field
+                        label="姓氏或姓名"
+                        v-model="eventDetail.blessed4"
+                        required
+                      ></v-text-field>
+                    </v-col>
+                  </v-col>
+                       
                           <v-col
                             cols="12"
                             sm="3"
@@ -195,7 +289,7 @@
                         label="完成收費"
                       ></v-checkbox>
                         </v-col>
-                      
+
                         </v-row>
                       </v-container>
                     </v-card-text>
@@ -244,17 +338,29 @@
         template: "#app-template",
         data() {
           return {
+            enableNameColumn:[true,true,false,false,false,false],
+            enableBlessedColumn:[true,false,false,false],
+
+            eventDescription:"",
             dialog: false,
-            selectUser:{},
+            selectUser: {},
             eventDetail: {
-              name:  "",
+              name: "",
+              name2: "",
+              name3: "",
+              name4: "",
+              name5: "",
+              name6: "",
               eventName: "",
               firstName: "",
+              blessed2: "",
+              blessed3: "",
+              blessed4: "",
               address: "",
               phone: "",
               memo: "",
               isFinish: false,
-              amount: 0
+              amount: 0,
             },
             overviewData: [],
             headers: [
@@ -294,6 +400,68 @@
               });
             });
           },
+          adjustEnableNameColumns(enableNameColumnCount){
+              for(var i =0; i<6; i++){
+                  if(i<enableNameColumnCount){
+                    this.enableNameColumn[i]=true;
+                  }
+                  else{
+                    this.enableNameColumn[i]=false;
+                  }
+              }
+          },
+          adjustBlessedColumns(enableBlessedColumnCount){
+              for(var i =0; i<4; i++){
+                  if(i<enableBlessedColumnCount){
+                    this.enableBlessedColumn[i]=true;
+                  }
+                  else{
+                    this.enableBlessedColumn[i]=false;
+                  }
+              }
+          },
+          changeRoute(selectObj) {
+
+            // :items="['梁皇寶懺超薦歷代祖先九玄七祖', '超薦歷代祖先', '超薦個人累世冤親債主', '超薦無緣子女嬰靈', '超薦親人+報恩(父、母、兄弟、姊妹、恩人)', '超薦動物靈(狗、貓寵物名)']"
+             if(selectObj==='梁皇寶懺超薦歷代祖先九玄七祖'){
+                this.eventDescription="梁皇寶懺";
+                this.adjustEnableNameColumns(6);
+                this.adjustBlessedColumns(1);
+
+             }
+             if(selectObj==='超薦歷代祖先'){
+                this.eventDescription="超薦歷代祖先姓氏"
+                this.adjustEnableNameColumns(6);
+                this.adjustBlessedColumns(1);
+                
+             }
+             if(selectObj==='超薦個人累世冤親債主'){
+                this.eventDescription="個人累世冤親債主"
+                this.adjustEnableNameColumns(4);
+                this.adjustBlessedColumns(4);
+             }
+             if(selectObj==='超薦無緣子女嬰靈'){
+                this.eventDescription="超薦無緣子女嬰靈姓名"
+                this.adjustEnableNameColumns(2);
+                this.adjustBlessedColumns(2);
+
+
+             }
+             if(selectObj==='超薦親人+報恩(父、母、兄弟、姊妹、恩人)'){
+                this.eventDescription="超薦親人+報恩(父、母、兄弟、姊妹、恩人)姓名"
+                this.adjustEnableNameColumns(6);
+                this.adjustBlessedColumns(4);
+
+
+             }
+             if(selectObj==='超薦動物靈(狗、貓寵物名)'){
+                this.eventDescription="超薦動物靈(狗、貓寵物名)"
+                this.adjustEnableNameColumns(2);
+                this.adjustBlessedColumns(2);
+
+                
+             }
+          },
           addByName: function () {
             location.href = "MemberCreate.html?name=" + this.search;
           },
@@ -313,12 +481,20 @@
             alert("刪除完成");
             this.loadData();
           },
-          addResigistion:function(){
+          addResigistion: function () {
             evnetRef.push({
-              userId:this.selectUser.key,
+              userId: this.selectUser.key,
               name: this.eventDetail.name,
+              name2: this.eventDetail.name2,
+              name3: this.eventDetail.name3,
+              name4: this.eventDetail.name4,
+              name5: this.eventDetail.name5,
+              name6: this.eventDetail.name6,
               eventName: this.eventDetail.eventName,
               firstName: this.eventDetail.firstName,
+              blessed2: this.eventDetail.blessed2,
+              blessed3: this.eventDetail.blessed3,
+              blessed4: this.eventDetail.blessed4,
               address: this.eventDetail.address,
               phone: this.eventDetail.phone,
               memo: this.eventDetail.memo,
@@ -331,17 +507,25 @@
           },
           registerEvent: function (data) {
             this.dialog = true;
-            this.selectUser=data;
-            this.eventDetail= {
-              name:  this.selectUser.name,
+            this.selectUser = data;
+            this.eventDetail = {
+              name: this.selectUser.name,
+              name2: "",
+              name3: "",
+              name4: "",
+              name5: "",
+              name6: "",
               eventName: "",
               firstName: "",
-              address:this.selectUser.address,
+              blessed2: "",
+              blessed3: "",
+              blessed4: "",
+              address: this.selectUser.address,
               phone: this.selectUser.phone,
               memo: "",
               isFinish: false,
-              amount: 0
-            }
+              amount: 0,
+            };
           },
         },
       };

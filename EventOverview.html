@@ -70,11 +70,35 @@
             <template v-slot:item.name="{ item }">
               <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
             </template>
+            <template v-slot:item.name2="{ item }">
+              <input :name="item.name2"  id="overview_name" v-model.trim="item.name2" maxlength="8">
+            </template>
+            <template v-slot:item.name3="{ item }">
+              <input :name="item.name3"  id="overview_name" v-model.trim="item.name3" maxlength="8">
+            </template>
+            <template v-slot:item.name4="{ item }">
+              <input :name="item.name4"  id="overview_name" v-model.trim="item.name4" maxlength="8">
+            </template>
+            <template v-slot:item.name5="{ item }">
+              <input :name="item.name5"  id="overview_name" v-model.trim="item.name5" maxlength="8">
+            </template>
+            <template v-slot:item.name6="{ item }">
+              <input :name="item.name6"  id="overview_name" v-model.trim="item.name6" maxlength="8">
+            </template>
             <template v-slot:item.eventName="{ item }">
               <input  :name="item.eventName" id="overview_address" v-model.trim="item.eventName">
             </template>
             <template v-slot:item.firstName="{ item }">
               <input  :name="item.firstName" id="overview_name" v-model.trim="item.firstName">
+            </template>
+            <template v-slot:item.blessed2="{ item }">
+              <input  :name="item.blessed2" id="overview_name" v-model.trim="item.blessed2">
+            </template>
+            <template v-slot:item.blessed3="{ item }">
+              <input  :name="item.blessed3" id="overview_name" v-model.trim="item.blessed3">
+            </template>
+            <template v-slot:item.blessed4="{ item }">
+              <input  :name="item.blessed4" id="overview_name" v-model.trim="item.blessed4">
             </template>
             <template v-slot:item.address="{ item }">
               <input  :name="item.address" v-model.trim="item.address" id="overview_address">
@@ -129,8 +153,18 @@
             overviewData: [],
             headers: [
               { text: "功德主姓名", value: "name" },
+              { text: "功德主姓名", value: "name2" },
+              { text: "功德主姓名", value: "name3" },
+              { text: "功德主姓名", value: "name4" },
+              { text: "功德主姓名", value: "name5" },
+              { text: "功德主姓名", value: "name6" },
+
               { text: "參加法會項目", value: "eventName" },
               { text: "姓名(姓氏)", value: "firstName" },
+              { text: "姓名(姓氏)", value: "blessed2" },
+              { text: "姓名(姓氏)", value: "blessed3" },
+              { text: "姓名(姓氏)", value: "blessed4" },
+
               { text: "地址", value: "address" },
               { text: "電話", value: "phone" },
               { text: "備註", value: "memo" },
@@ -139,7 +173,7 @@
               { text: "填寫日期", value: "createdTime" },
               { text: "修改日期", value: "modifyTime" },
               { text: "操作", value: "actions" },
-
+      
             ],
             search: "",
           };
