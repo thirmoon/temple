@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>慈善亭</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="./src/css/overview.css" />
+
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="./dist/vuefire.js"></script>
+    <script language="JavaScript" type="text/javascript">
+      var idTmr;
+      function getExplorer() {
+        var explorer = window.navigator.userAgent;
+        //ie
+        if (explorer.indexOf("MSIE") >= 0) {
+          return "ie";
+        }
+        //firefox
+        else if (explorer.indexOf("Firefox") >= 0) {
+          return "Firefox";
+        }
+        //Chrome
+        else if (explorer.indexOf("Chrome") >= 0) {
+          return "Chrome";
+        }
+        //Opera
+        else if (explorer.indexOf("Opera") >= 0) {
+          return "Opera";
+        }
+        //Safari
+        else if (explorer.indexOf("Safari") >= 0) {
+          return "Safari";
+        }
+      }
+      function downloadToExcel(tableid) {
+        if (getExplorer() == "ie") {
+          var curTbl = document.getElementById(tableid);
+          var oXL = new ActiveXObject("Excel.Application");
+          var oWB = oXL.Workbooks.Add();
+          var xlsheet = oWB.Worksheets(1);
+          var sel = document.body.createTextRange();
+          sel.moveToElementText(curTbl);
+          sel.select();
+          sel.execCommand("Copy");
+          xlsheet.Paste();
+          oXL.Visible = true;
+          try {
+            var fname = oXL.Application.GetSaveAsFilename(
+              "Excel.xls",
+              "Excel Spreadsheets (*.xls), *.xls"
+            );
+          } catch (e) {
+          } finally {
+            oWB.SaveAs(fname);
+            oWB.Close((savechanges = false));
+            oXL.Quit();
+            oXL = null;
+            idTmr = window.setInterval("Cleanup();", 1);
+          }
+        } else {
+          tableToExcel(tableid);
+        }
+      }
+      function Cleanup() {
+        window.clearInterval(idTmr);
+        CollectGarbage();
+      }
+      var tableToExcel = (function () {
+        var uri = "data:application/vnd.ms-excel;base64,",
+          template =
+            '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
+          base64 = function (s) {
+            return window.btoa(unescape(encodeURIComponent(s)));
+          },
+          format = function (s, c) {
+            return s.replace(/{(\w+)}/g, function (m, p) {
+              return c[p];
+            });
+          };
+        return function (table, name) {
+          if (!table.nodeType) table = document.getElementById(table);
+          var ctx = { worksheet: name || "Worksheet", table: table.innerHTML };
+          window.location.href = uri + base64(format(template, ctx));
+        };
+      })();
+    </script>
+  </head>
+
+  <body>
+    <div id="app">
+      <section id="admin-wrapper">
+        <div id="form-wrapper">
+          <h1 class="page-title">慈善亭 | 法會資料下載</h1>
+          <h1 class="page-title">
+            <a href="MemberCreate.html">新增信徒 |</a>
+            <a href="MemberOverview.html">信徒總覽 |</a>
+            <a href="EventOverview.html">法會報名總覽 |</a>
+            <a href="EventDownload.html">法會報名下載 |</a>
+          </h1>
+          <button v-on:click="loadAllData">載入所有資料</button>
+          <button v-on:click="loadTodayData">載入當天修改資料</button>
+          <br />
+
+          <button v-on:click="loadItem(1)">
+            載入梁皇寶懺超薦歷代祖先九玄七祖資料
+          </button>
+          <button v-on:click="loadItem(2)">載入超薦歷代祖先資料</button>
+          <button v-on:click="loadItem(3)">載入超薦個人累世冤親債主資料</button>
+          <button v-on:click="loadItem(4)">載入超薦無緣子女嬰靈資料</button>
+          <button v-on:click="loadItem(5)">
+            載入超薦親人+報恩(父、母、兄弟、姊妹、恩人)資料
+          </button>
+          <button v-on:click="loadItem(6)">
+            載入超薦動物靈(狗、貓寵物名)資料
+          </button>
+
+          <br />
+
+          <button type="button" onclick="downloadToExcel('tableExcel')">
+            下載
+          </button>
+        </div>
+      </section>
+      <ul>
+        <table class="table table-striped" id="tableExcel">
+          <thead>
+            <tr>
+              <td>功德主姓名</td>
+              <td>功德主姓名</td>
+              <td>功德主姓名</td>
+              <td>功德主姓名</td>
+              <td>功德主姓名</td>
+              <td>功德主姓名</td>
+              <td>參加法會項目</td>
+              <td>地址</td>
+              <td>姓名(姓氏)</td>
+              <td>姓名(姓氏)</td>
+              <td>姓名(姓氏)</td>
+              <td>姓名(姓氏)</td>
+              <td>電話</td>
+              <td>金額</td>
+              <td>完成付款</td>
+              <td>備註</td>
+              <td>修改時間</td>
+              <td>報名時間</td>
+            </tr>
+          </thead>
+          <tr v-for="data in overviewData">
+            <td>{{data.name}}</td>
+            <td>{{data.name2}}</td>
+            <td>{{data.name3}}</td>
+            <td>{{data.name4}}</td>
+            <td>{{data.name5}}</td>
+            <td>{{data.name6}}</td>
+            <td>{{data.eventName}}</td>
+            <td>{{data.address}}</td>
+            <td>{{data.firstName}}</td>
+            <td>{{data.blessed2}}</td>
+            <td>{{data.blessed3}}</td>
+            <td>{{data.blessed4}}</td>
+            <td>{{data.phone}}</td>
+            <td>{{data.amount}}</td>
+            <td>{{isFinish(data.isFinish)}}</td>
+            <td>{{data.memo}}</td>
+
+            <td>{{getDisplayTime(data.modifyTime)}}</td>
+            <td>{{getDisplayTime(data.createdTime)}}</td>
+          </tr>
+        </table>
+      </ul>
+    </div>
+
+    <script>
+      /* global Vue, firebase */
+
+      let config = {
+        apiKey: "AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g",
+        authDomain: "light-1a6d4.firebaseapp.com",
+        databaseURL: "https://light-1a6d4.firebaseio.com/",
+        projectId: "light-1a6d4",
+        storageBucket: "light-1a6d4.appspot.com",
+        messagingSenderId: "66654715141",
+      };
+      this.searchResultData;
+      let db = firebase.initializeApp(config).database();
+      let eventRef = db.ref("Event");
+      new Vue({
+        el: "#app",
+        data: {
+          overviewData: [],
+          today: null,
+        },
+        firebase: {
+          Users: eventRef.limitToLast(25),
+        },
+        methods: {
+          loadAllData: function () {
+            let self = this;
+            this.overviewData = [];
+            eventRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let eventDetail = data.val();
+                eventDetail.key = data.key;
+                self.overviewData.push(eventDetail);
+              });
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            });
+          },
+          isFinish: function (data) {
+            return data ? "是" : "否";
+          },
+          getDisplayTime: function (time) {
+            if (time == undefined) {
+              return null;
+            }
+            let dateTime = new Date(time);
+            return dateTime.toISOString().slice(0, 10);
+          },
+          loadItem: function (eventNameId) {
+            let self = this;
+            this.overviewData = [];
+            let eventName = "";
+            switch (eventNameId) {
+              case 1:
+                eventName = "梁皇寶懺超薦歷代祖先九玄七祖";
+                break;
+              case 2:
+                eventName = "超薦歷代祖先";
+                break;
+              case 3:
+                eventName = "超薦個人累世冤親債主";
+                break;
+              case 4:
+                eventName = "超薦無緣子女嬰靈";
+                break;
+              case 5:
+                eventName = "超薦親人+報恩(父、母、兄弟、姊妹、恩人)";
+                break;
+              case 6:
+                eventName = "超薦動物靈(狗、貓寵物名)";
+                break;
+            }
+
+            eventRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let eventDetail = data.val();
+                if (eventDetail.eventName == eventName) {
+                  eventDetail.key = data.key;
+                  self.overviewData.push(eventDetail);
+                }
+              });
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            });
+          },
+          loadTodayData: function () {
+            let self = this;
+            this.overviewData = [];
+            var q = new Date(Date.now());
+            var m = q.getMonth();
+            var d = q.getDate();
+            var y = q.getFullYear();
+            this.today = new Date(y, m, d);
+            eventRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let eventDetail = data.val();
+                let modifyTime = new Date(eventDetail.modifyTime);
+                if (modifyTime > self.today) {
+                  eventDetail.key = data.key;
+                  self.overviewData.push(eventDetail);
+                }
+              });
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            });
+          },
+        },
+      });
+    </script>
+  </body>
+</html>
