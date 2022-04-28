@@ -33,13 +33,12 @@
     <div id="app">
       <section id="admin-wrapper">
         <div id="form-wrapper">
-          <h1 class="page-title">慈善亭 </h1>
+          <h1 class="page-title">慈善亭</h1>
           <h1 class="page-title">
             <a href="MemberCreate.html">新增信徒 |</a>
             <a href="MemberOverview.html">信徒總覽 |</a>
             <a href="EventOverview.html">法會報名總覽 |</a>
             <a href="EventDownload.html">法會報名下載 |</a>
-
           </h1>
         </div>
       </section>
@@ -49,7 +48,41 @@
     </div>
     <script type="text/x-template" id="app-template">
       <v-app id="inspire">
-        <ul>  
+        <ul>
+          <v-card>
+            <v-data-table
+            :headers="balanceHeaders"
+            :items="balances"
+            class="elevation-1"
+            item-key="key"
+            fixed-header
+            height="250px">
+            <template v-slot:item.item1Balance="{ item }">
+              {{getDisplayNumber(item.item1Balance)}}
+            </template>
+            <template v-slot:item.item2Balance="{ item }">
+              {{getDisplayNumber(item.item2Balance)}}
+            </template>
+            <template v-slot:item.item3Balance="{ item }">
+              {{getDisplayNumber(item.item3Balance)}}
+            </template>
+            <template v-slot:item.item4Balance="{ item }">
+              {{getDisplayNumber(item.item4Balance)}}
+            </template>
+            <template v-slot:item.item5Balance="{ item }">
+              {{getDisplayNumber(item.item5Balance)}}
+            </template>
+            <template v-slot:item.item6Balance="{ item }">
+              {{getDisplayNumber(item.item6Balance)}}
+            </template>
+            <template v-slot:item.totalbalance="{ item }">
+              {{getDisplayNumber(item.totalbalance)}}
+            </template>
+          </v-data-table>
+          </v-card>
+          <br>
+        </ul>
+        <ul>
           <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
           <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
           </ul>
@@ -151,6 +184,54 @@
         data() {
           return {
             overviewData: [],
+            balances: [
+              {
+                label: "超拔數量",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0,
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+
+              },
+              {
+                label: "未付款",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0,
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+              },
+              {
+                label: "付款完成",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0,
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+              },
+              {
+                label: "合計總金額",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0,
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+              }
+            ],
+
             headers: [
               { text: "功德主姓名", value: "name" },
               { text: "功德主姓名", value: "name2" },
@@ -173,7 +254,17 @@
               { text: "填寫日期", value: "createdTime" },
               { text: "修改日期", value: "modifyTime" },
               { text: "操作", value: "actions" },
-      
+
+            ],
+            balanceHeaders: [
+              { text: "項目", value: "label" },
+              { text: "梁皇寶懺超薦歷代祖先九玄七祖", value: "item1Balance" },
+              { text: "超薦歷代祖先", value: "item2Balance" },
+              { text: "超薦個人累世冤親債主", value: "item3Balance" },
+              { text: "超薦無緣子女嬰靈", value: "item4Balance" },
+              { text: "超薦親人+報恩(父、母、兄弟、姊妹、恩人)", value: "item5Balance" },
+              { text: "超薦動物靈(狗、貓寵物名)", value: "item6Balance" },
+              { text: "總計", value: "totalbalance" },
             ],
             search: "",
           };
@@ -198,8 +289,78 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+
+              self.GetStatistics()
             });
           },
+          getDisplayNumber: function (number) {
+            if(number==undefined || number == null){
+              return 0;
+            }
+            return number.toLocaleString()
+          },
+          GetStatistics: function () {
+            let self = this;
+            this.overviewData.forEach(function (eventDetail) {
+              let index = 1;
+
+              if (eventDetail.isFinish) {
+                index = 2;
+              }
+
+              switch (eventDetail.eventName) {
+              case "梁皇寶懺超薦歷代祖先九玄七祖":
+                self.balances[0].item1Balance+=1;
+                self.balances[0].totalbalance+=1;
+                self.balances[index].item1Balance+= Number(eventDetail.amount);;
+                self.balances[index].totalbalance+=Number(eventDetail.amount);
+                self.balances[3].item1Balance+=Number(eventDetail.amount);
+                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                break;
+              case "超薦歷代祖先":
+                self.balances[0].item2Balance+=1;
+                self.balances[0].totalbalance+=1;
+                self.balances[index].item2Balance+=Number(eventDetail.amount);
+                self.balances[index].totalbalance+=Number(eventDetail.amount);
+                self.balances[3].item2Balance+=Number(eventDetail.amount);
+                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                break;
+              case "超薦個人累世冤親債主":
+                self.balances[0].item3Balance+=1;
+                self.balances[0].totalbalance+=1;
+                self.balances[index].item3Balance+=Number(eventDetail.amount);
+                self.balances[index].totalbalance+=Number(eventDetail.amount);
+                self.balances[3].item3Baance+=Number(eventDetail.amount);
+                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                break;
+              case "超薦無緣子女嬰靈":
+                self.balances[0].item4Balance+=1;
+                self.balances[0].totalbalance+=1;
+                self.balances[index].item4Balance+=Number(eventDetail.amount);
+                self.balances[index].totalbalance+=Number(eventDetail.amount);
+                self.balances[3].item4Balance+=Number(eventDetail.amount);
+                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                break;
+              case "超薦親人+報恩(父、母、兄弟、姊妹、恩人)":
+                self.balances[0].item5Balance+=1;
+                self.balances[0].totalbalance+=1;
+                self.balances[index].item5Balance+=Number(eventDetail.amount);
+                self.balances[index].totalbalance+=Number(eventDetail.amount);
+                self.balances[3].item5Balance+=Number(eventDetail.amount);
+                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                break;
+              case "超薦動物靈(狗、貓寵物名)":
+                self.balances[0].item6Balance+=1;
+                self.balances[0].totalbalance+=1;
+                self.balances[index].item6Balance+=Number(eventDetail.amount);
+                self.balances[index].totalbalance+=Number(eventDetail.amount);
+                self.balances[3].item6Balance+=Number(eventDetail.amount);
+                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                break;
+            }
+
+            })
+           },
           addByName: function () {
             location.href = "Create.html?name=" + this.search;
           },
