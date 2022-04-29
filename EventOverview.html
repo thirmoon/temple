@@ -56,7 +56,7 @@
             class="elevation-1"
             item-key="key"
             fixed-header
-            height="250px">
+            height="285px">
             <template v-slot:item.item1Balance="{ item }">
               {{getDisplayNumber(item.item1Balance)}}
             </template>
@@ -142,8 +142,9 @@
             <template v-slot:item.memo="{ item }">
               <input  :name="item.memo" v-model.trim="item.memo" id="overview_memo">
             </template>
-            <template v-slot:item.isFinish="{ item }">
-              <input type="checkbox"  v-model.trim="item.isFinish">
+            <template v-slot:item.paymentStatus="{ item }" >
+              <v-checkbox v-model="item.isCash" label="現金" class="payment-option"></v-checkbox>
+              <v-checkbox v-model="item.isBankTransfer" label="匯款" class="payment-option"></v-checkbox>
             </template>
             <template v-slot:item.amount="{ item }">
               <input  :name="item.amount" v-model.trim="item.amount">
@@ -209,7 +210,18 @@
                 item7Balance: 0
               },
               {
-                label: "付款完成",
+                label: "現金",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0,
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+              },
+              {
+                label: "匯款",
                 totalbalance:0,
                 item1Balance: 0,
                 item2Balance: 0,
@@ -249,10 +261,10 @@
               { text: "地址", value: "address" },
               { text: "電話", value: "phone" },
               { text: "備註", value: "memo" },
-              { text: "完成付款", value: "isFinish" },
+              { text: "付款狀態", value: "paymentStatus", width: '200px'  },
               { text: "金額", value: "amount" },
-              { text: "填寫日期", value: "createdTime" },
-              { text: "修改日期", value: "modifyTime" },
+              { text: "填寫日期", value: "createdTime" , width: '200px'},
+              { text: "修改日期", value: "modifyTime" , width: '200px'},
               { text: "操作", value: "actions" },
 
             ],
@@ -304,8 +316,10 @@
             this.overviewData.forEach(function (eventDetail) {
               let index = 1;
 
-              if (eventDetail.isFinish) {
+              if (eventDetail.isCash) {
                 index = 2;
+              }else if(eventDetail.isBankTransfer){
+                index=3
               }
 
               switch (eventDetail.eventName) {
@@ -314,48 +328,48 @@
                 self.balances[0].totalbalance+=1;
                 self.balances[index].item1Balance+= Number(eventDetail.amount);;
                 self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[3].item1Balance+=Number(eventDetail.amount);
-                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                self.balances[4].item1Balance+=Number(eventDetail.amount);
+                self.balances[4].totalbalance+=Number(eventDetail.amount);
                 break;
               case "超薦歷代祖先":
                 self.balances[0].item2Balance+=1;
                 self.balances[0].totalbalance+=1;
                 self.balances[index].item2Balance+=Number(eventDetail.amount);
                 self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[3].item2Balance+=Number(eventDetail.amount);
-                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                self.balances[4].item2Balance+=Number(eventDetail.amount);
+                self.balances[4].totalbalance+=Number(eventDetail.amount);
                 break;
               case "超薦個人累世冤親債主":
                 self.balances[0].item3Balance+=1;
                 self.balances[0].totalbalance+=1;
                 self.balances[index].item3Balance+=Number(eventDetail.amount);
                 self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[3].item3Balance+=Number(eventDetail.amount);
-                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                self.balances[4].item3Balance+=Number(eventDetail.amount);
+                self.balances[4].totalbalance+=Number(eventDetail.amount);
                 break;
               case "超薦無緣子女嬰靈":
                 self.balances[0].item4Balance+=1;
                 self.balances[0].totalbalance+=1;
                 self.balances[index].item4Balance+=Number(eventDetail.amount);
                 self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[3].item4Balance+=Number(eventDetail.amount);
-                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                self.balances[4].item4Balance+=Number(eventDetail.amount);
+                self.balances[4].totalbalance+=Number(eventDetail.amount);
                 break;
               case "超薦親人+報恩(父、母、兄弟、姊妹、恩人)":
                 self.balances[0].item5Balance+=1;
                 self.balances[0].totalbalance+=1;
                 self.balances[index].item5Balance+=Number(eventDetail.amount);
                 self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[3].item5Balance+=Number(eventDetail.amount);
-                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                self.balances[4].item5Balance+=Number(eventDetail.amount);
+                self.balances[4].totalbalance+=Number(eventDetail.amount);
                 break;
               case "超薦動物靈(狗、貓寵物名)":
                 self.balances[0].item6Balance+=1;
                 self.balances[0].totalbalance+=1;
                 self.balances[index].item6Balance+=Number(eventDetail.amount);
                 self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[3].item6Balance+=Number(eventDetail.amount);
-                self.balances[3].totalbalance+=Number(eventDetail.amount);
+                self.balances[4].item6Balance+=Number(eventDetail.amount);
+                self.balances[4].totalbalance+=Number(eventDetail.amount);
                 break;
             }
 

@@ -286,11 +286,20 @@
                           sm="4"
                         >
                         <v-checkbox
-                        v-model="eventDetail.isFinish"
-                        label="完成收費"
+                        v-model="eventDetail.isCash"
+                        label="現金"
                       ></v-checkbox>
                         </v-col>
-
+                      </v-col>
+                      <v-col
+                      cols="12"
+                      sm="4"
+                    >
+                    <v-checkbox
+                    v-model="eventDetail.isBankTransfer"
+                    label="匯款"
+                  ></v-checkbox>
+                    </v-col>
                         </v-row>
                       </v-container>
                     </v-card-text>
@@ -360,7 +369,8 @@
               address: "",
               phone: "",
               memo: "",
-              isFinish: false,
+              isCash:false,
+              isBankTransfer:false,
               amount: 0,
             },
             overviewData: [],
@@ -499,7 +509,8 @@
               address: this.eventDetail.address,
               phone: this.eventDetail.phone,
               memo: this.eventDetail.memo,
-              isFinish: this.eventDetail.isFinish,
+              isCash:this.eventDetail.isCash,
+              isBankTransfer:this.eventDetail.isBankTransfer,
               amount: this.eventDetail.amount,
               modifyTime: Date.now(),
               createdTime: Date.now(),
@@ -524,7 +535,8 @@
               address: this.selectUser.address,
               phone: this.selectUser.phone,
               memo: "",
-              isFinish: false,
+              isCash:false,
+              isBankTransfer:false,
               amount: 0,
             };
           },

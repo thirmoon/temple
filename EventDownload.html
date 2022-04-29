@@ -146,7 +146,7 @@
               <td>姓名(姓氏)</td>
               <td>電話</td>
               <td>金額</td>
-              <td>完成付款</td>
+              <td>付款狀態</td>
               <td>備註</td>
               <td>修改時間</td>
               <td>報名時間</td>
@@ -167,7 +167,7 @@
             <td>{{data.blessed4}}</td>
             <td>{{data.phone}}</td>
             <td>{{data.amount}}</td>
-            <td>{{isFinish(data.isFinish)}}</td>
+            <td>{{getPaymentStatus(data)}}</td>
             <td>{{data.memo}}</td>
 
             <td>{{getDisplayTime(data.modifyTime)}}</td>
@@ -215,8 +215,8 @@
               });
             });
           },
-          isFinish: function (data) {
-            return data ? "是" : "否";
+          getPaymentStatus: function (data) {
+            return data.isCash ? "現金" : data.isBankTransfer?"匯款":"未付款";
           },
           getDisplayTime: function (time) {
             if (time == undefined) {
