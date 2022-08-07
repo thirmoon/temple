@@ -285,9 +285,20 @@
           Donations: eventRef.limitToLast(25),
         },
         beforeMount() {
+          this.checkLogin();
           this.loadData();
         },
         methods: {
+          checkLogin: function (){
+            localStorage.setItem('temple_page','EventOverview.html');
+            let loginExpireTime = localStorage.getItem('temple_login_expire_time');
+            var date = new Date();
+            let isExpired = new Date(loginExpireTime) < new Date(date)
+            if(loginExpireTime==null || isExpired){
+              alert("請先登入")
+              window.location.href = 'Login.html';
+            }
+          },
           loadData: function () {
             let self = this;
             this.overviewData = [];
