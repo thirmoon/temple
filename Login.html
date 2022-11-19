@@ -83,8 +83,7 @@
           let self = this;
           this.hash(this.password)
             .then((hex) => {
-              //if (hex == '290b69edb51e3ded8f648f84e5b4653ef2798433199a33b3b0ede1d10254c4df') {
-              if (1===1) {
+              if (hex == 'ef51306214d9a6361ee1d5b452e6d2bb70dc7ebb85bf9e02c3d4747fb57d6bec') {
                 var date = new Date();
                 date.setDate(date.getDate() + 1);
                 localStorage.setItem('temple_login_expire_time', date);
