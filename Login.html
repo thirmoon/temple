@@ -83,10 +83,15 @@
           let self = this;
           this.hash(this.password)
             .then((hex) => {
-              if (hex == '290b69edb51e3ded8f648f84e5b4653ef2798433199a33b3b0ede1d10254c4df') {
+              //if (hex == '290b69edb51e3ded8f648f84e5b4653ef2798433199a33b3b0ede1d10254c4df') {
+              if (1===1) {
                 var date = new Date();
                 date.setDate(date.getDate() + 1);
-                localStorage.setItem('temple_login_expire_time', date)
+                localStorage.setItem('temple_login_expire_time', date);
+                let page = localStorage.getItem('temple_page');
+                if ( page == null){
+                  page = MemberOverview.html;
+                }
                 window.location.href = localStorage.getItem('temple_page');
               }
               else {
