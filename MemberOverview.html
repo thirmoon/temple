@@ -310,123 +310,121 @@
                      </v-card>
                    </v-dialog>
                  </v-row>
-               </template>
-         
-               <template v-slot:top>
                  <v-row justify="center">
-                   <v-dialog
-                     v-model="lightDialog"
-                     persistent
-                     max-width="600px"
-                   >
-                     <v-card>
-                       <v-card-title>
-                         <span class="text-h5">點燈報名</span>
-                       </v-card-title>
-                       <v-card-text>
-                         <v-container>
-                           <v-row>
-                             <v-col
-                             cols="12"
-                             sm="4"
-                           >
-                          {{selectUser.name}}
-                           </v-col>
-                             <v-col
-                             cols="12"
-                             sm="4"
-                           >
-                             <v-text-field
-                             v-model="lightDetail.lightYear"
-                             label="點燈年度"
-                             required
-                             ></v-text-field>
-                           </v-col>
+                  <v-dialog
+                    v-model="lightDialog"
+                    persistent
+                    max-width="600px"
+                  >
+                    <v-card>
+                      <v-card-title>
+                        <span class="text-h5">點燈報名</span>
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
                             <v-col
-                             cols="12"
-                             sm="4"
-                           >
-                         </v-col>
-                             <v-col cols="12" sm="3">
-                               <v-checkbox
-                                 v-model="lightDetail.lightType1"
-                                 label="太歲燈"
-                               ></v-checkbox>
-                             </v-col>
-         
-                             <v-col cols="12"sm="3">
-                               <v-checkbox
-                                 v-model="lightDetail.lightType2"
-                                 label="財神燈"
-                               ></v-checkbox>
-                             </v-col>
-               
-                             <v-col cols="12"sm="3">
-                               <v-checkbox
-                                 v-model="lightDetail.lightType3"
-                                 label="文昌燈"
-                               ></v-checkbox>
-                             </v-col>
-         
-                             <v-col cols="12"sm="3">
-                               <v-checkbox
-                                 v-model="lightDetail.lightType4"
-                                 label="長明燈"
-                               ></v-checkbox>
-                             </v-col>
-         
-                             <v-col cols="12"sm="3">
-                               <v-checkbox
-                                 v-model="lightDetail.lightType5"
-                                 label="藥師燈"
-                               ></v-checkbox>
-                             </v-col>
-         
-                             <v-col cols="12"sm="3">
-                               <v-checkbox
-                                 v-model="lightDetail.lightType6"
-                                 label="光明燈"
-                               ></v-checkbox>
-                             </v-col>
-         
-                             <v-col cols="12"sm="3">
-                               <v-checkbox
-                                 v-model="lightDetail.lightType7"
-                                 label="姻緣燈"
-                               ></v-checkbox>
-                             </v-col>
-                            
-                             <v-col cols="12" sm="9">
-                               <v-text-field
-                                 v-model="lightDetail.memo"
-                                 label="備註"
-                               ></v-text-field>
-                             </v-col>
-                            
-                           </v-row>
-                         </v-container>
-                       </v-card-text>
-                       <v-card-actions>
-                         <v-spacer></v-spacer>
-                         <v-btn
-                           color="blue darken-1"
-                           text
-                           @click="lightDialog = false"
-                         >
-                           關閉
-                         </v-btn>
-                         <v-btn
-                           color="blue darken-1"
-                           text
-                           @click="addLighting"
-                         >
-                           新增
-                         </v-btn>
-                       </v-card-actions>
-                     </v-card>
-                   </v-dialog>
-                 </v-row>
+                            cols="12"
+                            sm="4"
+                          >
+                         {{selectUser.name}}
+                          </v-col>
+                            <v-col
+                            cols="12"
+                            sm="4"
+                          >
+                            <v-text-field
+                            v-model="lightDetail.lightYear"
+                            label="點燈年度"
+                            required
+                            ></v-text-field>
+                          </v-col>
+                           <v-col
+                            cols="12"
+                            sm="4"
+                          >
+                        </v-col>
+                            <v-col cols="12" sm="3">
+                              <v-checkbox
+                                v-model="lightDetail.lightType1"
+                                label="太歲燈"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="lightDetail.lightType2"
+                                label="財神燈"
+                              ></v-checkbox>
+                            </v-col>
+              
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="lightDetail.lightType3"
+                                label="文昌燈"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="lightDetail.lightType4"
+                                label="長明燈"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="lightDetail.lightType5"
+                                label="藥師燈"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="lightDetail.lightType6"
+                                label="光明燈"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="lightDetail.lightType7"
+                                label="姻緣燈"
+                              ></v-checkbox>
+                            </v-col>
+                           
+                            <v-col cols="12" sm="9">
+                              <v-text-field
+                                v-model="lightDetail.memo"
+                                label="備註"
+                              ></v-text-field>
+                            </v-col>
+                           
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="lightDialog = false"
+                        >
+                          關閉
+                        </v-btn>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="addLighting"
+                        >
+                          新增
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-row>
                </template>
+
          
              </v-data-table>
            </v-card>
@@ -648,9 +646,6 @@
                this.eventDialog = false;
              },
              addLighting: function () {
-               console.log(this.selectUser);
-               console.log(this.lightDetail);
-         
                lightRef.push({
                  name: this.selectUser.name,
                  phone: this.selectUser.phone,
