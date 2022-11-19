@@ -1,726 +1,723 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-  <meta charset="utf-8" />
-  <title>慈善亭 | 信徒總覽</title>
-  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
-    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
-  <link rel="stylesheet" href="./src/css/overview.css" />
-  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
-  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
-  <script src="./dist/vuefire.js"></script>
-</head>
-
-<body>
-  <div id="app">
-    <section id="admin-wrapper">
-      <div id="form-wrapper">
-        <h1 class="page-title">慈善亭</h1>
-        <h1 class="page-title">
-          <a href="MemberCreate.html">新增信徒 |</a>
-          <a href="EventOverview.html">法會總覽 |</a>
-          <a href="LightOverview.html">點燈總覽</a>
-        </h1>
+   <head>
+      <meta charset="utf-8" />
+      <title>慈善亭 | 信徒總覽</title>
+      <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+         integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
+      <link rel="stylesheet" href="./src/css/overview.css" />
+      <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+      <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+      <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet" />
+      <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet" />
+      <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet" />
+      <script src="./dist/vuefire.js"></script>
+   </head>
+   <body>
+      <div id="app">
+         <section id="admin-wrapper">
+            <div id="form-wrapper">
+               <h1 class="page-title">慈善亭</h1>
+               <h1 class="page-title">
+                  <a href="MemberCreate.html">新增信徒 |</a>
+                  <a href="EventOverview.html">法會總覽 |</a>
+                  <a href="LightOverview.html">點燈總覽</a>
+               </h1>
+            </div>
+         </section>
+         <ul>
+            <div id="app-table"></div>
+         </ul>
       </div>
-    </section>
-    <ul>
-      <div id="app-table"></div>
-    </ul>
-  </div>
-  <script type="text/x-template" id="app-template">
-      <v-app id="inspire">
-        <ul>
-        <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
-        <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
-        </ul>
-        <v-card>
-          <v-card-title>
-            <v-text-field v-model="search" append-icon="mdi-magnify" label="搜尋" single-line hide-details>
-            </v-text-field>
-          </v-card-title>
-          <v-data-table
-            :headers="headers"
-            :items="overviewData"
-            :search="search"
-            class="elevation-1"
-            item-key="key"
-            fixed-header
-            height="400px"
-            :items-per-page="20">
-            <template v-slot:item.name="{ item }">
-              <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
-            </template>
-            <template v-slot:item.address="{ item }">
-              <input  :name="item.address" id="overview_address" v-model.trim="item.address">
-            </template>
-            <template v-slot:item.year="{ item }">
-              <input  :name="item.year" id="overview_date" v-model.trim="item.year" maxlength="4">
-            </template>
-            <template v-slot:item.month="{ item }">
-              <input  :name="item.month" id="overview_date" v-model.trim="item.month">
-            </template>
-            <template v-slot:item.day="{ item }">
-              <input  :name="item.day" id="overview_date" v-model.trim="item.day">
-            </template>
-            <template v-slot:item.minute="{ item }">
-              <input  :name="item.minute" id="overview_date" v-model.trim="item.minute">
-            </template>
-            <template v-slot:item.isChineeseYear="{ item }">
-              <input  id="overview_name" :name="item.isChineeseYear" v-model.trim="item.isChineeseYear">
-            </template>
-            <template v-slot:item.phone="{ item }">
-              <input  :name="item.phone" v-model.trim="item.phone" id="overview_phone">
-            </template>
-            <template v-slot:item.memo="{ item }">
-              <input  :name="item.memo" v-model.trim="item.memo">
-            </template>
-            <template v-slot:item.actions="{ item }">
-              <v-btn elevation="2"  v-on:click="updateUser(item)" >更新</v-btn>
-              <v-btn elevation="2"  v-on:click="removeUser(item)" >刪除</v-btn>
-              <v-btn elevation="2"  v-on:click="registerEvent(item)" >報名超薦法會</v-btn>
-              <v-btn elevation="2"  v-on:click="lighting(item)" >點燈</v-btn>
-            </template>
-            <template v-slot:top>
-              <v-row justify="center">
-                <v-dialog
-                  v-model="eventDialog"
-                  persistent
-                  max-width="600px"
-                >
-                  <v-card>
-                    <v-card-title>
-                      <span class="text-h5">壬寅年農曆七月二十二日慶讚中元</span>
-                      <span class="text-h5">舉辦梁皇寶懺超薦法會報名表</span>
-
-                    </v-card-title>
-                    <v-card-text>
-                      <v-container>
-                        <v-row>
-                          <v-col
-                          cols="12"
-                          sm="12"
-                        >
-                        <v-select
-                        :items="['梁皇寶懺超薦歷代祖先九玄七祖', '超薦歷代祖先', '超薦個人累世冤親債主', '超薦無緣子女嬰靈', '超薦親人+報恩(父、母、兄弟、姊妹、恩人)', '超薦動物靈(狗、貓寵物名)']"
-                        label="參加法會項目"
-                        v-model="eventDetail.eventName"
-                        required
-                        @change="changeRoute"
-                      ></v-select>
-                        </v-col>
-                          <v-col
-                            v-if="enableNameColumn[0]"
-                            cols="12"
-                            sm="4"
-                          >
-                            <v-text-field
-                              v-model="eventDetail.name"
-                              label="功德主姓名"
-                              required
-                            ></v-text-field>
-                          </v-col>
-
-                          <v-col
-                          v-if="enableNameColumn[1]"
-                          cols="12"
-                          sm="4"
-                        >
-                          <v-text-field
-                            v-model="eventDetail.name2"
-                            label="功德主姓名"
-                            required
-                          ></v-text-field>
-                        </v-col>
-                        <v-col
-                        v-if="enableNameColumn[2]"
-                        cols="12"
-                        sm="4"
-                      >
-                        <v-text-field
-                          v-model="eventDetail.name3"
-                          label="功德主姓名"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                      <v-col
-                      v-if="enableNameColumn[3]"
-                      cols="12"
-                      sm="4"
-                    >
-                      <v-text-field
-                        v-model="eventDetail.name4"
-                        label="功德主姓名"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                    <v-col
-                    v-if="enableNameColumn[4]"
-                    cols="12"
-                    sm="4"
-                  >
-                    <v-text-field
-                      v-model="eventDetail.name5"
-                      label="功德主姓名"
-                      required
-                    ></v-text-field>
-                  </v-col>
-                  <v-col
-                  v-if="enableNameColumn[5]"
-                  cols="12"
-                  sm="4"
-                >
-                  <v-text-field
-                    v-model="eventDetail.name6"
-                    label="功德主姓名"
-                    required
-                  ></v-text-field>
-                </v-col>
-           
-                  <v-col cols="12">
-                    <v-text-field
-                      label="牌位或塔位地址"
-                      v-model="eventDetail.address"
-                      required
-                    ></v-text-field>
-                    <v-col cols="12"
-                    md="9">
-                     {{eventDescription}}
-                    </v-col>
-                  </v-col>
-                          <v-col 
-                          v-if="enableBlessedColumn[0]"
-                          cols="12"
-                          sm="6"
-                          md="3">
-                            <v-text-field
-                              label="姓氏或姓名"
-                              v-model="eventDetail.firstName"
-                              required
-                            ></v-text-field>
-                          </v-col>
-                        </v-col>
-                        <v-col 
-                        v-if="enableBlessedColumn[1]"
-                        cols="12"
-                        sm="6"
-                        md="3">
-                          <v-text-field
-                            label="姓氏或姓名"
-                            v-model="eventDetail.blessed2"
-                            required
-                          ></v-text-field>
-                        </v-col>
-                      </v-col>
-                      <v-col 
-                      v-if="enableBlessedColumn[2]"
-                      cols="12"
-                      sm="6"
-                      md="3">
-                        <v-text-field
-                          label="姓氏或姓名"
-                          v-model="eventDetail.blessed3"
-                          required
-                        ></v-text-field>
-                      </v-col>
-                    </v-col>
-                    <v-col 
-                    v-if="enableBlessedColumn[3]"
-                    cols="12"
-                    sm="6"
-                    md="3">
-                      <v-text-field
-                        label="姓氏或姓名"
-                        v-model="eventDetail.blessed4"
-                        required
-                      ></v-text-field>
-                    </v-col>
-                  </v-col>
-                       
-                          <v-col
-                            cols="12"
-                            sm="3"
-                          >
-                          <v-text-field
-                          label="連絡電話"
-                          v-model="eventDetail.phone"
-                          required
-                        ></v-text-field>
-                          </v-col>
-                          <v-col
-                            cols="12"
-                            sm="9"
-                          >
-                          <v-text-field
-                          v-model="eventDetail.memo"
-                          label="備註"
-                        ></v-text-field>
-                          </v-col>
-                          <v-col
-                          cols="12"
-                          sm="3"
-                        >
-                        <v-text-field
-                        label="金額"
-                        v-model="eventDetail.amount"
-                        required
-                      ></v-text-field>
-                        </v-col>
-                          <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                        <v-checkbox
-                        v-model="eventDetail.isCash"
-                        label="現金"
-                      ></v-checkbox>
-                        </v-col>
-                      </v-col>
-                      <v-col
-                      cols="12"
-                      sm="4"
-                    >
-                    <v-checkbox
-                    v-model="eventDetail.isBankTransfer"
-                    label="匯款"
-                  ></v-checkbox>
-                    </v-col>
-                        </v-row>
-                      </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="eventDialog = false"
-                      >
-                        關閉
-                      </v-btn>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="addResigistion"
-                      >
-                        新增
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-row>
-            </template>
-
-            <template v-slot:top>
-              <v-row justify="center">
-                <v-dialog
-                  v-model="lightDialog"
-                  persistent
-                  max-width="600px"
-                >
-                  <v-card>
-                    <v-card-title>
-                      <span class="text-h5">點燈報名</span>
-                    </v-card-title>
-                    <v-card-text>
-                      <v-container>
-                        <v-row>
-                          <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                       {{selectUser.name}}
-                        </v-col>
-                          <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                          <v-text-field
-                          v-model="lightDetail.lightYear"
-                          label="點燈年度"
-                          required
-                          ></v-text-field>
-                        </v-col>
+      <script type="text/x-template" id="app-template">
+         <v-app id="inspire">
+           <ul>
+           <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
+           <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
+           </ul>
+           <v-card>
+             <v-card-title>
+               <v-text-field v-model="search" append-icon="mdi-magnify" label="搜尋" single-line hide-details>
+               </v-text-field>
+             </v-card-title>
+             <v-data-table
+               :headers="headers"
+               :items="overviewData"
+               :search="search"
+               class="elevation-1"
+               item-key="key"
+               fixed-header
+               height="400px"
+               :items-per-page="20">
+               <template v-slot:item.name="{ item }">
+                 <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
+               </template>
+               <template v-slot:item.address="{ item }">
+                 <input  :name="item.address" id="overview_address" v-model.trim="item.address">
+               </template>
+               <template v-slot:item.year="{ item }">
+                 <input  :name="item.year" id="overview_date" v-model.trim="item.year" maxlength="4">
+               </template>
+               <template v-slot:item.month="{ item }">
+                 <input  :name="item.month" id="overview_date" v-model.trim="item.month">
+               </template>
+               <template v-slot:item.day="{ item }">
+                 <input  :name="item.day" id="overview_date" v-model.trim="item.day">
+               </template>
+               <template v-slot:item.minute="{ item }">
+                 <input  :name="item.minute" id="overview_date" v-model.trim="item.minute">
+               </template>
+               <template v-slot:item.isChineeseYear="{ item }">
+                 <input  id="overview_name" :name="item.isChineeseYear" v-model.trim="item.isChineeseYear">
+               </template>
+               <template v-slot:item.phone="{ item }">
+                 <input  :name="item.phone" v-model.trim="item.phone" id="overview_phone">
+               </template>
+               <template v-slot:item.memo="{ item }">
+                 <input  :name="item.memo" v-model.trim="item.memo">
+               </template>
+               <template v-slot:item.actions="{ item }">
+                 <v-btn elevation="2"  v-on:click="updateUser(item)" >更新</v-btn>
+                 <v-btn elevation="2"  v-on:click="removeUser(item)" >刪除</v-btn>
+                 <v-btn elevation="2"  v-on:click="registerEvent(item)" >報名超薦法會</v-btn>
+                 <v-btn elevation="2"  v-on:click="lighting(item)" >點燈</v-btn>
+               </template>
+               <template v-slot:top>
+                 <v-row justify="center">
+                   <v-dialog
+                     v-model="eventDialog"
+                     persistent
+                     max-width="600px"
+                   >
+                     <v-card>
+                       <v-card-title>
+                         <span class="text-h5">壬寅年農曆七月二十二日慶讚中元</span>
+                         <span class="text-h5">舉辦梁皇寶懺超薦法會報名表</span>
+         
+                       </v-card-title>
+                       <v-card-text>
+                         <v-container>
+                           <v-row>
+                             <v-col
+                             cols="12"
+                             sm="12"
+                           >
+                           <v-select
+                           :items="['梁皇寶懺超薦歷代祖先九玄七祖', '超薦歷代祖先', '超薦個人累世冤親債主', '超薦無緣子女嬰靈', '超薦親人+報恩(父、母、兄弟、姊妹、恩人)', '超薦動物靈(狗、貓寵物名)']"
+                           label="參加法會項目"
+                           v-model="eventDetail.eventName"
+                           required
+                           @change="changeRoute"
+                         ></v-select>
+                           </v-col>
+                             <v-col
+                               v-if="enableNameColumn[0]"
+                               cols="12"
+                               sm="4"
+                             >
+                               <v-text-field
+                                 v-model="eventDetail.name"
+                                 label="功德主姓名"
+                                 required
+                               ></v-text-field>
+                             </v-col>
+         
+                             <v-col
+                             v-if="enableNameColumn[1]"
+                             cols="12"
+                             sm="4"
+                           >
+                             <v-text-field
+                               v-model="eventDetail.name2"
+                               label="功德主姓名"
+                               required
+                             ></v-text-field>
+                           </v-col>
+                           <v-col
+                           v-if="enableNameColumn[2]"
+                           cols="12"
+                           sm="4"
+                         >
+                           <v-text-field
+                             v-model="eventDetail.name3"
+                             label="功德主姓名"
+                             required
+                           ></v-text-field>
+                         </v-col>
                          <v-col
-                          cols="12"
-                          sm="4"
-                        >
-                      </v-col>
-                          <v-col cols="12" sm="3">
-                            <v-checkbox
-                              v-model="lightDetail.lightType1"
-                              label="太歲燈"
-                            ></v-checkbox>
-                          </v-col>
-
-                          <v-col cols="12"sm="3">
-                            <v-checkbox
-                              v-model="lightDetail.lightType2"
-                              label="財神燈"
-                            ></v-checkbox>
-                          </v-col>
-            
-                          <v-col cols="12"sm="3">
-                            <v-checkbox
-                              v-model="lightDetail.lightType3"
-                              label="文昌燈"
-                            ></v-checkbox>
-                          </v-col>
-
-                          <v-col cols="12"sm="3">
-                            <v-checkbox
-                              v-model="lightDetail.lightType4"
-                              label="長明燈"
-                            ></v-checkbox>
-                          </v-col>
-
-                          <v-col cols="12"sm="3">
-                            <v-checkbox
-                              v-model="lightDetail.lightType5"
-                              label="藥師燈"
-                            ></v-checkbox>
-                          </v-col>
-
-                          <v-col cols="12"sm="3">
-                            <v-checkbox
-                              v-model="lightDetail.lightType6"
-                              label="光明燈"
-                            ></v-checkbox>
-                          </v-col>
-
-                          <v-col cols="12"sm="3">
-                            <v-checkbox
-                              v-model="lightDetail.lightType7"
-                              label="姻緣燈"
-                            ></v-checkbox>
-                          </v-col>
-                         
-                          <v-col cols="12" sm="9">
-                            <v-text-field
-                              v-model="lightDetail.memo"
-                              label="備註"
-                            ></v-text-field>
-                          </v-col>
-                         
-                        </v-row>
-                      </v-container>
-                    </v-card-text>
-                    <v-card-actions>
-                      <v-spacer></v-spacer>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="lightDialog = false"
-                      >
-                        關閉
-                      </v-btn>
-                      <v-btn
-                        color="blue darken-1"
-                        text
-                        @click="addLighting"
-                      >
-                        新增
-                      </v-btn>
-                    </v-card-actions>
-                  </v-card>
-                </v-dialog>
-              </v-row>
-            </template>
-
-          </v-data-table>
-        </v-card>
-      </v-app>
-    </script>
-  <script>
-    /* global Vue, firebase */
-
-    let config = {
-      apiKey: "AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g",
-      authDomain: "light-1a6d4.firebaseapp.com",
-      databaseURL: "https://light-1a6d4.firebaseio.com/",
-      projectId: "light-1a6d4",
-      storageBucket: "light-1a6d4.appspot.com",
-      messagingSenderId: "66654715141",
-    };
-
-    let db = firebase.initializeApp(config).database();
-    let userRef = db.ref("Member");
-    let evnetRef = db.ref("Event");
-    let lightRef = db.ref('User')
-
-
-    const App = {
-      template: "#app-template",
-      data() {
-        return {
-          enableNameColumn: [true, true, false, false, false, false],
-          enableBlessedColumn: [true, false, false, false],
-
-          eventDescription: "",
-          eventDialog: false,
-          lightDialog: false,
-          selectUser: {},
-          lightDetail:{
-            lightType1: false,
-            lightType2: false,
-            lightType3: false,
-            lightType4: false,
-            lightType5: false,
-            lightType6: false,
-            lightType7: false,
-            lightYear:new Date().getFullYear()-1911,
-            memo:''
-          },
-          eventDetail: {
-            name: "",
-            name2: "",
-            name3: "",
-            name4: "",
-            name5: "",
-            name6: "",
-            eventName: "",
-            firstName: "",
-            blessed2: "",
-            blessed3: "",
-            blessed4: "",
-            address: "",
-            phone: "",
-            memo: "",
-            isCash: false,
-            isBankTransfer: false,
-            amount: 0,
-          },
-          overviewData: [],
-          headers: [
-            { text: "姓名", value: "name" },
-            { text: "地址", value: "address" },
-            { text: "年", value: "year" },
-            { text: "月", value: "month" },
-            { text: "日", value: "day" },
-            { text: "時", value: "minute" },
-            { text: "操作", value: "actions" },
-            { text: "國曆/農曆", value: "isChineeseYear" },
-            { text: "電話", value: "phone" },
-            { text: "備註", value: "memo" },
-          ],
-          search: "",
-        };
-      },
-      firebase: {
-        Users: userRef.limitToLast(25),
-      },
-      beforeMount() {
-        this.checkLogin();
-        this.loadData();
-      },
-      methods: {
-        checkLogin: function () {
-          localStorage.setItem('temple_page', 'MemberOverview.html');
-          let loginExpireTime = localStorage.getItem('temple_login_expire_time');
-          var date = new Date();
-          let isExpired = new Date(loginExpireTime) < new Date(date)
-          if (loginExpireTime == null || isExpired) {
-            alert("請先登入")
-            window.location.href = 'Login.html';
-          }
-        },
-        loadData: function () {
-          let self = this;
-          this.overviewData = [];
-          userRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              user.key = data.key;
-              self.overviewData.push(user);
-            });
-
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.address > b.address ? -1 : 1;
-            });
-          });
-        },
-        adjustEnableNameColumns(enableNameColumnCount) {
-          for (var i = 0; i < 6; i++) {
-            if (i < enableNameColumnCount) {
-              this.enableNameColumn[i] = true;
-            }
-            else {
-              this.enableNameColumn[i] = false;
-            }
-          }
-        },
-        adjustBlessedColumns(enableBlessedColumnCount) {
-          for (var i = 0; i < 4; i++) {
-            if (i < enableBlessedColumnCount) {
-              this.enableBlessedColumn[i] = true;
-            }
-            else {
-              this.enableBlessedColumn[i] = false;
-            }
-          }
-        },
-        changeRoute(selectObj) {
-
-          // :items="['梁皇寶懺超薦歷代祖先九玄七祖', '超薦歷代祖先', '超薦個人累世冤親債主', '超薦無緣子女嬰靈', '超薦親人+報恩(父、母、兄弟、姊妹、恩人)', '超薦動物靈(狗、貓寵物名)']"
-          if (selectObj === '梁皇寶懺超薦歷代祖先九玄七祖') {
-            this.eventDescription = "梁皇寶懺";
-            this.adjustEnableNameColumns(6);
-            this.adjustBlessedColumns(1);
-
-          }
-          if (selectObj === '超薦歷代祖先') {
-            this.eventDescription = "超薦歷代祖先姓氏"
-            this.adjustEnableNameColumns(6);
-            this.adjustBlessedColumns(1);
-
-          }
-          if (selectObj === '超薦個人累世冤親債主') {
-            this.eventDescription = "個人累世冤親債主"
-            this.eventDetail.firstName = this.selectUser.name
-            this.adjustEnableNameColumns(4);
-            this.adjustBlessedColumns(4);
-          }
-          if (selectObj === '超薦無緣子女嬰靈') {
-            this.eventDescription = "超薦無緣子女嬰靈姓名"
-            this.adjustEnableNameColumns(2);
-            this.adjustBlessedColumns(2);
-
-
-          }
-          if (selectObj === '超薦親人+報恩(父、母、兄弟、姊妹、恩人)') {
-            this.eventDescription = "超薦親人+報恩(父、母、兄弟、姊妹、恩人)姓名"
-            this.adjustEnableNameColumns(6);
-            this.adjustBlessedColumns(4);
-
-
-          }
-          if (selectObj === '超薦動物靈(狗、貓寵物名)') {
-            this.eventDescription = "超薦動物靈(狗、貓寵物名)"
-            this.adjustEnableNameColumns(2);
-            this.adjustBlessedColumns(2);
-
-
-          }
-        },
-        addByName: function () {
-          location.href = "MemberCreate.html?name=" + this.search;
-        },
-        addByAddress: function () {
-          location.href = "MemberCreate.html?address=" + this.search;
-        },
-        updateUser: function (data) {
-          data.modifyTime = Date.now();
-          let key = data.key;
-          delete data.key;
-          userRef.child(key).set(data);
-          alert("更新完成");
-          this.loadData();
-        },
-        removeUser: function (data) {
-          userRef.child(data.key).remove();
-          alert("刪除完成");
-          this.loadData();
-        },
-        addResigistion: function () {
-          evnetRef.push({
-            userId: this.selectUser.key,
-            name: this.eventDetail.name,
-            name2: this.eventDetail.name2,
-            name3: this.eventDetail.name3,
-            name4: this.eventDetail.name4,
-            name5: this.eventDetail.name5,
-            name6: this.eventDetail.name6,
-            eventName: this.eventDetail.eventName,
-            firstName: this.eventDetail.firstName,
-            blessed2: this.eventDetail.blessed2,
-            blessed3: this.eventDetail.blessed3,
-            blessed4: this.eventDetail.blessed4,
-            address: this.eventDetail.address,
-            phone: this.eventDetail.phone,
-            memo: this.eventDetail.memo,
-            isCash: this.eventDetail.isCash,
-            isBankTransfer: this.eventDetail.isBankTransfer,
-            amount: this.eventDetail.amount,
-            modifyTime: Date.now(),
-            createdTime: Date.now(),
-          });
-          this.eventDialog = false;
-        },
-        addLighting: function () {
-          console.log(this.selectUser);
-          console.log(this.lightDetail);
-          
-          lightRef.push({
-            name: this.selectUser.name,
-            phone: this.selectUser.phone,
-            address: this.selectUser.address,
-            year: this.selectUser.year,
-            month: this.selectUser.month,
-            day: this.selectUser.day,
-            minute: this.selectUser.minute,
-            isChineeseYear: this.selectUser.isChineeseYear,
-            memo: this.lightDetail.memo,
-            lightType1: this.lightDetail.lightType1,
-            lightType2: this.lightDetail.lightType2,
-            lightType3: this.lightDetail.lightType3,
-            lightType4: this.lightDetail.lightType4,
-            lightType5: this.lightDetail.lightType5,
-            lightType6: this.lightDetail.lightType6,
-            lightType7: this.lightDetail.lightType7,
-            lightYear:this.lightDetail.lightYear,
-            modifyTime: Date.now(),
-            createdTime: Date.now()
-          });
-          this.lightDialog = false;
-          this.lightDetail={
-            lightType1: false,
-            lightType2: false,
-            lightType3: false,
-            lightType4: false,
-            lightType5: false,
-            lightType6: false,
-            lightType7: false,
-            lightYear:new Date().getFullYear()-1911,
-            memo:''
-          }
-        },
-        registerEvent: function (data) {
-          this.eventDialog = true;
-          this.selectUser = data;
-          this.eventDetail = {
-            name: this.selectUser.name,
-            name2: "",
-            name3: "",
-            name4: "",
-            name5: "",
-            name6: "",
-            eventName: "",
-            firstName: "",
-            blessed2: "",
-            blessed3: "",
-            blessed4: "",
-            address: this.selectUser.address,
-            phone: this.selectUser.phone,
-            memo: "",
-            isCash: false,
-            isBankTransfer: false,
-            amount: 0,
-          };
-        },
-        lighting: function (data) {
-          this.lightDialog = true;
-          this.selectUser = data;
-        },
-      },
-    };
-    new Vue({
-      vuetify: new Vuetify(),
-      render: (h) => h(App),
-    }).$mount("#app-table");
-  </script>
-</body>
-
+                         v-if="enableNameColumn[3]"
+                         cols="12"
+                         sm="4"
+                       >
+                         <v-text-field
+                           v-model="eventDetail.name4"
+                           label="功德主姓名"
+                           required
+                         ></v-text-field>
+                       </v-col>
+                       <v-col
+                       v-if="enableNameColumn[4]"
+                       cols="12"
+                       sm="4"
+                     >
+                       <v-text-field
+                         v-model="eventDetail.name5"
+                         label="功德主姓名"
+                         required
+                       ></v-text-field>
+                     </v-col>
+                     <v-col
+                     v-if="enableNameColumn[5]"
+                     cols="12"
+                     sm="4"
+                   >
+                     <v-text-field
+                       v-model="eventDetail.name6"
+                       label="功德主姓名"
+                       required
+                     ></v-text-field>
+                   </v-col>
+              
+                     <v-col cols="12">
+                       <v-text-field
+                         label="牌位或塔位地址"
+                         v-model="eventDetail.address"
+                         required
+                       ></v-text-field>
+                       <v-col cols="12"
+                       md="9">
+                        {{eventDescription}}
+                       </v-col>
+                     </v-col>
+                             <v-col 
+                             v-if="enableBlessedColumn[0]"
+                             cols="12"
+                             sm="6"
+                             md="3">
+                               <v-text-field
+                                 label="姓氏或姓名"
+                                 v-model="eventDetail.firstName"
+                                 required
+                               ></v-text-field>
+                             </v-col>
+                           </v-col>
+                           <v-col 
+                           v-if="enableBlessedColumn[1]"
+                           cols="12"
+                           sm="6"
+                           md="3">
+                             <v-text-field
+                               label="姓氏或姓名"
+                               v-model="eventDetail.blessed2"
+                               required
+                             ></v-text-field>
+                           </v-col>
+                         </v-col>
+                         <v-col 
+                         v-if="enableBlessedColumn[2]"
+                         cols="12"
+                         sm="6"
+                         md="3">
+                           <v-text-field
+                             label="姓氏或姓名"
+                             v-model="eventDetail.blessed3"
+                             required
+                           ></v-text-field>
+                         </v-col>
+                       </v-col>
+                       <v-col 
+                       v-if="enableBlessedColumn[3]"
+                       cols="12"
+                       sm="6"
+                       md="3">
+                         <v-text-field
+                           label="姓氏或姓名"
+                           v-model="eventDetail.blessed4"
+                           required
+                         ></v-text-field>
+                       </v-col>
+                     </v-col>
+                          
+                             <v-col
+                               cols="12"
+                               sm="3"
+                             >
+                             <v-text-field
+                             label="連絡電話"
+                             v-model="eventDetail.phone"
+                             required
+                           ></v-text-field>
+                             </v-col>
+                             <v-col
+                               cols="12"
+                               sm="9"
+                             >
+                             <v-text-field
+                             v-model="eventDetail.memo"
+                             label="備註"
+                           ></v-text-field>
+                             </v-col>
+                             <v-col
+                             cols="12"
+                             sm="3"
+                           >
+                           <v-text-field
+                           label="金額"
+                           v-model="eventDetail.amount"
+                           required
+                         ></v-text-field>
+                           </v-col>
+                             <v-col
+                             cols="12"
+                             sm="4"
+                           >
+                           <v-checkbox
+                           v-model="eventDetail.isCash"
+                           label="現金"
+                         ></v-checkbox>
+                           </v-col>
+                         </v-col>
+                         <v-col
+                         cols="12"
+                         sm="4"
+                       >
+                       <v-checkbox
+                       v-model="eventDetail.isBankTransfer"
+                       label="匯款"
+                     ></v-checkbox>
+                       </v-col>
+                           </v-row>
+                         </v-container>
+                       </v-card-text>
+                       <v-card-actions>
+                         <v-spacer></v-spacer>
+                         <v-btn
+                           color="blue darken-1"
+                           text
+                           @click="eventDialog = false"
+                         >
+                           關閉
+                         </v-btn>
+                         <v-btn
+                           color="blue darken-1"
+                           text
+                           @click="addResigistion"
+                         >
+                           新增
+                         </v-btn>
+                       </v-card-actions>
+                     </v-card>
+                   </v-dialog>
+                 </v-row>
+               </template>
+         
+               <template v-slot:top>
+                 <v-row justify="center">
+                   <v-dialog
+                     v-model="lightDialog"
+                     persistent
+                     max-width="600px"
+                   >
+                     <v-card>
+                       <v-card-title>
+                         <span class="text-h5">點燈報名</span>
+                       </v-card-title>
+                       <v-card-text>
+                         <v-container>
+                           <v-row>
+                             <v-col
+                             cols="12"
+                             sm="4"
+                           >
+                          {{selectUser.name}}
+                           </v-col>
+                             <v-col
+                             cols="12"
+                             sm="4"
+                           >
+                             <v-text-field
+                             v-model="lightDetail.lightYear"
+                             label="點燈年度"
+                             required
+                             ></v-text-field>
+                           </v-col>
+                            <v-col
+                             cols="12"
+                             sm="4"
+                           >
+                         </v-col>
+                             <v-col cols="12" sm="3">
+                               <v-checkbox
+                                 v-model="lightDetail.lightType1"
+                                 label="太歲燈"
+                               ></v-checkbox>
+                             </v-col>
+         
+                             <v-col cols="12"sm="3">
+                               <v-checkbox
+                                 v-model="lightDetail.lightType2"
+                                 label="財神燈"
+                               ></v-checkbox>
+                             </v-col>
+               
+                             <v-col cols="12"sm="3">
+                               <v-checkbox
+                                 v-model="lightDetail.lightType3"
+                                 label="文昌燈"
+                               ></v-checkbox>
+                             </v-col>
+         
+                             <v-col cols="12"sm="3">
+                               <v-checkbox
+                                 v-model="lightDetail.lightType4"
+                                 label="長明燈"
+                               ></v-checkbox>
+                             </v-col>
+         
+                             <v-col cols="12"sm="3">
+                               <v-checkbox
+                                 v-model="lightDetail.lightType5"
+                                 label="藥師燈"
+                               ></v-checkbox>
+                             </v-col>
+         
+                             <v-col cols="12"sm="3">
+                               <v-checkbox
+                                 v-model="lightDetail.lightType6"
+                                 label="光明燈"
+                               ></v-checkbox>
+                             </v-col>
+         
+                             <v-col cols="12"sm="3">
+                               <v-checkbox
+                                 v-model="lightDetail.lightType7"
+                                 label="姻緣燈"
+                               ></v-checkbox>
+                             </v-col>
+                            
+                             <v-col cols="12" sm="9">
+                               <v-text-field
+                                 v-model="lightDetail.memo"
+                                 label="備註"
+                               ></v-text-field>
+                             </v-col>
+                            
+                           </v-row>
+                         </v-container>
+                       </v-card-text>
+                       <v-card-actions>
+                         <v-spacer></v-spacer>
+                         <v-btn
+                           color="blue darken-1"
+                           text
+                           @click="lightDialog = false"
+                         >
+                           關閉
+                         </v-btn>
+                         <v-btn
+                           color="blue darken-1"
+                           text
+                           @click="addLighting"
+                         >
+                           新增
+                         </v-btn>
+                       </v-card-actions>
+                     </v-card>
+                   </v-dialog>
+                 </v-row>
+               </template>
+         
+             </v-data-table>
+           </v-card>
+         </v-app>
+      </script>
+      <script>
+         /* global Vue, firebase */
+         
+         let config = {
+           apiKey: "AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g",
+           authDomain: "light-1a6d4.firebaseapp.com",
+           databaseURL: "https://light-1a6d4.firebaseio.com/",
+           projectId: "light-1a6d4",
+           storageBucket: "light-1a6d4.appspot.com",
+           messagingSenderId: "66654715141",
+         };
+         
+         let db = firebase.initializeApp(config).database();
+         let userRef = db.ref("Member");
+         let evnetRef = db.ref("Event");
+         let lightRef = db.ref('User')
+         
+         
+         const App = {
+           template: "#app-template",
+           data() {
+             return {
+               enableNameColumn: [true, true, false, false, false, false],
+               enableBlessedColumn: [true, false, false, false],
+         
+               eventDescription: "",
+               eventDialog: false,
+               lightDialog: false,
+               selectUser: {},
+               lightDetail: {
+                 lightType1: false,
+                 lightType2: false,
+                 lightType3: false,
+                 lightType4: false,
+                 lightType5: false,
+                 lightType6: false,
+                 lightType7: false,
+                 lightYear: new Date().getFullYear() - 1911,
+                 memo: ''
+               },
+               eventDetail: {
+                 name: "",
+                 name2: "",
+                 name3: "",
+                 name4: "",
+                 name5: "",
+                 name6: "",
+                 eventName: "",
+                 firstName: "",
+                 blessed2: "",
+                 blessed3: "",
+                 blessed4: "",
+                 address: "",
+                 phone: "",
+                 memo: "",
+                 isCash: false,
+                 isBankTransfer: false,
+                 amount: 0,
+               },
+               overviewData: [],
+               headers: [
+                 { text: "姓名", value: "name" },
+                 { text: "地址", value: "address" },
+                 { text: "年", value: "year" },
+                 { text: "月", value: "month" },
+                 { text: "日", value: "day" },
+                 { text: "時", value: "minute" },
+                 { text: "操作", value: "actions" },
+                 { text: "國曆/農曆", value: "isChineeseYear" },
+                 { text: "電話", value: "phone" },
+                 { text: "備註", value: "memo" },
+               ],
+               search: "",
+             };
+           },
+           firebase: {
+             Users: userRef.limitToLast(25),
+           },
+           beforeMount() {
+             this.checkLogin();
+             this.loadData();
+           },
+           methods: {
+             checkLogin: function () {
+               localStorage.setItem('temple_page', 'MemberOverview.html');
+               let loginExpireTime = localStorage.getItem('temple_login_expire_time');
+               var date = new Date();
+               let isExpired = new Date(loginExpireTime) < new Date(date)
+               if (loginExpireTime == null || isExpired) {
+                 alert("請先登入")
+                 window.location.href = 'Login.html';
+               }
+             },
+             loadData: function () {
+               let self = this;
+               this.overviewData = [];
+               userRef.once("value", function (snapshot) {
+                 snapshot.forEach(function (data) {
+                   let user = data.val();
+                   user.key = data.key;
+                   self.overviewData.push(user);
+                 });
+         
+                 self.overviewData = self.overviewData.sort(function (a, b) {
+                   return a.address > b.address ? -1 : 1;
+                 });
+               });
+             },
+             adjustEnableNameColumns(enableNameColumnCount) {
+               for (var i = 0; i < 6; i++) {
+                 if (i < enableNameColumnCount) {
+                   this.enableNameColumn[i] = true;
+                 }
+                 else {
+                   this.enableNameColumn[i] = false;
+                 }
+               }
+             },
+             adjustBlessedColumns(enableBlessedColumnCount) {
+               for (var i = 0; i < 4; i++) {
+                 if (i < enableBlessedColumnCount) {
+                   this.enableBlessedColumn[i] = true;
+                 }
+                 else {
+                   this.enableBlessedColumn[i] = false;
+                 }
+               }
+             },
+             changeRoute(selectObj) {
+         
+               // :items="['梁皇寶懺超薦歷代祖先九玄七祖', '超薦歷代祖先', '超薦個人累世冤親債主', '超薦無緣子女嬰靈', '超薦親人+報恩(父、母、兄弟、姊妹、恩人)', '超薦動物靈(狗、貓寵物名)']"
+               if (selectObj === '梁皇寶懺超薦歷代祖先九玄七祖') {
+                 this.eventDescription = "梁皇寶懺";
+                 this.adjustEnableNameColumns(6);
+                 this.adjustBlessedColumns(1);
+         
+               }
+               if (selectObj === '超薦歷代祖先') {
+                 this.eventDescription = "超薦歷代祖先姓氏"
+                 this.adjustEnableNameColumns(6);
+                 this.adjustBlessedColumns(1);
+         
+               }
+               if (selectObj === '超薦個人累世冤親債主') {
+                 this.eventDescription = "個人累世冤親債主"
+                 this.eventDetail.firstName = this.selectUser.name
+                 this.adjustEnableNameColumns(4);
+                 this.adjustBlessedColumns(4);
+               }
+               if (selectObj === '超薦無緣子女嬰靈') {
+                 this.eventDescription = "超薦無緣子女嬰靈姓名"
+                 this.adjustEnableNameColumns(2);
+                 this.adjustBlessedColumns(2);
+         
+         
+               }
+               if (selectObj === '超薦親人+報恩(父、母、兄弟、姊妹、恩人)') {
+                 this.eventDescription = "超薦親人+報恩(父、母、兄弟、姊妹、恩人)姓名"
+                 this.adjustEnableNameColumns(6);
+                 this.adjustBlessedColumns(4);
+         
+         
+               }
+               if (selectObj === '超薦動物靈(狗、貓寵物名)') {
+                 this.eventDescription = "超薦動物靈(狗、貓寵物名)"
+                 this.adjustEnableNameColumns(2);
+                 this.adjustBlessedColumns(2);
+         
+         
+               }
+             },
+             addByName: function () {
+               location.href = "MemberCreate.html?name=" + this.search;
+             },
+             addByAddress: function () {
+               location.href = "MemberCreate.html?address=" + this.search;
+             },
+             updateUser: function (data) {
+               data.modifyTime = Date.now();
+               let key = data.key;
+               delete data.key;
+               userRef.child(key).set(data);
+               alert("更新完成");
+               this.loadData();
+             },
+             removeUser: function (data) {
+               userRef.child(data.key).remove();
+               alert("刪除完成");
+               this.loadData();
+             },
+             addResigistion: function () {
+               evnetRef.push({
+                 userId: this.selectUser.key,
+                 name: this.eventDetail.name,
+                 name2: this.eventDetail.name2,
+                 name3: this.eventDetail.name3,
+                 name4: this.eventDetail.name4,
+                 name5: this.eventDetail.name5,
+                 name6: this.eventDetail.name6,
+                 eventName: this.eventDetail.eventName,
+                 firstName: this.eventDetail.firstName,
+                 blessed2: this.eventDetail.blessed2,
+                 blessed3: this.eventDetail.blessed3,
+                 blessed4: this.eventDetail.blessed4,
+                 address: this.eventDetail.address,
+                 phone: this.eventDetail.phone,
+                 memo: this.eventDetail.memo,
+                 isCash: this.eventDetail.isCash,
+                 isBankTransfer: this.eventDetail.isBankTransfer,
+                 amount: this.eventDetail.amount,
+                 modifyTime: Date.now(),
+                 createdTime: Date.now(),
+               });
+               this.eventDialog = false;
+             },
+             addLighting: function () {
+               console.log(this.selectUser);
+               console.log(this.lightDetail);
+         
+               lightRef.push({
+                 name: this.selectUser.name,
+                 phone: this.selectUser.phone,
+                 address: this.selectUser.address,
+                 year: this.selectUser.year,
+                 month: this.selectUser.month,
+                 day: this.selectUser.day,
+                 minute: this.selectUser.minute,
+                 isChineeseYear: this.selectUser.isChineeseYear,
+                 memo: this.lightDetail.memo,
+                 lightType1: this.lightDetail.lightType1,
+                 lightType2: this.lightDetail.lightType2,
+                 lightType3: this.lightDetail.lightType3,
+                 lightType4: this.lightDetail.lightType4,
+                 lightType5: this.lightDetail.lightType5,
+                 lightType6: this.lightDetail.lightType6,
+                 lightType7: this.lightDetail.lightType7,
+                 lightYear: this.lightDetail.lightYear,
+                 modifyTime: Date.now(),
+                 createdTime: Date.now()
+               });
+               this.lightDialog = false;
+               this.lightDetail = {
+                 lightType1: false,
+                 lightType2: false,
+                 lightType3: false,
+                 lightType4: false,
+                 lightType5: false,
+                 lightType6: false,
+                 lightType7: false,
+                 lightYear: new Date().getFullYear() - 1911,
+                 memo: ''
+               }
+             },
+             registerEvent: function (data) {
+               this.eventDialog = true;
+               this.selectUser = data;
+               this.eventDetail = {
+                 name: this.selectUser.name,
+                 name2: "",
+                 name3: "",
+                 name4: "",
+                 name5: "",
+                 name6: "",
+                 eventName: "",
+                 firstName: "",
+                 blessed2: "",
+                 blessed3: "",
+                 blessed4: "",
+                 address: this.selectUser.address,
+                 phone: this.selectUser.phone,
+                 memo: "",
+                 isCash: false,
+                 isBankTransfer: false,
+                 amount: 0,
+               };
+             },
+             lighting: function (data) {
+               this.lightDialog = true;
+               this.selectUser = data;
+             },
+           },
+         };
+         new Vue({
+           vuetify: new Vuetify(),
+           render: (h) => h(App),
+         }).$mount("#app-table");
+      </script>
+   </body>
 </html>
