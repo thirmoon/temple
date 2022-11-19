@@ -631,7 +631,7 @@
         addLighting: function () {
           console.log(this.selectUser);
           console.log(this.lightDetail);
-
+          
 //           address: "高雄市鼓山區青海路76號2樓之1"
 // createdTime: "1650206635421"
 // day: "10"
@@ -651,10 +651,8 @@
             year: this.selectUser.year,
             month: this.selectUser.month,
             day: this.selectUser.day,
-            hour: this.selectUser.hour,
             minute: this.selectUser.minute,
-            isAftermoon: this.selectUser.isAftermoon,
-            isChineeseYear: user.isChineeseYear,
+            isChineeseYear: this.selectUser.isChineeseYear,
             memo: this.lightDetail.memo,
             lightType1: this.lightDetail.lightType1,
             lightType2: this.lightDetail.lightType2,
@@ -667,6 +665,16 @@
             createdTime: Date.now()
           });
           this.lightDialog = false;
+          this.lightDetail={
+            lightType1: false,
+            lightType2: false,
+            lightType3: false,
+            lightType4: false,
+            lightType5: false,
+            lightType6: false,
+            lightType7: false,
+            memo:''
+          }
         },
         registerEvent: function (data) {
           this.eventDialog = true;
@@ -694,25 +702,6 @@
         lighting: function (data) {
           this.lightDialog = true;
           this.selectUser = data;
-          this.eventDetail = {
-            name: this.selectUser.name,
-            name2: "",
-            name3: "",
-            name4: "",
-            name5: "",
-            name6: "",
-            eventName: "",
-            firstName: "",
-            blessed2: "",
-            blessed3: "",
-            blessed4: "",
-            address: this.selectUser.address,
-            phone: this.selectUser.phone,
-            memo: "",
-            isCash: false,
-            isBankTransfer: false,
-            amount: 0,
-          };
         },
       },
     };
