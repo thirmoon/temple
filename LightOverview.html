@@ -62,6 +62,9 @@
           <template v-slot:item.name="{ item }">
             <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
           </template>
+          <template v-slot:item.lightYear="{ item }">
+            <input :name="item.lightYear"  id="overview_name" v-model.trim="item.lightYear" maxlength="8">
+          </template>
           <template v-slot:item.address="{ item }">
             <input  :name="item.address" id="overview_address" v-model.trim="item.address">
           </template>
@@ -137,6 +140,7 @@
           overviewData: [],
           headers: [
             { text: '姓名', value: 'name' },
+            { text: '點燈年份', value: 'lightYear' },
             { text: '地址', value: 'address' },
             { text: '年', value: 'year' },
             { text: '月', value: 'month' },
