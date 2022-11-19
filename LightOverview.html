@@ -1,0 +1,277 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>慈善亭 | 點燈系統</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./src/css/overview.css">
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <script src="./dist/vuefire.js"></script>
+
+</head>
+
+<body>
+
+  <div id="app">
+    <section id="admin-wrapper">
+      <div id="form-wrapper">
+        <h1 class="page-title">慈善亭</h1>
+        <h1 class="page-title">
+          <a href="MemberOverview.html">信徒總覽 |</a>
+          <a href="EventOverview.html">法會總覽 |</a>
+          <a href="LightOverview.html">點燈總覽</a>
+        </h1>
+      </div>
+
+    </section>
+    <ul>
+      <div id="app-table"></div>
+    </ul>
+  </div>
+  <script type="text/x-template" id="app-template">
+    <v-app id="inspire">
+      <ul>
+      <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
+      <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
+      </ul>
+      <v-card>
+        <v-card-title>
+          <v-text-field v-model="search"  label="搜尋" single-line hide-details></v-text-field>
+          <v-btn elevation="2"  v-on:click="searchData" >鎖定搜尋</v-btn>
+        </v-card-title>
+        <v-data-table 
+          :headers="headers" 
+          :items="overviewData" 
+          class="elevation-1" 
+          item-key="key"
+          fixed-header
+          :search="search" 
+          height="400px"
+          :items-per-page="20">   
+          <template v-slot:item.name="{ item }">
+            <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
+          </template>
+          <template v-slot:item.lightYear="{ item }">
+            <input :name="item.lightYear"  id="overview_name" v-model.trim="item.lightYear" maxlength="8">
+          </template>
+          <template v-slot:item.address="{ item }">
+            <input  :name="item.address" id="overview_address" v-model.trim="item.address">
+          </template>
+          <template v-slot:item.year="{ item }">
+            <input  :name="item.year" id="overview_date" v-model.trim="item.year" maxlength="4">
+          </template>
+          <template v-slot:item.month="{ item }">
+            <input  :name="item.month" id="overview_date" v-model.trim="item.month">
+          </template>
+          <template v-slot:item.day="{ item }">
+            <input  :name="item.day" id="overview_date" v-model.trim="item.day">
+          </template>
+          <template v-slot:item.minute="{ item }">
+            <input  :name="item.minute" id="overview_date" v-model.trim="item.minute">
+          </template>
+          <template v-slot:item.lightType1="{ item }">
+            <input type="checkbox"  v-model.trim="item.lightType1">
+          </template>
+          <template v-slot:item.lightType2="{ item }">
+            <input type="checkbox"  v-model.trim="item.lightType2">
+          </template>
+          <template v-slot:item.lightType3="{ item }">
+            <input type="checkbox"  v-model.trim="item.lightType3">
+          </template>
+          <template v-slot:item.lightType4="{ item }">
+            <input type="checkbox"  v-model.trim="item.lightType4">
+          </template>
+          <template v-slot:item.lightType5="{ item }">
+            <input type="checkbox"  v-model.trim="item.lightType5">
+          </template>
+          <template v-slot:item.lightType6="{ item }">
+            <input type="checkbox"  v-model.trim="item.lightType6">
+          </template>
+          <template v-slot:item.lightType7="{ item }">
+            <input type="checkbox"  v-model.trim="item.lightType7">
+          </template>
+          <template v-slot:item.isChineeseYear="{ item }">
+            <input  id="overview_name" :name="item.isChineeseYear" v-model.trim="item.isChineeseYear">
+          </template>
+          <template v-slot:item.phone="{ item }">
+            <input  :name="item.phone" v-model.trim="item.phone" id="overview_phone">
+          </template>
+          <template v-slot:item.memo="{ item }">
+            <input  :name="item.memo" v-model.trim="item.memo">
+          </template>
+          <template v-slot:item.actions="{ item }">
+            <v-btn elevation="2"  v-on:click="updateUser(item)" >更新</v-btn>
+            <v-btn elevation="2"  v-on:click="removeUser(item)" >刪除</v-btn>
+            <v-btn elevation="2"  v-on:click="newUser(item)" >新增</v-btn>
+          </template>
+        </v-data-table>
+      </v-card>
+    </v-app>
+  </script>
+
+  <script>
+    /* global Vue, firebase */
+
+    let config = {
+      apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
+      authDomain: 'light-1a6d4.firebaseapp.com',
+      databaseURL: 'https://light-1a6d4.firebaseio.com/',
+      projectId: 'light-1a6d4',
+      storageBucket: 'light-1a6d4.appspot.com',
+      messagingSenderId: '66654715141'
+    }
+
+    let db = firebase.initializeApp(config).database()
+    let userRef = db.ref('User')
+    const App = {
+      template: '#app-template',
+      data() {
+        return {
+          overviewData: [],
+          headers: [
+            { text: '姓名', value: 'name' },
+            { text: '點燈年份', value: 'lightYear' },
+            { text: '地址', value: 'address' },
+            { text: '年', value: 'year' },
+            { text: '月', value: 'month' },
+            { text: '日', value: 'day' },
+            { text: '時', value: 'minute' },
+            { text: '太歲燈', value: 'lightType1' },
+            { text: '財神燈', value: 'lightType2' },
+            { text: '文昌燈', value: 'lightType3' },
+            { text: '長明燈', value: 'lightType4' },
+            { text: '藥師燈', value: 'lightType5' },
+            { text: '光明燈', value: 'lightType6' },
+            { text: '姻緣燈', value: 'lightType7' },
+            { text: '操作', value: 'actions' },
+            { text: '國曆/農曆', value: 'isChineeseYear' },
+            { text: '電話', value: 'phone' },
+            { text: '備註', value: 'memo' }
+            
+
+          ],
+          search: ''
+
+        }
+      },
+      firebase: {
+        Users: userRef.limitToLast(25),
+      },
+      beforeMount() {
+        this.loadData()
+      },
+      methods: {
+        loadData: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+
+            snapshot.forEach(function (data) {
+
+              let user = data.val();
+              user.key = data.key;
+              self.overviewData.push(user);
+            });
+
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+
+          });
+        },
+        addByName: function () {
+          location.href = 'Index.html?name=' + this.search;
+        },
+        addByAddress: function () {
+          location.href = 'Index.html?address=' + this.search;
+        },
+        searchData: function () {
+          let self = this;
+          this.overviewData = []
+
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.address.includes(self.search) ||user.name.includes(self.search)) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            if (self.overviewData.length > 0) {
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            }
+            else {
+              alert('無此資料');
+            }
+            self.search='';
+
+          });
+
+
+        },
+        updateUser: function (data) {
+          data.isAftermoon = '上午';
+          data.lightType = '信徒';
+          data.modifyTime = Date.now();
+          data.hour = 0;
+          let key = data.key;
+          delete data.key;
+          userRef.child(key).set(data);
+          alert('更新完成')
+          this.loadData()
+        },
+        removeUser: function (data) {
+          userRef.child(data.key).remove();
+          alert('刪除完成')
+          this.loadData()
+        },
+        newUser: function (data) {
+          userRef.push({
+                 name: data.name,
+                 phone: data.phone,
+                 address: data.address,
+                 year: data.year,
+                 month: data.month,
+                 day: data.day,
+                 minute: data.minute,
+                 isChineeseYear: data.isChineeseYear,
+                 memo: data.memo,
+                 lightType1: data.lightType1,
+                 lightType2: data.lightType2,
+                 lightType3: data.lightType3,
+                 lightType4: data.lightType4,
+                 lightType5: data.lightType5,
+                 lightType6: data.lightType6,
+                 lightType7: data.lightType7,
+                 lightYear: new Date().getFullYear() - 1911,
+                 modifyTime: Date.now(),
+                 createdTime: Date.now()
+               });
+          alert('複製完成')
+          this.loadData()
+        },
+
+      }
+    }
+    new Vue({
+      vuetify: new Vuetify(),
+      render: h => h(App)
+    }).$mount('#app-table')
+
+
+
+  </script>
+</body>
+
+</html>

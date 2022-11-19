@@ -1,0 +1,371 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>慈善亭 | 點燈系統</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="./src/css/overview.css">
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="./dist/vuefire.js"></script>
+  <script language="JavaScript" type="text/javascript">
+
+    var idTmr;
+    function getExplorer() {
+      var explorer = window.navigator.userAgent;
+      //ie
+      if (explorer.indexOf("MSIE") >= 0) {
+        return 'ie';
+      }
+      //firefox
+      else if (explorer.indexOf("Firefox") >= 0) {
+        return 'Firefox';
+      }
+      //Chrome
+      else if (explorer.indexOf("Chrome") >= 0) {
+        return 'Chrome';
+      }
+      //Opera
+      else if (explorer.indexOf("Opera") >= 0) {
+        return 'Opera';
+      }
+      //Safari
+      else if (explorer.indexOf("Safari") >= 0) {
+        return 'Safari';
+      }
+    }
+    function downloadToExcel(tableid) {
+      if (getExplorer() == 'ie') {
+        var curTbl = document.getElementById(tableid);
+        var oXL = new ActiveXObject("Excel.Application");
+        var oWB = oXL.Workbooks.Add();
+        var xlsheet = oWB.Worksheets(1);
+        var sel = document.body.createTextRange();
+        sel.moveToElementText(curTbl);
+        sel.select();
+        sel.execCommand("Copy");
+        xlsheet.Paste();
+        oXL.Visible = true;
+        try {
+          var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+        } catch (e) {
+
+        } finally {
+          oWB.SaveAs(fname);
+          oWB.Close(savechanges = false);
+          oXL.Quit();
+          oXL = null;
+          idTmr = window.setInterval("Cleanup();", 1);
+        }
+      }
+      else {
+        tableToExcel(tableid)
+      }
+    }
+    function Cleanup() {
+      window.clearInterval(idTmr);
+      CollectGarbage();
+    }
+    var tableToExcel = (function () {
+      var uri = 'data:application/vnd.ms-excel;base64,',
+        template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
+        base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) },
+        format = function (s, c) {
+          return s.replace(/{(\w+)}/g,
+            function (m, p) { return c[p]; })
+        }
+      return function (table, name) {
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+        window.location.href = uri + base64(format(template, ctx))
+      }
+    })()
+  </script>
+</head>
+
+<body>
+
+  <div id="app">
+    <section id="admin-wrapper">
+      <div id="form-wrapper">
+        <h1 class="page-title">慈善亭</h1>
+        <h1 class="page-title"> 
+          <a href="Index.html">新增</a> | 
+          <a href="Search.html">搜尋</a> | 
+          <a href="Overview.html">總覽</a>
+        </h1>
+        <h1 class="page-title"> 
+          <a href="Download-v1.html">下載(舊版)</a> | 
+          <a href="Download-v2.html">下載(新版)</a>
+        </h1>
+        <button v-on:click="loadAllData">載入所有資料</button>
+        <button v-on:click="loadTodayData">載入當天修改資料</button>
+        <!-- <button v-on:click="loadUniqueData">載入點燈用資料(過濾年紀)</button> -->
+        <br>
+        <br>
+        <button v-on:click="loadLight1">載入太歲燈資料</button>
+        <button v-on:click="loadLight2">載入財神燈資料</button>
+        <button v-on:click="loadLight3">載入文昌燈資料</button>
+        <br>
+        <br>
+        <button v-on:click="loadLight4">載入長明燈資料</button>
+        <button v-on:click="loadLight5">載入藥師燈資料</button>
+        <button v-on:click="loadLight6">載入光明燈資料</button>
+        <br>
+        <br>
+        <button v-on:click="loadLight7">載入姻緣燈資料</button>
+
+        <br>
+        <br>
+
+        <button type="button" onclick="downloadToExcel('tableExcel')">下載</button>
+      </div>
+
+    </section>
+    <ul>
+      <table class="table table-striped" id="tableExcel">
+        <thead>
+          <tr>
+            <td>姓名</td>
+            <td>地址</td>
+            <td>年</td>
+            <td>月</td>
+            <td>日</td>
+            <td>時</td>
+
+          </tr>
+        </thead>
+        <tr v-for="data in overviewData">
+
+          <td> {{data.name}}</td>
+          <td> {{data.address}}</td>
+          <td> {{data.year}}</td>
+          <td> {{data.month}}</td>
+          <td> {{data.day}}</td>
+          <td> {{data.minute}}</td>
+
+        </tr>
+      </table>
+    </ul>
+  </div>
+
+  <script>
+    /* global Vue, firebase */
+
+    let config = {
+      apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
+      authDomain: 'light-1a6d4.firebaseapp.com',
+      databaseURL: 'https://light-1a6d4.firebaseio.com/',
+      projectId: 'light-1a6d4',
+      storageBucket: 'light-1a6d4.appspot.com',
+      messagingSenderId: '66654715141'
+    }
+    this.searchResultData
+    let db = firebase.initializeApp(config).database()
+    let userRef = db.ref('User')
+    new Vue({
+      el: '#app',
+      data: {
+        overviewData: [],
+        today: null,
+        addMultipleUserStyle: {
+          display: 'none'
+        }
+      },
+      firebase: {
+        Users: userRef.limitToLast(25),
+      },
+      methods: {
+        loadAllData: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              user.key = data.key;
+              self.overviewData.push(user);
+
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadTodayData: function () {
+          let self = this;
+          this.overviewData = []
+          var q = new Date(Date.now());
+          var m = q.getMonth();
+          var d = q.getDate();
+          var y = q.getFullYear();
+          this.today = new Date(y, m, d);
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              let modifyTime = new Date(user.modifyTime);
+              if (modifyTime > self.today) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadUniqueData: function () {
+          let self = this;
+          this.overviewData = []
+          this.overviewData = []
+          var q = new Date(Date.now());
+          var m = q.getMonth();
+          var d = q.getDate();
+          var y = q.getFullYear();
+          this.today = new Date(y, m, d);
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              user.key = data.key;
+              let age = self.today.getFullYear() - (parseInt(user.year, 10) + 1911);
+              if (age < 75 && age > 18)
+                self.overviewData.push(user);
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadLight1: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType1 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadLight2: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType2 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        }, loadLight3: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType3 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        }, loadLight4: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType4 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        }, loadLight5: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType5 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        }, loadLight6: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType6 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        }, loadLight1: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType1 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        }, loadLight7: function () {
+          let self = this;
+          this.overviewData = []
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightType7 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+
+
+      }
+    })
+  </script>
+</body>
+
+</html>

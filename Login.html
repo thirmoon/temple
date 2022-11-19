@@ -8,6 +8,8 @@
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous" />
   <link rel="stylesheet" href="./src/css/overview.css" />
 
+
+  
   <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
@@ -23,11 +25,12 @@
       <div id="form-wrapper">
         <h1 class="page-title">慈善亭</h1>
       </div>
-    </section>
     <div id="app"></div>
+
+    </section>
   </div>
   <script type="text/x-template" id="app-template">
-      <v-app id="inspire">
+      <v-app id="inspire" justify="center">
         <template>
           <v-form >
             <v-container fluid>
@@ -66,7 +69,7 @@
       data() {
         return {
           show1: false,
-          password: 'Password',
+          password: '',
           rules: {
             required: value => !!value || 'Required.',
             min: v => v.length >= 8 || 'Min 8 characters',
@@ -74,15 +77,21 @@
           },
         }
       },
+      
       methods: {
         login: function () {
           let self = this;
           this.hash(this.password)
             .then((hex) => {
-              if (hex == '290b69edb51e3ded8f648f84e5b4653ef2798433199a33b3b0ede1d10254c4df') {
+              if (hex == 'ef51306214d9a6361ee1d5b452e6d2bb70dc7ebb85bf9e02c3d4747fb57d6bec') {
                 var date = new Date();
                 date.setDate(date.getDate() + 1);
-                localStorage.setItem('temple_login_exipre_time', date)
+                localStorage.setItem('temple_login_expire_time', date);
+                let page = localStorage.getItem('temple_page');
+                if ( page == null){
+                  page = MemberOverview.html;
+                }
+                window.location.href = localStorage.getItem('temple_page');
               }
               else {
                 alert("密碼錯誤")

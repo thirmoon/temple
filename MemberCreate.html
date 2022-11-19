@@ -16,10 +16,20 @@
           <h1 class="page-title">慈善亭</h1>
           <h1 class="page-title">
             <a href="MemberCreate.html">新增信徒 |</a>
-            <a href="MemberOverview.html">信徒總覽 |</a>
+            <a href="MemberOverview.html">信徒總覽</a>
+          </h1>
+          <h1 class="page-title">
             <a href="EventOverview.html">法會報名總覽 |</a>
-            <a href="EventDownload.html">法會報名下載 |</a>
-
+            <a href="EventDownload.html">法會報名下載</a>
+          </h1>
+          <h1 class="page-title">
+            <a href="EventOverview.html">法會報名總覽 |</a>
+            <a href="EventDownload.html">法會報名下載</a>
+          </h1>
+          <h1 class="page-title">
+            <a href="LightOverview.html">點燈報名總覽 |</a>
+            <a href="LightDownload_New.html">點燈資料下載(新版) |</a>
+            <a href="LightDownload_Old.html">點燈資料下載(舊版)</a>
           </h1>
         </div>
         <ul>
@@ -146,7 +156,20 @@
         firebase: {
           Users: userRef.limitToLast(25),
         },
+        beforeMount() {
+          this.checkLogin();
+        },
         methods: {
+          checkLogin: function (){
+            localStorage.setItem('temple_page','MemberCreate.html');
+            let loginExpireTime = localStorage.getItem('temple_login_expire_time');
+            var date = new Date();
+            let isExpired = new Date(loginExpireTime) < new Date(date)
+            if(loginExpireTime==null || isExpired){
+              alert("請先登入")
+              window.location.href = 'Login.html';
+            }
+          },
           addUserToFirebase: function (user) {
             userRef.push({
               name: user.name,
