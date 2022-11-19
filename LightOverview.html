@@ -113,6 +113,7 @@
           <template v-slot:item.actions="{ item }">
             <v-btn elevation="2"  v-on:click="updateUser(item)" >更新</v-btn>
             <v-btn elevation="2"  v-on:click="removeUser(item)" >刪除</v-btn>
+            <v-btn elevation="2"  v-on:click="copyUser(item)" >複製</v-btn>
           </template>
         </v-data-table>
       </v-card>
@@ -236,6 +237,32 @@
           userRef.child(data.key).remove();
           alert('刪除完成')
           this.loadData()
+        },
+        copyUser: function (data) {
+          userRef.push({
+                 name: data.name,
+                 phone: data.phone,
+                 address: data.address,
+                 year: data.year,
+                 month: data.month,
+                 day: data.day,
+                 minute: data.minute,
+                 isChineeseYear: data.isChineeseYear,
+                 memo: data.memo,
+                 lightType1: data.lightType1,
+                 lightType2: data.lightType2,
+                 lightType3: data.lightType3,
+                 lightType4: data.lightType4,
+                 lightType5: data.lightType5,
+                 lightType6: data.lightType6,
+                 lightType7: data.lightType7,
+                 lightYear: new Date().getFullYear() - 1911,
+                 modifyTime: Date.now(),
+                 createdTime: Date.now()
+               });
+          //userRef.child(data.key).remove();
+          //alert('刪除完成')
+          //this.loadData()
         },
 
       }
