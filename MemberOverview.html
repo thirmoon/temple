@@ -328,6 +328,27 @@
                     <v-card-text>
                       <v-container>
                         <v-row>
+                          <v-col
+                          cols="12"
+                          sm="4"
+                        >
+                       {{selectUser.name}}
+                        </v-col>
+                          <v-col
+                          cols="12"
+                          sm="4"
+                        >
+                          <v-text-field
+                          v-model="lightDetail.lightYear"
+                          label="點燈年度"
+                          required
+                          ></v-text-field>
+                        </v-col>
+                         <v-col
+                          cols="12"
+                          sm="4"
+                        >
+                      </v-col>
                           <v-col cols="12" sm="3">
                             <v-checkbox
                               v-model="lightDetail.lightType1"
@@ -450,6 +471,7 @@
             lightType5: false,
             lightType6: false,
             lightType7: false,
+            lightYear:new Date().getFullYear()-1911,
             memo:''
           },
           eventDetail: {
@@ -648,6 +670,7 @@
             lightType5: this.lightDetail.lightType5,
             lightType6: this.lightDetail.lightType6,
             lightType7: this.lightDetail.lightType7,
+            lightYear:this.lightDetail.lightYear,
             modifyTime: Date.now(),
             createdTime: Date.now()
           });
@@ -660,6 +683,7 @@
             lightType5: false,
             lightType6: false,
             lightType7: false,
+            lightYear:new Date().getFullYear()-1911,
             memo:''
           }
         },
