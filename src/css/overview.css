@@ -12,9 +12,14 @@
 }
 
 #overview_date {
-    width: 30px;
+    width: 20px;
 }
-
+#overview_year {
+    width: 32px;
+}
+#overview_option {
+    width: 20px;
+}
 #overview_address {
     width: 300px;
 }

@@ -64,13 +64,13 @@
             <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
           </template>
           <template v-slot:item.lightYear="{ item }">
-            <input  :name="item.lightYear" id="overview_name" v-model.trim="item.lightYear">
+            <input  :name="item.lightYear" id="overview_year" v-model.trim="item.lightYear">
           </template>
           <template v-slot:item.address="{ item }">
             <input  :name="item.address" id="overview_address" v-model.trim="item.address">
           </template>
           <template v-slot:item.year="{ item }">
-            <input  :name="item.year" id="overview_date" v-model.trim="item.year" maxlength="4">
+            <input  :name="item.year" id="overview_year" v-model.trim="item.year" maxlength="4">
           </template>
           <template v-slot:item.month="{ item }">
             <input  :name="item.month" id="overview_date" v-model.trim="item.month">
@@ -82,25 +82,25 @@
             <input  :name="item.minute" id="overview_date" v-model.trim="item.minute">
           </template>
           <template v-slot:item.lightType1="{ item }">
-            <input type="checkbox"  v-model.trim="item.lightType1">
+            <input type="checkbox"  id="overview_option" v-model.trim="item.lightType1">
           </template>
           <template v-slot:item.lightType2="{ item }">
-            <input type="checkbox"  v-model.trim="item.lightType2">
+            <input type="checkbox"    id="overview_option"  v-model.trim="item.lightType2">
           </template>
           <template v-slot:item.lightType3="{ item }">
-            <input type="checkbox"  v-model.trim="item.lightType3">
+            <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType3">
           </template>
           <template v-slot:item.lightType4="{ item }">
-            <input type="checkbox"  v-model.trim="item.lightType4">
+            <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType4">
           </template>
           <template v-slot:item.lightType5="{ item }">
-            <input type="checkbox"  v-model.trim="item.lightType5">
+            <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType5">
           </template>
           <template v-slot:item.lightType6="{ item }">
-            <input type="checkbox"  v-model.trim="item.lightType6">
+            <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType6">
           </template>
           <template v-slot:item.lightType7="{ item }">
-            <input type="checkbox"  v-model.trim="item.lightType7">
+            <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType7">
           </template>
           <template v-slot:item.isChineeseYear="{ item }">
             <input  id="overview_name" :name="item.isChineeseYear" v-model.trim="item.isChineeseYear">
