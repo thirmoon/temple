@@ -102,6 +102,12 @@
           <template v-slot:item.lightType7="{ item }">
             <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType7">
           </template>
+          <template v-slot:item.isCash="{ item }">
+            <input type="checkbox"   id="overview_option"  v-model.trim="item.isCash">
+          </template>
+          <template v-slot:item.isBankTransfer="{ item }">
+            <input type="checkbox"   id="overview_option"  v-model.trim="item.isBankTransfer">
+          </template>
           <template v-slot:item.isChineeseYear="{ item }">
             <input  id="overview_name" :name="item.isChineeseYear" v-model.trim="item.isChineeseYear">
           </template>
@@ -159,13 +165,12 @@
             { text: '光明燈', value: 'lightType6' },
             { text: '姻緣燈', value: 'lightType7' },
             { text: '操作', value: 'actions' },
+            { text: '現金', value: 'isCash' },
+            { text: '匯款', value: 'isBankTransfer' },
             { text: '國曆/農曆', value: 'isChineeseYear' },
             { text: '電話', value: 'phone' },
             { text: '備註', value: 'memo' },
             { text: '建立日期', value: 'createdTime' },
-
-
-
           ],
           search: ''
 
@@ -226,6 +231,7 @@
               let modifyTime = new Date(user.modifyTime);
               if (modifyTime > self.today) {
                 user.key = data.key;
+                console.log(user);
                 self.overviewData.push(user);
               }
             });
@@ -285,7 +291,7 @@
 
           let properyArray = ['name', 'phone', 'address', 'year', 'month', 'day', 'minute', 'isChineeseYear',
             'memo', 'lightType1', 'lightType2', 'lightType3', 'lightType4', 'lightType5', 'lightType6', 'lightType7',
-            'lightYear', 'modifyTime', 'createdTime'];
+            'lightYear', 'modifyTime', 'createdTime','isBankTransfer','isCash'];
           for (let i = 0; i < properyArray.length; i++) {
             if (data[properyArray[i]] == undefined)
               data[properyArray[i]] = null;
@@ -314,9 +320,12 @@
             lightType5: data.lightType5,
             lightType6: data.lightType6,
             lightType7: data.lightType7,
+            isCash: data.isCash,
+            isBankTransfer: data.isBankTransfer,
             lightYear: new Date().getFullYear() - 1911,
             modifyTime: Date.now(),
-            createdTime: Date.now()
+            createdTime: Date.now(),
+
           });
           alert('複製完成')
           this.loadData()

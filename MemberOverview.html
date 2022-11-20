@@ -392,7 +392,33 @@
                                 label="姻緣燈"
                               ></v-checkbox>
                             </v-col>
-                           
+                             </v-row>
+                            <v-row>
+                            <v-col
+                            cols="12"
+                            sm="2"
+                          >
+                          付款方式</v-checkbox>
+                          </v-col>
+                            <v-col
+                            cols="12"
+                            sm="3"
+                          >
+                          <v-checkbox
+                          v-model="lightDetail.isCash"
+                          label="現金"
+                        ></v-checkbox>
+                          </v-col>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="3"
+                      >
+                      <v-checkbox
+                      v-model="lightDetail.isBankTransfer"
+                      label="匯款"
+                    ></v-checkbox>
+                      </v-col>
                             <v-col cols="12" sm="9">
                               <v-text-field
                                 v-model="lightDetail.memo"
@@ -468,7 +494,9 @@
                  lightType6: false,
                  lightType7: false,
                  lightYear: new Date().getFullYear() - 1911,
-                 memo: ''
+                 memo: '',
+                 isCash:false,
+                 isBankTransfer:false
                },
                eventDetail: {
                  name: "",
@@ -664,6 +692,8 @@
                  lightType6: this.lightDetail.lightType6,
                  lightType7: this.lightDetail.lightType7,
                  lightYear: this.lightDetail.lightYear,
+                 isCash:this.lightDetail.isCash,
+                 isBankTransfer:this.lightDetail.isBankTransfer,
                  modifyTime: Date.now(),
                  createdTime: Date.now()
                });
@@ -677,6 +707,8 @@
                  lightType6: false,
                  lightType7: false,
                  lightYear: new Date().getFullYear() - 1911,
+                 isCash:false,
+                 isBankTransfer:false,
                  memo: ''
                }
              },
