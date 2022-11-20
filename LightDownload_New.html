@@ -93,14 +93,11 @@
     <section id="admin-wrapper">
       <div id="form-wrapper">
         <h1 class="page-title">慈善亭</h1>
-        <h1 class="page-title"> 
-          <a href="Index.html">新增</a> | 
-          <a href="Search.html">搜尋</a> | 
-          <a href="Overview.html">總覽</a>
-        </h1>
-        <h1 class="page-title"> 
-          <a href="Download-v1.html">下載(舊版)</a> | 
-          <a href="Download-v2.html">下載(新版)</a>
+        <h1 class="page-title">
+          <a href="MemberOverview.html">信徒總覽 |</a>
+          <a href="LightOverview.html">點燈總覽 |</a>
+          <a href="LightDownload_Old.html">下載(舊版) |</a>
+          <a href="LightDownload_New.html">下載(新版)</a>
         </h1>
         <button v-on:click="loadAllData">載入所有資料</button>
         <button v-on:click="loadTodayData">載入當天修改資料</button>
@@ -256,7 +253,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType1 == true) {
+               if (user.lightType1 == true && user.lightYear ==111) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
