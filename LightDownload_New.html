@@ -163,7 +163,7 @@
 
   <script>
     /* global Vue, firebase */
-
+    let lightYear = 111;
     let config = {
       apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
       authDomain: 'light-1a6d4.firebaseapp.com',
@@ -194,9 +194,10 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              user.key = data.key;
-              self.overviewData.push(user);
-
+              if (user.lightYear ==lightYear) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
             });
             self.overviewData = self.overviewData.sort(function (a, b) {
               return a.address > b.address ? -1 : 1;
@@ -253,7 +254,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-               if (user.lightType1 == true && user.lightYear ==111) {
+              if (user.lightType1 == true &&user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -269,7 +270,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType2 == true) {
+              if (user.lightType2 == true&&user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -284,7 +285,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType3 == true) {
+              if (user.lightType3 == true&&user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -299,7 +300,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType4 == true) {
+              if (user.lightType4 == true&&user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -314,7 +315,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType5 == true) {
+              if (user.lightType5 == true&&user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -329,22 +330,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType6 == true) {
-                user.key = data.key;
-                self.overviewData.push(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.address > b.address ? -1 : 1;
-            });
-          });
-        }, loadLight1: function () {
-          let self = this;
-          this.overviewData = []
-          userRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.lightType1 == true) {
+              if (user.lightType6 == true&&user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -359,7 +345,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType7 == true) {
+              if (user.lightType7 == true&&user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
