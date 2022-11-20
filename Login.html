@@ -89,9 +89,11 @@
                 localStorage.setItem('temple_login_expire_time', date);
                 let page = localStorage.getItem('temple_page');
                 if ( page == null){
-                  page = MemberOverview.html;
+                  page = 'page/Member/MemberOverview.html';
+                  window.location.href = page;
                 }
-                window.location.href = localStorage.getItem('temple_page');
+                page = 'page/Member/MemberOverview.html';
+                window.location.href = page;
               }
               else {
                 alert("密碼錯誤")
