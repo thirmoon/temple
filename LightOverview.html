@@ -27,7 +27,6 @@
         <h1 class="page-title">慈善亭</h1>
         <h1 class="page-title">
           <a href="MemberOverview.html">信徒總覽 |</a>
-          <a href="EventOverview.html">法會總覽 |</a>
           <a href="LightOverview.html">點燈總覽</a>
         </h1>
       </div>
@@ -42,6 +41,8 @@
       <ul>
       <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
       <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
+      <v-btn elevation="2"  v-on:click="loadTodayData" >顯示今天修改資料</v-btn>
+
       </ul>
       <v-card>
         <v-card-title>
@@ -194,6 +195,30 @@
         addByAddress: function () {
           location.href = 'Index.html?address=' + this.search;
         },
+        loadTodayData: function () {
+          let self = this;
+          this.overviewData = []
+          var q = new Date(Date.now());
+          var m = q.getMonth();
+          var d = q.getDate();
+          var y = q.getFullYear();
+          this.today = new Date(y, m, d);
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              let modifyTime = new Date(user.modifyTime);
+              if (modifyTime > self.today) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+
+        },
+        
         searchData: function () {
           let self = this;
           this.overviewData = []
@@ -201,7 +226,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.address.includes(self.search) || user.name.includes(self.search)) {
+              if (user.modifyTime) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
