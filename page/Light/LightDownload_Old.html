@@ -6,12 +6,12 @@
   <title>慈善亭 | 點燈系統</title>
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
     integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
-  <link rel="stylesheet" href="./src/css/overview.css">
+  <link rel="stylesheet" href="../../src/css/overview.css">
 
 
   <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
-  <script src="./dist/vuefire.js"></script>
+  <script src="../../dist/vuefire.js"></script>
   <script language="JavaScript" type="text/javascript">
 
     var idTmr;
@@ -94,7 +94,7 @@
       <div id="form-wrapper">
         <h1 class="page-title">慈善亭</h1>
         <h1 class="page-title">
-          <a href="MemberOverview.html">信徒總覽 |</a>
+          <a href="../Member/MemberOverview.html">信徒總覽 |</a>
           <a href="LightOverview.html">點燈總覽 |</a>
           <a href="LightDownload_Old.html">下載(舊版) |</a>
           <a href="LightDownload_New.html">下載(新版)</a>
@@ -129,15 +129,10 @@
           <tr>
             <td>姓名</td>
             <td>地址</td>
-            <td>民國</td>
-            <td>年</td>
             <td>年</td>
             <td>月</td>
-            <td>月</td>
-            <td>日</td>
             <td>日</td>
             <td>時</td>
-            <td>時生</td>
 
           </tr>
         </thead>
@@ -145,16 +140,10 @@
 
           <td> {{data.name}}</td>
           <td> {{data.address}}</td>
-          <td>民國</td>
           <td> {{data.year}}</td>
-          <td>年</td>
           <td> {{data.month}}</td>
-          <td>月</td>
           <td> {{data.day}}</td>
-          <td>日</td>
           <td> {{data.minute}}</td>
-          <td>時生</td>
-
 
         </tr>
       </table>
@@ -163,6 +152,7 @@
 
   <script>
     /* global Vue, firebase */
+
     let lightYear = 111;
     let config = {
       apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
@@ -254,7 +244,8 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType1 == true &&user.lightYear ==lightYear) {
+            
+              if (user.lightType1 == true && user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -270,7 +261,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType2 == true&&user.lightYear ==lightYear) {
+              if (user.lightType2 == true&& user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -285,7 +276,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType3 == true&&user.lightYear ==lightYear) {
+              if (user.lightType3 == true&& user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -300,7 +291,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType4 == true&&user.lightYear ==lightYear) {
+              if (user.lightType4 == true&& user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -315,7 +306,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType5 == true&&user.lightYear ==lightYear) {
+              if (user.lightType5 == true&& user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -330,7 +321,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType6 == true&&user.lightYear ==lightYear) {
+              if (user.lightType6 == true&& user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -345,7 +336,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightType7 == true&&user.lightYear ==lightYear) {
+              if (user.lightType7 == true&& user.lightYear ==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
