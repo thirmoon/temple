@@ -1,0 +1,417 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <title>慈善亭 | 油香功德金捐獻</title>
+    <link
+      rel="stylesheet"
+      href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+      integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T"
+      crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../../src/css/overview.css" />
+
+    <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+    <link
+      href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css"
+      rel="stylesheet"
+    />
+    <script src="../../dist/vuefire.js"></script>
+  </head>
+
+  <body>
+    <div id="app">
+      <section id="admin-wrapper">
+        <div id="form-wrapper">
+          <h1 class="page-title">慈善亭 | 油香功德金捐獻</h1>
+          <h1 class="page-title">
+            <a href="../../MemberOverview.html">信徒總覽</a>
+          </h1>
+        </div>
+      </section>
+      <ul>
+        <div id="app-table"></div>
+      </ul>
+    </div>
+    <script type="text/x-template" id="app-template">
+      <v-app id="inspire">
+        <ul>
+          <v-card>
+            <v-data-table
+            :headers="balanceHeaders"
+            :items="balances"
+            class="elevation-1"
+            item-key="key"
+            fixed-header
+            height="400px">
+            <template v-slot:item.item1Balance="{ item }">
+              {{getDisplayNumber(item.item1Balance)}}
+            </template>
+            <template v-slot:item.item2Balance="{ item }">
+              {{getDisplayNumber(item.item2Balance)}}
+            </template>
+            <template v-slot:item.item3Balance="{ item }">
+              {{getDisplayNumber(item.item3Balance)}}
+            </template>
+            <template v-slot:item.item4Balance="{ item }">
+              {{getDisplayNumber(item.item4Balance)}}
+            </template>
+            <template v-slot:item.item5Balance="{ item }">
+              {{getDisplayNumber(item.item5Balance)}}
+            </template>
+            <template v-slot:item.item6Balance="{ item }">
+              {{getDisplayNumber(item.item6Balance)}}
+            </template>
+            <template v-slot:item.item7Balance="{ item }">
+              {{getDisplayNumber(item.item7Balance)}}
+            </template>
+            <template v-slot:item.totalbalance="{ item }">
+              {{getDisplayNumber(item.totalbalance)}}
+            </template>
+            <template slot="body.append">
+              <tr class="pink--text">
+                  <th class="title">總計</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item1Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item2Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item3Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item4Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item5Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item6Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item7Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('totalbalance'))}}</th>
+              </tr>
+          </template>
+          <template slot="body.append">
+            <tr class="pink--text">
+                <th class="title">桌數</th>
+                <th class="title">{{tableCount}}</th>
+            </tr>
+        </template>
+          </v-data-table>
+          </v-card>
+          <br>
+        </ul>
+        <ul>  
+          <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
+          <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
+          </ul>
+        <v-card>
+          <v-card-title>
+            <v-text-field v-model="search" append-icon="mdi-magnify" label="搜尋" single-line hide-details>
+            </v-text-field>
+          </v-card-title>
+          <v-data-table
+            :headers="headers"
+            :items="overviewData"
+            :search="search"
+            class="elevation-1"
+            item-key="key"
+            fixed-header
+            height="400px"
+            :items-per-page="20">
+            <template v-slot:item.name="{ item }">
+              <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
+            </template>
+            <template v-slot:item.address="{ item }">
+              <input  :name="item.address" id="overview_address" v-model.trim="item.address">
+            </template>
+            <template v-slot:item.phone="{ item }">
+              <input  :name="item.phone" v-model.trim="item.phone" id="overview_phone">
+            </template>
+            <template v-slot:item.amount="{ item }">
+              <input  :name="item.amount" v-model.trim="item.amount" id="overview_phone">
+            </template>
+            <template v-slot:item.isCash="{ item }">
+              <input type="checkbox"  v-model.trim="item.isCash">
+            </template>
+            <template v-slot:item.isBankTransfer="{ item }">
+              <input type="checkbox"  v-model.trim="item.isBankTransfer">
+            </template>
+            <template v-slot:item.item1="{ item }">
+              <input type="checkbox"  v-model.trim="item.item1">
+            </template>
+            <template v-slot:item.item2="{ item }">
+              <input type="checkbox"  v-model.trim="item.item2">
+            </template>
+            <template v-slot:item.item3="{ item }">
+              <input type="checkbox"  v-model.trim="item.item3">
+            </template>
+            <template v-slot:item.item4="{ item }">
+              <input type="checkbox"  v-model.trim="item.item4">
+            </template>
+            <template v-slot:item.item5="{ item }">
+              <input type="checkbox"  v-model.trim="item.item5">
+            </template>
+            <template v-slot:item.item6="{ item }">
+              <input type="checkbox"  v-model.trim="item.item6">
+            </template>
+            <template v-slot:item.item7="{ item }">
+              <input type="checkbox"  v-model.trim="item.item7">
+            </template>
+            <template v-slot:item.memo="{ item }">
+              <input  :name="item.memo" v-model.trim="item.memo">
+            </template>
+            <template v-slot:item.modifiedDate="{ item }">
+             {{getDisplayTime(item.modifyTime)}}
+            </template>
+            <template v-slot:item.actions="{ item }">
+              <v-btn elevation="1"  v-on:click="updateDonation(item)" >更新</v-btn>
+              <v-btn elevation="1"  v-on:click="removeDonation(item)" >刪除</v-btn>
+              <v-btn elevation="1"  v-on:click="copyDonation(item)" >複製</v-btn>
+
+            </template>
+          </v-data-table>
+        </v-card>
+      </v-app>
+    </script>
+
+    <script>
+      /* global Vue, firebase */
+
+      let config = {
+        apiKey: "AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g",
+        authDomain: "light-1a6d4.firebaseapp.com",
+        databaseURL: "https://light-1a6d4.firebaseio.com/",
+        projectId: "light-1a6d4",
+        storageBucket: "light-1a6d4.appspot.com",
+        messagingSenderId: "66654715141",
+      };
+
+      let db = firebase.initializeApp(config).database();
+      let donationRef = db.ref("Donation");
+      const App = {
+        template: "#app-template",
+        data() {
+          return {
+            overviewData: [],
+            tableCount:0,
+            balances: [
+              {
+                label: "未付款",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0,
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+
+              },
+              {
+                label: "現金",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0,
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+              },
+              {
+                label: "匯款",
+                totalbalance:0,
+                item1Balance: 0,
+                item2Balance: 0,
+                item3Balance: 0,
+                item4Balance: 0, 
+                item5Balance: 0,
+                item6Balance: 0,
+                item7Balance: 0
+              }
+            ],
+            headers: [
+              { text: "功德主姓名", value: "name" },
+              { text: "地址", value: "address" },
+              { text: "電話", value: "phone" },
+              { text: "金額", value: "amount" },
+              { text: "現金", value: "isCash" },
+              { text: "匯款", value: "isBankTransfer" },
+              { text: "油香功德金", value: "item1" },
+              { text: "增建/整修工程", value: "item2" },
+              { text: "金身雕刻", value: "item3" },
+              { text: "九龍椅", value: "item4" },
+              { text: "文昌筆", value: "item5" },
+              { text: "其他", value: "item6" },
+              { text: "供品桌", value: "item7" },
+
+              { text: "備註", value: "memo" },
+              { text: "日期", value: "modifiedDate" },
+              { text: "操作", value: "actions" },
+            ],
+
+            balanceHeaders: [
+              { text: "項目", value: "label" },
+              { text: "油香功德金", value: "item1Balance" },
+              { text: "增建/整修工程", value: "item2Balance" },
+              { text: "金身雕刻", value: "item3Balance" },
+              { text: "九龍椅", value: "item4Balance" },
+              { text: "文昌筆", value: "item5Balance" },
+              { text: "其他", value: "item6Balance" },
+              { text: "供品桌", value: "item7Balance" },
+              { text: "總計", value: "totalbalance" },
+
+
+            ],
+            search: "",
+          };
+        },
+        firebase: {
+          Donations: donationRef.limitToLast(25),
+        },
+        beforeMount() {
+          this.loadData();
+        },
+        methods: {
+          loadData: function () {
+            let self = this;
+            this.balance = 0;
+            this.overviewData = [];
+            donationRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let donation = data.val();
+                donation.key = data.key;
+                self.overviewData.push(donation);
+              });
+
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+              self.GetBalance();
+            });
+          },
+          sumField(key) {
+        // sum data in give key (property)
+          return this.balances.reduce((a, b) => a + (b[key] || 0), 0)
+        },
+          addByName: function () {
+            location.href = "Create.html?name=" + this.search;
+          },
+          addByAddress: function () {
+            location.href = "Create.html?address=" + this.search;
+          },
+          GetBalance: function () {
+            let self = this;
+            this.overviewData.forEach(function (donation) {
+              let index = 0;
+              
+              if (donation.amount > 0) {
+                if (donation.isCash) {
+                  index = 1;
+                } else if (donation.isBankTransfer) {
+                  index = 2;
+                };
+
+                self.balances[index].totalbalance += Number(donation.amount);
+
+                if (donation.item1) {
+                  self.balances[index].item1Balance += Number(donation.amount);
+                } else if (donation.item2) {
+                  self.balances[index].item2Balance += Number(donation.amount);
+                } else if (donation.item3) {
+                  self.balances[index].item3Balance += Number(donation.amount);
+                } else if (donation.item4) {
+                  self.balances[index].item4Balance += Number(donation.amount);
+                }else if (donation.item5) {
+                  self.balances[index].item5Balance += Number(donation.amount);
+                }else if (donation.item6) {
+                  self.balances[index].item6Balance += Number(donation.amount);
+                }else if (donation.item7) {
+                  if(donation.memo && donation.memo.includes("桌")){
+                    let tableValue = donation.memo.replace("桌","");
+                    self.tableCount+=Number(tableValue);
+                  }
+                  self.balances[index].item7Balance += Number(donation.amount);
+                }
+              
+              }
+
+
+              // if (donation.amount > 0) {
+              //   if (donation.item1) {
+              //     index = 1;
+              //   } else if (donation.item2) {
+              //     index = 2;
+              //   } else if (donation.item3) {
+              //     index = 3;
+              //   } else if (donation.item4) {
+              //     index = 4;
+              //   }
+              //   self.balances[index].balance += Number(donation.amount);
+              //   if (donation.isCash) {
+              //     self.balances[index].cashBalance += Number(donation.amount);
+              //   }
+              //   if (donation.isBankTransfer) {
+              //     self.balances[index].bankTransferBalance += Number(
+              //       donation.amount
+              //     );
+              //   }
+              // }
+            });
+          },
+          updateDonation: function (data) {
+            data.modifyTime = Date.now();
+            let key = data.key;
+            delete data.key;
+            donationRef.child(key).set(data);
+            alert("更新完成");
+            this.loadData();
+          },
+          removeDonation: function (data) {
+            donationRef.child(data.key).remove();
+            alert("刪除完成");
+            this.loadData();
+          },
+          copyDonation: function (donation ) {
+            donationRef.push({
+            name: donation.name,
+            phone: donation.phone,
+            address: donation.address,
+            memo: '',
+            isCash: false,
+            isBankTransfer : false,
+            item1 : false,
+            item2: false,
+            item3:false,
+            item4:false,
+            item5:false,
+            item6:false,
+            item7:false,
+            modifyTime: Date.now()
+          })
+            alert("複製完成");
+            this.loadData();
+          },
+          getDisplayTime: function (time) {
+            if(time==undefined){
+              return null;
+            }
+            let dateTime = new Date(time);
+            return dateTime.toISOString().slice(0, 10);;
+          },
+          getDisplayNumber: function (number) {
+            if(number==undefined || number == null){
+              return 0;
+            }
+            return number.toLocaleString()
+          },
+        },
+      };
+      new Vue({
+        vuetify: new Vuetify(),
+        render: (h) => h(App),
+      }).$mount("#app-table");
+    </script>
+  </body>
+</html>
