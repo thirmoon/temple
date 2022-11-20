@@ -156,7 +156,7 @@
             { text: '國曆/農曆', value: 'isChineeseYear' },
             { text: '電話', value: 'phone' },
             { text: '備註', value: 'memo' }
-            
+
 
           ],
           search: ''
@@ -201,7 +201,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.address.includes(self.search) ||user.name.includes(self.search)) {
+              if (user.address.includes(self.search) || user.name.includes(self.search)) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
@@ -214,7 +214,7 @@
             else {
               alert('無此資料');
             }
-            self.search='';
+            self.search = '';
 
           });
 
@@ -232,32 +232,36 @@
           this.loadData()
         },
         removeUser: function (data) {
-          userRef.child(data.key).remove();
-          alert('刪除完成')
-          this.loadData()
+          
+          var yes = confirm('確認要刪除嗎？');
+
+          if (yes) {
+            userRef.child(data.key).remove();
+            this.loadData()
+          }
         },
         newUser: function (data) {
           userRef.push({
-                 name: data.name,
-                 phone: data.phone,
-                 address: data.address,
-                 year: data.year,
-                 month: data.month,
-                 day: data.day,
-                 minute: data.minute,
-                 isChineeseYear: data.isChineeseYear,
-                 memo: data.memo,
-                 lightType1: data.lightType1,
-                 lightType2: data.lightType2,
-                 lightType3: data.lightType3,
-                 lightType4: data.lightType4,
-                 lightType5: data.lightType5,
-                 lightType6: data.lightType6,
-                 lightType7: data.lightType7,
-                 lightYear: new Date().getFullYear() - 1911,
-                 modifyTime: Date.now(),
-                 createdTime: Date.now()
-               });
+            name: data.name,
+            phone: data.phone,
+            address: data.address,
+            year: data.year,
+            month: data.month,
+            day: data.day,
+            minute: data.minute,
+            isChineeseYear: data.isChineeseYear,
+            memo: data.memo,
+            lightType1: data.lightType1,
+            lightType2: data.lightType2,
+            lightType3: data.lightType3,
+            lightType4: data.lightType4,
+            lightType5: data.lightType5,
+            lightType6: data.lightType6,
+            lightType7: data.lightType7,
+            lightYear: new Date().getFullYear() - 1911,
+            modifyTime: Date.now(),
+            createdTime: Date.now()
+          });
           alert('複製完成')
           this.loadData()
         },
