@@ -204,11 +204,11 @@
         },
         getDisplayLightYear(createdTime) {
           let ct = new Date(createdTime);
-          let result = (ct.getFullYear()-1911).toString()+'.'+(ct.getMonth()+1).toString();
-          if (result.includes('Na')){
+          let result = (ct.getFullYear() - 1911).toString() + '.' + (ct.getMonth() + 1).toString();
+          if (result.includes('Na')) {
             return '';
           }
-          else{
+          else {
             return result;
           }
         },
@@ -260,7 +260,6 @@
 
           });
 
-
         },
         updateUser: function (data) {
           data.isAftermoon = '上午';
@@ -282,7 +281,22 @@
             this.loadData()
           }
         },
+        formateUser: function (data) {
+
+          let properyArray = ['name', 'phone', 'address', 'year', 'month', 'day', 'minute', 'isChineeseYear',
+            'memo', 'lightType1', 'lightType2', 'lightType3', 'lightType4', 'lightType5', 'lightType6', 'lightType7',
+            'lightYear', 'modifyTime', 'createdTime'];
+          for (let i = 0; i < properyArray.length; i++) {
+            if (data[properyArray[i]] == undefined)
+              data[properyArray[i]] = null;
+          }
+          return data;
+        },
+
         newUser: function (data) {
+
+          data = this.formateUser(data);
+
           userRef.push({
             name: data.name,
             phone: data.phone,
