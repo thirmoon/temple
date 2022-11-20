@@ -779,9 +779,11 @@
           this.loadData();
         },
         removeUser: function (data) {
-          userRef.child(data.key).remove();
-          alert("刪除完成");
-          this.loadData();
+          var yes = confirm('確認要刪除嗎？');
+          if (yes) {
+            userRef.child(data.key).remove();
+            this.loadData()
+          }
         },
         addResigistion: function () {
           evnetRef.push({
@@ -808,7 +810,7 @@
           });
           this.eventDialog = false;
         },
-        addDonation:function(){
+        addDonation: function () {
           donationRef.push({
             name: this.selectUser.name,
             phone: this.selectUser.phone,
@@ -816,14 +818,14 @@
             memo: this.donateDetail.memo,
             amount: this.donateDetail.amount,
             isCash: this.donateDetail.isCash,
-            isBankTransfer : this.donateDetail.isBankTransfer,
-            item1 : this.donateDetail.item1,
+            isBankTransfer: this.donateDetail.isBankTransfer,
+            item1: this.donateDetail.item1,
             item2: this.donateDetail.item2,
-            item3:this.donateDetail.item3,
-            item4:this.donateDetail.item4,
-            item5:this.donateDetail.item5,
-            item6:this.donateDetail.item6,
-            item7:this.donateDetail.item7,
+            item3: this.donateDetail.item3,
+            item4: this.donateDetail.item4,
+            item5: this.donateDetail.item5,
+            item6: this.donateDetail.item6,
+            item7: this.donateDetail.item7,
             modifyTime: Date.now(),
             createdTime: Date.now()
           })
