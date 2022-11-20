@@ -204,7 +204,6 @@
         },
         getDisplayLightYear(createdTime) {
           let ct = new Date(createdTime);
-          console.log(createdTime);
           let result = (ct.getFullYear()-1911).toString()+'.'+(ct.getMonth()+1).toString();
           if (result.includes('Na')){
             return '';
