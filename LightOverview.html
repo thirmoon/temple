@@ -64,7 +64,7 @@
             <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
           </template>
           <template v-slot:item.lightYear="{ item }">
-            <input :name="item.lightYear"  id="overview_name" v-model.trim="item.lightYear" maxlength="8">
+            <input  :name="item.lightYear" id="overview_name" v-model.trim="item.lightYear">
           </template>
           <template v-slot:item.address="{ item }">
             <input  :name="item.address" id="overview_address" v-model.trim="item.address">
@@ -116,6 +116,9 @@
             <v-btn elevation="2"  v-on:click="removeUser(item)" >刪除</v-btn>
             <v-btn elevation="2"  v-on:click="newUser(item)" >新增</v-btn>
           </template>
+          <template v-slot:item.createdTime="{ item }">
+            {{getDisplayLightYear(item.createdTime)}}
+          </template>
         </v-data-table>
       </v-card>
     </v-app>
@@ -158,7 +161,9 @@
             { text: '操作', value: 'actions' },
             { text: '國曆/農曆', value: 'isChineeseYear' },
             { text: '電話', value: 'phone' },
-            { text: '備註', value: 'memo' }
+            { text: '備註', value: 'memo' },
+            { text: '建立日期', value: 'createdTime' },
+
 
 
           ],
@@ -197,6 +202,17 @@
         addByAddress: function () {
           location.href = 'Index.html?address=' + this.search;
         },
+        getDisplayLightYear(createdTime) {
+          let ct = new Date(createdTime);
+          console.log(createdTime);
+          let result = (ct.getFullYear()-1911).toString()+'.'+(ct.getMonth()+1).toString();
+          if (result.includes('Na')){
+            return '';
+          }
+          else{
+            return result;
+          }
+        },
         loadTodayData: function () {
           let self = this;
           this.overviewData = []
@@ -220,7 +236,7 @@
           });
 
         },
-        
+
         searchData: function () {
           let self = this;
           this.overviewData = []
@@ -259,7 +275,7 @@
           this.loadData()
         },
         removeUser: function (data) {
-          
+
           var yes = confirm('確認要刪除嗎？');
 
           if (yes) {
