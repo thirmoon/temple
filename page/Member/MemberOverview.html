@@ -466,39 +466,75 @@
         
                             <v-col cols="12"sm="3">
                               <v-checkbox
+                                v-model="donateDetail.item8"
+                                label="高上帝聖誕"
+                              ></v-checkbox>
+                            </v-col>
+              
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="donateDetail.item9"
+                                label="玄天上帝聖誕"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="donateDetail.item10"
+                                label="祈安法會"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="donateDetail.item11"
+                                label="超拔法會"
+                              ></v-checkbox>
+                            </v-col>
+        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
                                 v-model="donateDetail.item2"
                                 label="增建/整修工程"
                               ></v-checkbox>
                             </v-col>
-              
+        
                             <v-col cols="12"sm="3">
                               <v-checkbox
                                 v-model="donateDetail.item3"
                                 label="金身雕刻"
                               ></v-checkbox>
                             </v-col>
-        
                             <v-col cols="12"sm="3">
                               <v-checkbox
-                                v-model="donateDetail.item4"
-                                label="九龍椅"
+                                v-model="donateDetail.item12"
+                                label="金身1"
                               ></v-checkbox>
                             </v-col>
-        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="donateDetail.item13"
+                                label="金身2"
+                              ></v-checkbox>
+                            </v-col>
                             <v-col cols="12"sm="3">
                               <v-checkbox
                                 v-model="donateDetail.item5"
                                 label="文昌筆"
                               ></v-checkbox>
                             </v-col>
-        
                             <v-col cols="12"sm="3">
                               <v-checkbox
-                                v-model="donateDetail.item6"
-                                label="其他"
+                                v-model="donateDetail.item14"
+                                label="其他1"
                               ></v-checkbox>
                             </v-col>
-        
+                            <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="donateDetail.item15"
+                                label="其他2"
+                              ></v-checkbox>
+                            </v-col>
                             <v-col cols="12"sm="3">
                               <v-checkbox
                                 v-model="donateDetail.item7"
@@ -625,11 +661,17 @@
             isCash: false,
             isBankTransfer: false,
             item1: false,
+            item8: false,
+            item9: false,
+            item10: false,
+            item11: false,
             item2: false,
             item3: false,
-            item4: false,
+            item12: false,
+            item13: false,
             item5: false,
-            item6: false,
+            item14: false,
+            item15: false,
             item7: false,
             memo: ''
           },
@@ -820,11 +862,17 @@
             isCash: this.donateDetail.isCash,
             isBankTransfer: this.donateDetail.isBankTransfer,
             item1: this.donateDetail.item1,
+            item8: this.donateDetail.item8,
+            item9: this.donateDetail.item9,
+            item10: this.donateDetail.item10,
+            item11: this.donateDetail.item11,
             item2: this.donateDetail.item2,
             item3: this.donateDetail.item3,
-            item4: this.donateDetail.item4,
+            item12: this.donateDetail.item12,
+            item13: this.donateDetail.item13,
             item5: this.donateDetail.item5,
-            item6: this.donateDetail.item6,
+            item14: this.donateDetail.item14,
+            item15: this.donateDetail.item15,
             item7: this.donateDetail.item7,
             modifyTime: Date.now(),
             createdTime: Date.now()
@@ -835,11 +883,17 @@
             isCash: false,
             isBankTransfer: false,
             item1: false,
+            item8: false,
+            item9: false,
+            item10: false,
+            item11: false,
             item2: false,
             item3: false,
-            item4: false,
+            item12: false,
+            item13: false,
             item5: false,
-            item6: false,
+            item14: false,
+            item15: false,
             item7: false,
             memo: ''
           }

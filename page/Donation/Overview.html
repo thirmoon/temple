@@ -98,6 +98,7 @@
                   <th class="title">{{ getDisplayNumber(sumField('item5Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item14Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item15Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item7Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('totalbalance'))}}</th>
               </tr>
           </template>
@@ -182,6 +183,9 @@
             </template>
             <template v-slot:item.item15="{ item }">
               <input type="checkbox"  v-model.trim="item.item15">
+            </template>
+            <template v-slot:item.item7="{ item }">
+              <input type="checkbox"  v-model.trim="item.item7">
             </template>
             <template v-slot:item.memo="{ item }">
               <input  :name="item.memo" v-model.trim="item.memo">
@@ -422,11 +426,11 @@
                 self.balances[index].item11Balance += Number(donation.amount);
               }else if (donation.item12) {
                 self.balances[index].item12Balance += Number(donation.amount);
-              }else if (donation.item13Balance) {
+              }else if (donation.item13) {
                 self.balances[index].item13Balance += Number(donation.amount);
-              }else if (donation.item14Balance) {
+              }else if (donation.item14) {
                 self.balances[index].item14Balance += Number(donation.amount);
-              }else if (donation.item15Balance) {
+              }else if (donation.item15) {
                 self.balances[index].item15Balance += Number(donation.amount);
               }
               
