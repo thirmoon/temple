@@ -384,6 +384,7 @@
           let self = this;
           this.overviewData.forEach(function (donation) {
             let index = 0;
+            let overYeayDate = new Date(2022, 11, 01);
 
             if (donation.amount > 0) {
               if (donation.isCash) {
@@ -391,13 +392,18 @@
               } else if (donation.isBankTransfer) {
                 index = 2;
               };
-              if(donation.item4 || donation.item6){
+              if(donation.item4 || donation.item6 
+              || (donation.item1 && new Date(donation.modifyTime) < overYeayDate)
+              || (donation.item7 && new Date(donation.modifyTime) < overYeayDate)
+              ){
 
               }else{
                 self.balances[index].totalbalance += Number(donation.amount);
               }
+           
 
-              if (donation.item1) {
+
+              if (donation.item1 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item1Balance += Number(donation.amount);
               } else if (donation.item2) {
                 self.balances[index].item2Balance += Number(donation.amount);
@@ -405,7 +411,7 @@
                 self.balances[index].item3Balance += Number(donation.amount);
               } else if (donation.item5) {
                 self.balances[index].item5Balance += Number(donation.amount);
-              }  else if (donation.item7) {
+              }  else if (donation.item7 && new Date(donation.modifyTime) > overYeayDate) {
                 if (donation.memo && donation.memo.includes("桌")) {
                   let tableValue = donation.memo.replace("桌", "");
                   self.tableCount += Number(tableValue);
