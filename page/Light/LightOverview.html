@@ -41,6 +41,32 @@
   <script type="text/x-template" id="app-template">
     <v-app id="inspire">
       <ul>
+        <v-card>
+          <v-data-table
+          :headers="summaryHeaders"
+          :items="summarys"
+          class="elevation-1"
+          item-key="key"
+          fixed-header
+          height="250px">
+          <template slot="body.append">
+            <tr class="pink--text">
+                <th class="title">總計</th>
+                <th class="title">{{ sumField('lightType1Count')}}</th>
+                <th class="title">{{ sumField('lightType2Count') }}</th>
+                <th class="title">{{ sumField('lightType3Count') }}</th>
+                <th class="title">{{ sumField('lightType4Count') }}</th>
+                <th class="title">{{ sumField('lightType5Count') }}</th>
+                <th class="title">{{ sumField('lightType6Count')}}</th>
+                <th class="title">{{ sumField('lightType7Count')}}</th>
+                <th class="title">{{ sumField('totalCount')}}</th>
+            </tr>
+        </template>
+        </v-data-table>
+        </v-card>
+        <br>
+      </ul>
+      <ul>
       <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
       <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
       <v-btn elevation="2"  v-on:click="loadTodayData" >顯示今天修改資料</v-btn>
@@ -149,6 +175,42 @@
       data() {
         return {
           overviewData: [],
+          summarys: [
+            {
+              label: "未付款",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            },
+            {
+              label: "現金",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            },
+            {
+              label: "匯款",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            }
+          ],
+         
           headers: [
             { text: '姓名', value: 'name' },
             { text: '點燈年份', value: 'lightYear' },
@@ -172,6 +234,18 @@
             { text: '備註', value: 'memo' },
             { text: '建立日期', value: 'createdTime' },
           ],
+          summaryHeaders: [
+            { text: "項目", value: "label" },
+            { text: "太歲燈", value: "lightType1Count" },
+            { text: "財神燈", value: "lightType2Count" },
+            { text: "文昌燈", value: "lightType3Count" },
+            { text: "長明燈", value: "lightType4Count" },
+            { text: "藥師燈", value: "lightType5Count" },
+            { text: '光明燈', value: 'lightType6Count' },
+            { text: "姻緣燈", value: "lightType7Count" },
+            { text: "總計", value: "totalCount" },
+
+          ],
           search: ''
 
         }
@@ -182,6 +256,7 @@
       beforeMount() {
         this.loadData()
       },
+    
       methods: {
         loadData: function () {
           let self = this;
@@ -198,9 +273,43 @@
             self.overviewData = self.overviewData.sort(function (a, b) {
               return a.address > b.address ? -1 : 1;
             });
+            self.GetSummary(); 
+          });
+        },
+        sumField(key) {
+          return this.summarys.reduce((a, b) => a + (b[key] || 0), 0)
+        },
+        GetSummary: function () {
+          let self = this;
+          this.overviewData.forEach(function (data) {
+            if(data.lightYear == 112){
+              let index = 0;
+            if (data.isCash) {
+                index = 1;
+              } else if (data.isBankTransfer) {
+                index = 2;
+              };
+              self.summarys[index].totalCount += 1;
+              if (data.lightType1) {
+                self.summarys[index].lightType1Count += 1;
+              } else if (data.lightType2) {
+                self.summarys[index].lightType2Count += 1;
+              } else if (data.lightType3) {
+                self.summarys[index].lightType3Count += 1;
+              }else if (data.lightType4) {
+                self.summarys[index].lightType4Count += 1;
+              }else if (data.lightType5) {
+                self.summarys[index].lightType5Count += 1;
+              }else if (data.lightType6) {
+                self.summarys[index].lightType6Count += 1;
+              }else if (data.lightType7) {
+                self.summarys[index].lightType7Count += 1;
+              }
+            }
 
           });
         },
+  
         addByName: function () {
           location.href = '../Member/MemberCreate.html?name=' + this.search;
         },

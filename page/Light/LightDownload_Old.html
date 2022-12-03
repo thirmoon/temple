@@ -153,7 +153,7 @@
   <script>
     /* global Vue, firebase */
 
-    let lightYear = 111;
+    let lightYear = 112;
     let config = {
       apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
       authDomain: 'light-1a6d4.firebaseapp.com',
@@ -293,6 +293,8 @@
               let user = data.val();
               if (user.lightType4 == true&& user.lightYear ==lightYear) {
                 user.key = data.key;
+                console.log(user.name);
+                console.log(new Date(user.modifyTime));
                 self.overviewData.push(user);
               }
             });
