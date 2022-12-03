@@ -160,7 +160,7 @@
 
   <script>
     /* global Vue, firebase */
-
+    let lightYear = 112;
     let config = {
       apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
       authDomain: 'light-1a6d4.firebaseapp.com',
@@ -284,7 +284,7 @@
         GetSummary: function () {
           let self = this;
           this.overviewData.forEach(function (data) {
-            if(data.lightYear == 112){
+            if(data.lightYear == lightYear){
               let index = 0;
             if (data.isCash) {
                 index = 1;
@@ -358,7 +358,7 @@
           userRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.lightYear==112) {
+              if (user.lightYear==lightYear) {
                 user.key = data.key;
                 self.overviewData.push(user);
               }
