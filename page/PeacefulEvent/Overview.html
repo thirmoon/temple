@@ -50,33 +50,30 @@
         <ul>
           <v-card>
             <v-data-table
-            :headers="balanceHeaders"
-            :items="balances"
+            :headers="dinnerSummaryHeaders"
+            :items="dinnerSummary"
             class="elevation-1"
             item-key="key"
             fixed-header
             height="285px">
-            <template v-slot:item.item1Balance="{ item }">
-              {{getDisplayNumber(item.item1Balance)}}
+            <template v-slot:item.totalCount="{ item }">
+              {{getDisplayNumber(item.totalCount)}}
             </template>
-            <template v-slot:item.item2Balance="{ item }">
-              {{getDisplayNumber(item.item2Balance)}}
+            <template v-slot:item.dinner_vegetable_count="{ item }">
+              {{getDisplayNumber(item.dinner_vegetable_count)}}
             </template>
-            <template v-slot:item.item3Balance="{ item }">
-              {{getDisplayNumber(item.item3Balance)}}
+            <template v-slot:item.dinner_meat_count="{ item }">
+              {{getDisplayNumber(item.dinner_meat_count)}}
             </template>
-            <template v-slot:item.item4Balance="{ item }">
-              {{getDisplayNumber(item.item4Balance)}}
-            </template>
-            <template v-slot:item.item5Balance="{ item }">
-              {{getDisplayNumber(item.item5Balance)}}
-            </template>
-            <template v-slot:item.item6Balance="{ item }">
-              {{getDisplayNumber(item.item6Balance)}}
-            </template>
-            <template v-slot:item.totalbalance="{ item }">
-              {{getDisplayNumber(item.totalbalance)}}
-            </template>
+            <template slot="body.append">
+              <tr class="pink--text">
+                  <th class="title">總計</th>
+                  <th class="title">{{ getDisplayNumber(sumField('dinner_vegetable_count'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('dinner_meat_count'))}}</th>
+                  <th class="title">{{ sumField('dinner_free_count')}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('totalCount'))}}</th>
+              </tr>
+          </template>
           </v-data-table>
           </v-card>
           <br>
@@ -166,62 +163,27 @@
         data() {
           return {
             overviewData: [],
-            balances: [
-              {
-                label: "超拔數量",
-                totalbalance:0,
-                item1Balance: 0,
-                item2Balance: 0,
-                item3Balance: 0,
-                item4Balance: 0,
-                item5Balance: 0,
-                item6Balance: 0,
-                item7Balance: 0
-
-              },
+            dinnerSummary: [
               {
                 label: "未付款",
-                totalbalance:0,
-                item1Balance: 0,
-                item2Balance: 0,
-                item3Balance: 0,
-                item4Balance: 0,
-                item5Balance: 0,
-                item6Balance: 0,
-                item7Balance: 0
+                totalCount:0,
+                dinner_vegetable_count: 0,
+                dinner_meat_count: 0,
+                dinner_free_count: 0,
               },
               {
                 label: "現金",
-                totalbalance:0,
-                item1Balance: 0,
-                item2Balance: 0,
-                item3Balance: 0,
-                item4Balance: 0,
-                item5Balance: 0,
-                item6Balance: 0,
-                item7Balance: 0
+                totalCount:0,
+                dinner_vegetable_count: 0,
+                dinner_meat_count: 0,
+                dinner_free_count: 0,
               },
               {
                 label: "匯款",
-                totalbalance:0,
-                item1Balance: 0,
-                item2Balance: 0,
-                item3Balance: 0,
-                item4Balance: 0,
-                item5Balance: 0,
-                item6Balance: 0,
-                item7Balance: 0
-              },
-              {
-                label: "合計總金額",
-                totalbalance:0,
-                item1Balance: 0,
-                item2Balance: 0,
-                item3Balance: 0,
-                item4Balance: 0,
-                item5Balance: 0,
-                item6Balance: 0,
-                item7Balance: 0
+                totalCount:0,
+                dinner_vegetable_count: 0,
+                dinner_meat_count: 0,
+                dinner_free_count: 0,
               }
             ],
 
@@ -241,16 +203,14 @@
               { text: "操作", value: "actions" },
 
             ],
-            balanceHeaders: [
+            dinnerSummaryHeaders: [
               { text: "項目", value: "label" },
-              { text: "梁皇寶懺超薦歷代祖先九玄七祖", value: "item1Balance" },
-              { text: "超薦歷代祖先", value: "item2Balance" },
-              { text: "超薦個人累世冤親債主", value: "item3Balance" },
-              { text: "超薦無緣子女嬰靈", value: "item4Balance" },
-              { text: "超薦親人+報恩(父、母、兄弟、姊妹、恩人)", value: "item5Balance" },
-              { text: "超薦動物靈(狗、貓寵物名)", value: "item6Balance" },
-              { text: "總計", value: "totalbalance" },
+              { text: "平安宴(葷)", value: "dinner_vegetable_count" },
+              { text: "平安宴(素)", value: "dinner_meat_count" },
+              { text: "平安宴(小孩)", value: "dinner_free_count" },
+              { text: "總計", value: "totalCount" },
             ],
+        
             search: "",
           };
         },
@@ -286,77 +246,29 @@
                 return a.address > b.address ? -1 : 1;
               });
 
-              //self.GetStatistics()
+              self.GetStatistics()
             });
           },
           getDisplayNumber: function (number) {
-            if(number==undefined || number == null){
-              return 0;
+              if (number == undefined || number == null) {
+            return 0;
             }
-            return number.toLocaleString()
+          return number + '(' + (number*500).toLocaleString()+')'
           },
           GetStatistics: function () {
             let self = this;
             this.overviewData.forEach(function (eventDetail) {
-              let index = 1;
+              let index = 0;
 
               if (eventDetail.isCash) {
-                index = 2;
+                index = 1;
               }else if(eventDetail.isBankTransfer){
-                index=3
+                index=2
               }
-
-              switch (eventDetail.eventName) {
-              case "梁皇寶懺超薦歷代祖先九玄七祖":
-                self.balances[0].item1Balance+=1;
-                self.balances[0].totalbalance+=1;
-                self.balances[index].item1Balance+= Number(eventDetail.amount);;
-                self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[4].item1Balance+=Number(eventDetail.amount);
-                self.balances[4].totalbalance+=Number(eventDetail.amount);
-                break;
-              case "超薦歷代祖先":
-                self.balances[0].item2Balance+=1;
-                self.balances[0].totalbalance+=1;
-                self.balances[index].item2Balance+=Number(eventDetail.amount);
-                self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[4].item2Balance+=Number(eventDetail.amount);
-                self.balances[4].totalbalance+=Number(eventDetail.amount);
-                break;
-              case "超薦個人累世冤親債主":
-                self.balances[0].item3Balance+=1;
-                self.balances[0].totalbalance+=1;
-                self.balances[index].item3Balance+=Number(eventDetail.amount);
-                self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[4].item3Balance+=Number(eventDetail.amount);
-                self.balances[4].totalbalance+=Number(eventDetail.amount);
-                break;
-              case "超薦無緣子女嬰靈":
-                self.balances[0].item4Balance+=1;
-                self.balances[0].totalbalance+=1;
-                self.balances[index].item4Balance+=Number(eventDetail.amount);
-                self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[4].item4Balance+=Number(eventDetail.amount);
-                self.balances[4].totalbalance+=Number(eventDetail.amount);
-                break;
-              case "超薦親人+報恩(父、母、兄弟、姊妹、恩人)":
-                self.balances[0].item5Balance+=1;
-                self.balances[0].totalbalance+=1;
-                self.balances[index].item5Balance+=Number(eventDetail.amount);
-                self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[4].item5Balance+=Number(eventDetail.amount);
-                self.balances[4].totalbalance+=Number(eventDetail.amount);
-                break;
-              case "超薦動物靈(狗、貓寵物名)":
-                self.balances[0].item6Balance+=1;
-                self.balances[0].totalbalance+=1;
-                self.balances[index].item6Balance+=Number(eventDetail.amount);
-                self.balances[index].totalbalance+=Number(eventDetail.amount);
-                self.balances[4].item6Balance+=Number(eventDetail.amount);
-                self.balances[4].totalbalance+=Number(eventDetail.amount);
-                break;
-            }
-
+              self.dinnerSummary[index].dinner_vegetable_count += Number(eventDetail.dinner_vegetable_count);
+              self.dinnerSummary[index].dinner_meat_count += Number(eventDetail.dinner_meat_count);
+              self.dinnerSummary[index].dinner_free_count += Number(eventDetail.dinner_free_count);
+              self.dinnerSummary[index].totalCount += Number(eventDetail.dinner_vegetable_count)+Number(eventDetail.dinner_meat_count);
             })
            },
           addByName: function () {
@@ -380,6 +292,10 @@
               this.loadData()
             }
           },
+          sumField(key) {
+          // sum data in give key (property)
+          return this.dinnerSummary.reduce((a, b) => a + (b[key] || 0), 0)
+        },
           copyEventDetail: function (eventDetail ) {
             eventRef.push({
               name:  eventDetail.name,
@@ -405,12 +321,7 @@
             let dateTime = new Date(time);
             return dateTime.toISOString().slice(0, 10);;
           },
-          getDisplayNumber: function (number) {
-            if(number==undefined || number == null){
-              return 0;
-            }
-            return number.toLocaleString()
-          },
+      
         },
       };
       new Vue({
