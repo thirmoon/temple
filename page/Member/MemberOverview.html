@@ -916,6 +916,44 @@
             '月老神君首':16000,
             '平安首':6000,
           },
+          uniqueEventOption:{
+            '圓明斗姥首':36000,
+            '中斗神君首':26000,
+            '東斗神君首':20000,
+            '南斗神君首':20000,
+            '西斗神君首':20000,
+            '北斗神君首':20000,
+            '北極玄元開天大上帝首':20000,
+            '北極真武大上帝首':20000,
+            '北極真武上帝首':20000,
+            '北極真武大帝首':20000,
+            '北極諸天上帝首':20000,
+            '玄武上帝首':20000,
+            '梁武帝皇首':20000,
+            '三清靖王':16000,
+            '張府天師首':16000,
+            '縣城隍爺首':16000,
+            '清水祖師首':16000,
+            '灶王公首':16000,
+            '天宮大帝首':16000,
+            '水官大帝首':16000,
+            '地官大帝首':16000,
+            '二郎神君首':16000,
+            '南無釋迦牟尼佛祖首':16000,
+            '天上聖母首':16000,
+            '中壇元帥大太子首':16000,
+            '中壇元帥二太子首':16000,
+            '中壇元帥三太子首':16000,
+          },
+          duplicateEventOption:{
+            '保生大帝首':16000,
+            '神農大帝首':16000,
+            '文昌武帝首':16000,
+            '天宮武財神首':16000,
+            '註生娘娘首':16000,
+            '月老神君首':16000,
+            '平安首':6000,
+          },
           overviewData: [],
           headers: [
             { text: "姓名", value: "name" },
@@ -1078,6 +1116,16 @@
           this.eventDialog = false;
         },
         addPeacefulEvent: function () {
+
+          let freeLimit = 0;
+              if ( Object.keys(this.uniqueEventOption).includes(this.peacefulEventDetail.eventName)){
+                freeLimit=4;
+              }else if (Object.keys(this.duplicateEventOption).includes(this.peacefulEventDetail.eventName)){
+                freeLimit=2;
+              }
+
+          let count = Number(this.peacefulEventDetail.dinner_meat_count)
+                    +Number(this.peacefulEventDetail.dinner_vegetable_count)
           peaceEvnetRef.push({
             userId: this.selectUser.key,
             name: this.peacefulEventDetail.name,
@@ -1093,7 +1141,7 @@
             dinner_vegetable_count: this.peacefulEventDetail.dinner_vegetable_count,
             dinner_meat_count: this.peacefulEventDetail.dinner_meat_count,
             dinner_free_count: this.peacefulEventDetail.dinner_free_count,
-            
+            dinner_amount: count>freeLimit ? (count-freeLimit) *500: 0,
             modifyTime: Date.now(),
             createdTime: Date.now(),
           });
@@ -1187,6 +1235,8 @@
         registerPeacefulEvent: function (data) {
           this.peacefulEventDialog = true;
           this.selectUser = data;
+
+        
           this.peacefulEventDetail= {
             name: this.selectUser.name,
             eventName: "",
@@ -1200,7 +1250,7 @@
             isCash: false,
             isBankTransfer: false,
             isCashDinner: false,
-            isBankTransferDinner: false,
+            isBankTransferDinner: false
           };
         },
         registerEvent: function (data) {

@@ -127,8 +127,8 @@
             item-key="key"
             fixed-header
             height="285px">
-            <template v-slot:item.totalCount="{ item }">
-              {{getDisplayNumberWithCount(item.totalCount)}}
+            <template v-slot:item.dinner_amount="{ item }">
+              {{getDisplayNumber(item.dinner_amount)}}
             </template>
             <template slot="body.append">
               <tr class="pink--text">
@@ -162,7 +162,7 @@
             height="400px"
             :items-per-page="20">
             <template v-slot:item.name="{ item }">
-              <input :name="item.name"  id="overview_name" v-model.trim="item.name" maxlength="8">
+              <input :name="item.name" v-model.trim="item.name" id="overview_phone" maxlength="5">
             </template>
             <template v-slot:item.eventName="{ item }">
               <input  :name="item.eventName" id="overview_phone" v-model.trim="item.eventName">
@@ -195,6 +195,9 @@
             </template>
             <template v-slot:item.dinner_free_count="{ item }">
               <input  :name="item.dinner_free_count" id="overview_date" v-model.trim="item.dinner_free_count">
+            </template>
+            <template v-slot:item.dinner_amount="{ item }">
+              <input  :name="item.dinner_amount" id="overview_date" v-model.trim="item.dinner_amount">
             </template>
             <template v-slot:item.createdTime="{ item }">
               {{getDisplayTime(item.createdTime)}}
@@ -260,21 +263,21 @@
             ],
 
             headers: [
-              { text: "姓名", value: "name" },
+              { text: "姓名", value: "name" ,width: '20px'},
               { text: "斗首項目", value: "eventName" },
               { text: "地址", value: "address" },
               { text: "電話", value: "phone" },
               { text: "備註", value: "memo" },
-              { text: "付款狀態", value: "paymentStatus", width: '200px'  },
+              { text: "付款狀態", value: "paymentStatus", width: '150px'  },
               { text: "金額", value: "eventAmount" },
               { text: "平安宴(素)", value: "dinner_vegetable_count" },
               { text: "平安宴(葷)", value: "dinner_meat_count" },
               { text: "平安宴小孩", value: "dinner_free_count" },
               { text: "平安宴付款狀態", value: "paymentStatusDinner" },
-
+              { text: "平安宴金額", value: "dinner_amount" },
               
-              { text: "填寫日期", value: "createdTime" , width: '200px'},
-              { text: "修改日期", value: "modifyTime" , width: '200px'},
+              { text: "填寫日期", value: "createdTime"},
+              { text: "修改日期", value: "modifyTime" },
               { text: "操作", value: "actions" },
 
             ],
@@ -477,7 +480,9 @@
               self.dinnerSummary[index].dinner_meat_count += Number(eventDetail.dinner_meat_count);
               self.dinnerSummary[index].dinner_free_count += Number(eventDetail.dinner_free_count);
               self.dinnerSummary[index].totalCount += totalCount;
-              self.dinnerSummary[index].dinner_amount += totalCount>freeLimit ? (totalCount-freeLimit)*500:0;
+
+              let dinnerAmount = eventDetail.dinner_amount==null ? 0 : Number(eventDetail.dinner_amount);
+              self.dinnerSummary[index].dinner_amount += dinnerAmount;
            
             })
            },
