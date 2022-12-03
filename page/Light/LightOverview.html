@@ -49,17 +49,41 @@
           item-key="key"
           fixed-header
           height="250px">
+          <template v-slot:item.lightType1Count="{ item }">
+            {{getDisplayNumber(item.lightType1Count)}}
+          </template>
+          <template v-slot:item.lightType2Count="{ item }">
+            {{getDisplayNumber(item.lightType2Count)}}
+          </template>
+          <template v-slot:item.lightType3Count="{ item }">
+            {{getDisplayNumber(item.lightType3Count)}}
+          </template>
+          <template v-slot:item.lightType4Count="{ item }">
+            {{getDisplayNumber(item.lightType4Count)}}
+          </template>
+          <template v-slot:item.lightType5Count="{ item }">
+            {{getDisplayNumber(item.lightType5Count)}}
+          </template>
+          <template v-slot:item.lightType6Count="{ item }">
+            {{getDisplayNumber(item.lightType6Count)}}
+          </template>
+          <template v-slot:item.lightType7Count="{ item }">
+            {{getDisplayNumber(item.lightType7Count)}}
+          </template>
+          <template v-slot:item.totalCount="{ item }">
+            {{getDisplayNumber(item.totalCount)}}
+          </template>
           <template slot="body.append">
             <tr class="pink--text">
                 <th class="title">總計</th>
-                <th class="title">{{ sumField('lightType1Count')}}</th>
-                <th class="title">{{ sumField('lightType2Count') }}</th>
-                <th class="title">{{ sumField('lightType3Count') }}</th>
-                <th class="title">{{ sumField('lightType4Count') }}</th>
-                <th class="title">{{ sumField('lightType5Count') }}</th>
-                <th class="title">{{ sumField('lightType6Count')}}</th>
-                <th class="title">{{ sumField('lightType7Count')}}</th>
-                <th class="title">{{ sumField('totalCount')}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('lightType1Count'))}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('lightType2Count'))}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('lightType3Count'))}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('lightType4Count'))}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('lightType5Count'))}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('lightType6Count'))}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('lightType7Count'))}}</th>
+                <th class="title">{{ getDisplayNumber(sumField('totalCount'))}}</th>
             </tr>
         </template>
         </v-data-table>
@@ -425,7 +449,12 @@
           }
           return data;
         },
-
+        getDisplayNumber: function (number) {
+          if (number == undefined || number == null) {
+            return 0;
+          }
+          return number + '(' + (number*500).toLocaleString()+')'
+        },
         newUser: function (data) {
 
           data = this.formateUser(data);
