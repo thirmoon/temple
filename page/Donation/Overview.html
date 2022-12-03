@@ -320,10 +320,6 @@
             { text: "其他1", value: "item14" },
             { text: "其他2", value: "item15" },
             { text: "供品桌", value: "item7" },
-
-
-
-
             { text: "備註", value: "memo" },
             { text: "日期", value: "modifiedDate" },
             { text: "操作", value: "actions" },
@@ -395,8 +391,11 @@
               } else if (donation.isBankTransfer) {
                 index = 2;
               };
+              if(donation.item4 || donation.item6){
 
-              self.balances[index].totalbalance += Number(donation.amount);
+              }else{
+                self.balances[index].totalbalance += Number(donation.amount);
+              }
 
               if (donation.item1) {
                 self.balances[index].item1Balance += Number(donation.amount);
@@ -404,13 +403,9 @@
                 self.balances[index].item2Balance += Number(donation.amount);
               } else if (donation.item3) {
                 self.balances[index].item3Balance += Number(donation.amount);
-              } else if (donation.item4) {
-                self.balances[index].item4Balance += Number(donation.amount);
               } else if (donation.item5) {
                 self.balances[index].item5Balance += Number(donation.amount);
-              } else if (donation.item6) {
-                self.balances[index].item6Balance += Number(donation.amount);
-              } else if (donation.item7) {
+              }  else if (donation.item7) {
                 if (donation.memo && donation.memo.includes("桌")) {
                   let tableValue = donation.memo.replace("桌", "");
                   self.tableCount += Number(tableValue);
