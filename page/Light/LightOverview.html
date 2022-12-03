@@ -231,7 +231,6 @@
               let modifyTime = new Date(user.modifyTime);
               if (modifyTime > self.today) {
                 user.key = data.key;
-                console.log(user);
                 self.overviewData.push(user);
               }
             });

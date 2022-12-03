@@ -47,23 +47,38 @@
             <template v-slot:item.item1Balance="{ item }">
               {{getDisplayNumber(item.item1Balance)}}
             </template>
+            <template v-slot:item.item8Balance="{ item }">
+              {{getDisplayNumber(item.item8Balance)}}
+            </template>
+            <template v-slot:item.item9Balance="{ item }">
+              {{getDisplayNumber(item.item9Balance)}}
+            </template>
+            <template v-slot:item.item10Balance="{ item }">
+              {{getDisplayNumber(item.item10Balance)}}
+            </template>
+            <template v-slot:item.item11Balance="{ item }">
+              {{getDisplayNumber(item.item11Balance)}}
+            </template>
             <template v-slot:item.item2Balance="{ item }">
               {{getDisplayNumber(item.item2Balance)}}
             </template>
             <template v-slot:item.item3Balance="{ item }">
               {{getDisplayNumber(item.item3Balance)}}
             </template>
-            <template v-slot:item.item4Balance="{ item }">
-              {{getDisplayNumber(item.item4Balance)}}
+            <template v-slot:item.item12Balance="{ item }">
+              {{getDisplayNumber(item.item12Balance)}}
+            </template>
+            <template v-slot:item.item13Balance="{ item }">
+              {{getDisplayNumber(item.item13Balance)}}
             </template>
             <template v-slot:item.item5Balance="{ item }">
               {{getDisplayNumber(item.item5Balance)}}
             </template>
-            <template v-slot:item.item6Balance="{ item }">
-              {{getDisplayNumber(item.item6Balance)}}
+            <template v-slot:item.item14Balance="{ item }">
+              {{getDisplayNumber(item.item14Balance)}}
             </template>
-            <template v-slot:item.item7Balance="{ item }">
-              {{getDisplayNumber(item.item7Balance)}}
+            <template v-slot:item.item15Balance="{ item }">
+              {{getDisplayNumber(item.item15Balance)}}
             </template>
             <template v-slot:item.totalbalance="{ item }">
               {{getDisplayNumber(item.totalbalance)}}
@@ -72,12 +87,17 @@
               <tr class="pink--text">
                   <th class="title">總計</th>
                   <th class="title">{{ getDisplayNumber(sumField('item1Balance'))}}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('item2Balance')) }}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('item3Balance')) }}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('item4Balance')) }}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('item5Balance')) }}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('item6Balance'))}}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('item7Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item8Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item9Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item10Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item11Balance')) }}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item2Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item3Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item12Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item13Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item5Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item14Balance'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumField('item15Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('totalbalance'))}}</th>
               </tr>
           </template>
@@ -130,23 +150,38 @@
             <template v-slot:item.item1="{ item }">
               <input type="checkbox"  v-model.trim="item.item1">
             </template>
+            <template v-slot:item.item8="{ item }">
+              <input type="checkbox"  v-model.trim="item.item8">
+            </template>
+            <template v-slot:item.item9="{ item }">
+              <input type="checkbox"  v-model.trim="item.item9">
+            </template>
+            <template v-slot:item.item10="{ item }">
+              <input type="checkbox"  v-model.trim="item.item10">
+            </template>
+            <template v-slot:item.item11="{ item }">
+              <input type="checkbox"  v-model.trim="item.item11">
+            </template>
             <template v-slot:item.item2="{ item }">
               <input type="checkbox"  v-model.trim="item.item2">
             </template>
             <template v-slot:item.item3="{ item }">
               <input type="checkbox"  v-model.trim="item.item3">
             </template>
-            <template v-slot:item.item4="{ item }">
-              <input type="checkbox"  v-model.trim="item.item4">
+            <template v-slot:item.item12="{ item }">
+              <input type="checkbox"  v-model.trim="item.item12">
+            </template>
+            <template v-slot:item.item13="{ item }">
+              <input type="checkbox"  v-model.trim="item.item13">
             </template>
             <template v-slot:item.item5="{ item }">
               <input type="checkbox"  v-model.trim="item.item5">
             </template>
-            <template v-slot:item.item6="{ item }">
-              <input type="checkbox"  v-model.trim="item.item6">
+            <template v-slot:item.item14="{ item }">
+              <input type="checkbox"  v-model.trim="item.item14">
             </template>
-            <template v-slot:item.item7="{ item }">
-              <input type="checkbox"  v-model.trim="item.item7">
+            <template v-slot:item.item15="{ item }">
+              <input type="checkbox"  v-model.trim="item.item15">
             </template>
             <template v-slot:item.memo="{ item }">
               <input  :name="item.memo" v-model.trim="item.memo">
@@ -195,7 +230,15 @@
               item4Balance: 0,
               item5Balance: 0,
               item6Balance: 0,
-              item7Balance: 0
+              item7Balance: 0, 
+              item8Balance: 0,
+              item9Balance: 0,
+              item10Balance: 0,
+              item11Balance: 0,
+              item12Balance: 0,
+              item13Balance: 0,
+              item14Balance: 0,
+              item15Balance: 0
 
             },
             {
@@ -207,7 +250,15 @@
               item4Balance: 0,
               item5Balance: 0,
               item6Balance: 0,
-              item7Balance: 0
+              item7Balance: 0,
+              item8Balance: 0,
+              item9Balance: 0,
+              item10Balance: 0,
+              item11Balance: 0,
+              item12Balance: 0,
+              item13Balance: 0,
+              item14Balance: 0,
+              item15Balance: 0
             },
             {
               label: "匯款",
@@ -218,9 +269,33 @@
               item4Balance: 0,
               item5Balance: 0,
               item6Balance: 0,
-              item7Balance: 0
+              item7Balance: 0,
+              item8Balance: 0,
+              item9Balance: 0,
+              item10Balance: 0,
+              item11Balance: 0,
+              item12Balance: 0,
+              item13Balance: 0,
+              item14Balance: 0,
+              item15Balance: 0
+
             }
           ],
+          /*{ text: "油香功德金", value: "item1" },
+            { text: "增建/整修工程", value: "item2" },
+            { text: "金身雕刻", value: "item3" },
+            { text: "九龍椅", value: "item4" },
+            { text: "文昌筆", value: "item5" },
+            { text: "其他", value: "item6" },
+            { text: "供品桌", value: "item7" },
+            { text: "高上帝聖誕", value: "item8" },
+            { text: "玄天上帝聖誕", value: "item9" },
+            { text: "祈安法會", value: "item10" },
+            { text: "超拔法會", value: "item11" },
+            { text: "金身1", value: "item12" },
+            { text: "金身2", value: "item13" },
+            { text: "其他1", value: "item14" },
+            { text: "其他2", value: "item15" },*/
           headers: [
             { text: "功德主姓名", value: "name" },
             { text: "地址", value: "address" },
@@ -229,12 +304,21 @@
             { text: "現金", value: "isCash" },
             { text: "匯款", value: "isBankTransfer" },
             { text: "油香功德金", value: "item1" },
+            { text: "高上帝聖誕", value: "item8" },
+            { text: "玄天上帝聖誕", value: "item9" },
+            { text: "祈安法會", value: "item10" },
+            { text: "超拔法會", value: "item11" },
             { text: "增建/整修工程", value: "item2" },
             { text: "金身雕刻", value: "item3" },
-            { text: "九龍椅", value: "item4" },
+            { text: "金身1", value: "item12" },
+            { text: "金身2", value: "item13" },
             { text: "文昌筆", value: "item5" },
-            { text: "其他", value: "item6" },
+            { text: "其他1", value: "item14" },
+            { text: "其他2", value: "item15" },
             { text: "供品桌", value: "item7" },
+
+
+
 
             { text: "備註", value: "memo" },
             { text: "日期", value: "modifiedDate" },
@@ -244,14 +328,19 @@
           balanceHeaders: [
             { text: "項目", value: "label" },
             { text: "油香功德金", value: "item1Balance" },
+            { text: "高上帝聖誕", value: "item8Balance" },
+            { text: "玄天上帝聖誕", value: "item9Balance" },
+            { text: "祈安法會", value: "item10Balance" },
+            { text: "超拔法會", value: "item11Balance" },
             { text: "增建/整修工程", value: "item2Balance" },
             { text: "金身雕刻", value: "item3Balance" },
-            { text: "九龍椅", value: "item4Balance" },
+            { text: "金身1", value: "item12Balance" },
+            { text: "金身2", value: "item13Balance" },
             { text: "文昌筆", value: "item5Balance" },
-            { text: "其他", value: "item6Balance" },
+            { text: "其他1", value: "item14Balance" },
+            { text: "其他2", value: "item15Balance" },
             { text: "供品桌", value: "item7Balance" },
             { text: "總計", value: "totalbalance" },
-
 
           ],
           search: "",
@@ -323,7 +412,24 @@
                   self.tableCount += Number(tableValue);
                 }
                 self.balances[index].item7Balance += Number(donation.amount);
+              } else if (donation.item8) {
+                self.balances[index].item8Balance += Number(donation.amount);
+              } else if (donation.item9) {
+                self.balances[index].item9Balance += Number(donation.amount);
+              }else if (donation.item10) {
+                self.balances[index].item10Balance += Number(donation.amount);
+              }else if (donation.item11) {
+                self.balances[index].item11Balance += Number(donation.amount);
+              }else if (donation.item12) {
+                self.balances[index].item12Balance += Number(donation.amount);
+              }else if (donation.item13Balance) {
+                self.balances[index].item13Balance += Number(donation.amount);
+              }else if (donation.item14Balance) {
+                self.balances[index].item14Balance += Number(donation.amount);
+              }else if (donation.item15Balance) {
+                self.balances[index].item15Balance += Number(donation.amount);
               }
+              
 
             }
 
@@ -361,6 +467,14 @@
             item5: false,
             item6: false,
             item7: false,
+            item8: false,
+            item9: false,
+            item10: false,
+            item11: false,
+            item12: false,
+            item13: false,
+            item14: false,
+            item15: false,
             modifyTime: Date.now(),
             createdTime: Date.now()
           })
