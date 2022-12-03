@@ -70,6 +70,8 @@
       <v-btn elevation="2"  v-on:click="addByName" >以姓名新增</v-btn>
       <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
       <v-btn elevation="2"  v-on:click="loadTodayData" >顯示今天修改資料</v-btn>
+      <v-btn elevation="2"  v-on:click="loadYeaylyData" >今年度資料</v-btn>
+
 
       </ul>
       <v-card>
@@ -349,7 +351,24 @@
           });
 
         },
+        loadYeaylyData: function () {
+          let self = this;
+          this.overviewData = []
+          
+          userRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.lightYear==112) {
+                user.key = data.key;
+                self.overviewData.push(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
 
+        },
         searchData: function () {
           let self = this;
           this.overviewData = []
