@@ -54,6 +54,7 @@
             :items="uniqueEventSummary"
             class="elevation-1"
             item-key="key"
+            items-per-page="30"
             fixed-header
             height="285px">
           </v-data-table>
@@ -281,7 +282,6 @@
             '中壇元帥大太子首':16000,
             '中壇元帥二太子首':16000,
             '中壇元帥三太子首':16000,
-            '平安首':6000,
           },
           duplicateEventOption:{
             '保生大帝首':16000,
@@ -290,6 +290,8 @@
             '天宮武財神首':16000,
             '註生娘娘首':16000,
             '月老神君首':16000,
+            '平安首':6000,
+
           },
             search: "",
           };
@@ -409,14 +411,12 @@
               }else if(eventDetail.isBankTransfer){
                 index=2
               }
-              //handle dinner summary
               self.dinnerSummary[index].dinner_vegetable_count += Number(eventDetail.dinner_vegetable_count);
               self.dinnerSummary[index].dinner_meat_count += Number(eventDetail.dinner_meat_count);
               self.dinnerSummary[index].dinner_free_count += Number(eventDetail.dinner_free_count);
               self.dinnerSummary[index].totalCount += Number(eventDetail.dinner_vegetable_count)+Number(eventDetail.dinner_meat_count);
             
             
-              //handle event summary
            
             })
            },
