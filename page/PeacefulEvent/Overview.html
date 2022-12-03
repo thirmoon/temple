@@ -50,6 +50,32 @@
         <ul>
           <v-card>
             <v-data-table
+            :headers="uniqueEventHeaders"
+            :items="uniqueEventSummary"
+            class="elevation-1"
+            item-key="key"
+            fixed-header
+            height="285px">
+          </v-data-table>
+          </v-card>
+          <br>
+        </ul>
+        <ul>
+          <v-card>
+            <v-data-table
+            :headers="duplicateEventHeaders"
+            :items="duplicateEventSummary"
+            class="elevation-1"
+            item-key="key"
+            fixed-header
+            height="285px">
+          </v-data-table>
+          </v-card>
+          <br>
+        </ul>
+        <ul>
+          <v-card>
+            <v-data-table
             :headers="dinnerSummaryHeaders"
             :items="dinnerSummary"
             class="elevation-1"
@@ -210,7 +236,61 @@
               { text: "平安宴(小孩)", value: "dinner_free_count" },
               { text: "總計", value: "totalCount" },
             ],
-        
+            uniqueEventHeaders: [
+              { text: "項目", value: "label" },
+              { text: "姓名", value: "name" },
+              { text: "未付款", value: "unpiad_amount" },
+              { text: "現金", value: "cash_amount" },
+              { text: "匯款", value: "bank_transfer_amount" },
+              { text: "總計", value: "total_amount" },
+            ],
+            duplicateEventHeaders: [
+              { text: "項目", value: "label" },
+              { text: "未付款", value: "unpiad_amount" },
+              { text: "現金", value: "cash_amount" },
+              { text: "匯款", value: "bank_transfer_amount" },
+              { text: "總計", value: "total_amount" },
+            ],
+            uniqueEventSummary:[],
+            duplicateEventSummary:[],
+            uniqueEventOption:{
+            '圓明斗姥首':36000,
+            '中斗神君首':26000,
+            '東斗神君首':20000,
+            '南斗神君首':20000,
+            '西斗神君首':20000,
+            '北斗神君首':20000,
+            '北極玄元開天大上帝首':20000,
+            '北極真武大上帝首':20000,
+            '北極真武上帝首':20000,
+            '北極真武大帝首':20000,
+            '北極諸天上帝首':20000,
+            '玄武上帝首':20000,
+            '梁武帝皇首':20000,
+            '三清靖王':16000,
+            '張府天師首':16000,
+            '縣城隍爺首':16000,
+            '清水祖師首':16000,
+            '灶王公首':16000,
+            '天宮大帝首':16000,
+            '水官大帝首':16000,
+            '地官大帝首':16000,
+            '二郎神君首':16000,
+            '南無釋迦牟尼佛祖首':16000,
+            '天上聖母首':16000,
+            '中壇元帥大太子首':16000,
+            '中壇元帥二太子首':16000,
+            '中壇元帥三太子首':16000,
+            '平安首':6000,
+          },
+          duplicateEventOption:{
+            '保生大帝首':16000,
+            '神農大帝首':16000,
+            '文昌武帝首':16000,
+            '天宮武財神首':16000,
+            '註生娘娘首':16000,
+            '月老神君首':16000,
+          },
             search: "",
           };
         },
@@ -246,16 +326,80 @@
                 return a.address > b.address ? -1 : 1;
               });
 
-              self.GetStatistics()
+
+              self.GetEventSummary();
+              self.GetDinnerSummary()
             });
           },
+          GetEventSummary: function () {
+
+            for (let index = 0; index < Object.keys(this.uniqueEventOption).length; index++) {
+              this.uniqueEventSummary.push(
+                {
+                  label: Object.keys(this.uniqueEventOption)[index],
+                  unpiad_amount:0,
+                  cash_amount:0,
+                  bank_transfer_amount:0,
+                  total_amount:0
+                }
+              )
+            }
+           
+            for (let index = 0; index < Object.keys(this.duplicateEventOption).length; index++) {
+              this.duplicateEventSummary.push(
+                {
+                  label: Object.keys(this.duplicateEventOption)[index],
+                  unpiad_amount:0,
+                  name :"",
+                  cash_amount:0,
+                  bank_transfer_amount:0,
+                  total_amount:0
+                }
+              )
+            }
+
+            let self = this;
+            this.overviewData.forEach(function (eventDetail) {
+              let index = 0;
+              let eventIndex = Object.keys(self.uniqueEventOption).indexOf(eventDetail.eventName);
+              if(eventIndex!=-1){
+
+                if (eventDetail.isCash) {
+                  self.uniqueEventSummary[eventIndex].cash_amount += Number(eventDetail.eventAmount);
+                }else if(eventDetail.isBankTransfer){
+                  self.uniqueEventSummary[eventIndex].bank_transfer_amount += Number(eventDetail.eventAmount);
+                }else{
+                  self.uniqueEventSummary[eventIndex].unpiad_amount += Number(eventDetail.eventAmount);
+                }
+                self.uniqueEventSummary[eventIndex].name = eventDetail.name;
+                self.uniqueEventSummary[eventIndex].total_amount += Number(eventDetail.eventAmount);
+
+              } 
+              eventIndex = Object.keys(self.duplicateEventOption).indexOf(eventDetail.eventName);
+
+              if(eventIndex!=-1){
+               
+                if (eventDetail.isCash) {
+                  self.duplicateEventSummary[eventIndex].cash_amount += Number(eventDetail.eventAmount);
+                }else if(eventDetail.isBankTransfer){
+                  self.duplicateEventSummary[eventIndex].bank_transfer_amount += Number(eventDetail.eventAmount);
+                }else{
+                  self.duplicateEventSummary[eventIndex].unpiad_amount += Number(eventDetail.eventAmount);
+              }
+              self.duplicateEventSummary[eventIndex].total_amount += Number(eventDetail.eventAmount);
+             
+              }
+            
+           
+            })
+           },
           getDisplayNumber: function (number) {
               if (number == undefined || number == null) {
             return 0;
             }
           return number + '(' + (number*500).toLocaleString()+')'
           },
-          GetStatistics: function () {
+          GetDinnerSummary: function () {
             let self = this;
             this.overviewData.forEach(function (eventDetail) {
               let index = 0;
@@ -265,10 +409,15 @@
               }else if(eventDetail.isBankTransfer){
                 index=2
               }
+              //handle dinner summary
               self.dinnerSummary[index].dinner_vegetable_count += Number(eventDetail.dinner_vegetable_count);
               self.dinnerSummary[index].dinner_meat_count += Number(eventDetail.dinner_meat_count);
               self.dinnerSummary[index].dinner_free_count += Number(eventDetail.dinner_free_count);
               self.dinnerSummary[index].totalCount += Number(eventDetail.dinner_vegetable_count)+Number(eventDetail.dinner_meat_count);
+            
+            
+              //handle event summary
+           
             })
            },
           addByName: function () {
