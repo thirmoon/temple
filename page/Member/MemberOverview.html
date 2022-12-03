@@ -25,7 +25,9 @@
           <a href="MemberCreate.html">新增信徒 |</a>
           <a href="../Event/EventOverview.html">法會總覽 |</a>
           <a href="../Donation/Overview.html">捐贈總覽 |</a>
-          <a href="../Light/LightOverview.html">點燈總覽</a>
+          <a href="../Light/LightOverview.html">點燈總覽 |</a>
+          <a href="../PeacefulEvent/Overview.html">平安大法會總覽</a>
+
         </h1>
       </div>
     </section>
@@ -846,6 +848,7 @@
           peacefulEventDetail: {
             name: "",
             eventName: "",
+            phone:"",
             address: "",
             eventAmount: 0,
             dinner_vegetable_count: 0,
@@ -1062,11 +1065,10 @@
             memo: this.peacefulEventDetail.memo,
             isCash: this.peacefulEventDetail.isCash,
             isBankTransfer: this.peacefulEventDetail.isBankTransfer,
-            eventAmount: this.peacefulEventDetail.amount,
+            eventAmount: this.peacefulEventDetail.eventAmount,
             dinner_vegetable_count: this.peacefulEventDetail.dinner_vegetable_count,
+            dinner_meat_count: this.peacefulEventDetail.dinner_meat_count,
             dinner_free_count: this.peacefulEventDetail.dinner_free_count,
-            dinner_free_count: this.peacefulEventDetail.dinner_free_count,
-
             modifyTime: Date.now(),
             createdTime: Date.now(),
           });
