@@ -84,10 +84,158 @@
                  <v-btn elevation="2"  v-on:click="updateUser(item)" >更新</v-btn>
                  <v-btn elevation="2"  v-on:click="removeUser(item)" >刪除</v-btn>
                  <!-- <v-btn elevation="2"  v-on:click="registerEvent(item)" >報名超薦法會</v-btn> -->
+                 <v-btn elevation="2"  v-on:click="registerPeacefulEvent(item)" >報名平安法會</v-btn>
                  <v-btn elevation="2"  v-on:click="lighting(item)" >點燈</v-btn>
                  <v-btn elevation="2"  v-on:click="donate(item)" >捐贈</v-btn>
                </template>
                <template v-slot:top>
+                <v-row justify="center">
+                  <v-dialog
+                    v-model="peacefulEventDialog"
+                    persistent
+                    max-width="600px"
+                  >
+                    <v-card>
+                      <v-card-title>
+                        <span class="text-h5">癸卯年祈安禮斗平安大法會</span>
+                        <span class="text-h5">(進錢補運)個斗首報名表</span>
+        
+                      </v-card-title>
+                      <v-card-text>
+                        <v-container>
+                          <v-row>
+                            <v-col
+                            cols="12"
+                            sm="12"
+                          >
+                          <v-select
+                          :items="Object.keys(peacefulEventOption)"
+                          label="斗首項目"
+                          v-model="peacefulEventDetail.eventName"
+                          required
+                          @change="updatePeacefulEventAmount"
+                        ></v-select>
+                          </v-col>
+                            <v-col
+                              v-if="enableNameColumn[0]"
+                              cols="12"
+                              sm="4"
+                            >
+                              <v-text-field
+                                v-model="peacefulEventDetail.name"
+                                label="姓名"
+                                required
+                              ></v-text-field>
+                            </v-col>
+                    <v-col cols="12">
+                      <v-text-field
+                        label="地址"
+                        v-model="peacefulEventDetail.address"
+                        required
+                      ></v-text-field>
+                
+                    </v-col>
+                            <v-col
+                              cols="12"
+                              sm="3"
+                            >
+                            <v-text-field
+                            label="連絡電話"
+                            v-model="peacefulEventDetail.phone"
+                            required
+                          ></v-text-field>
+                            </v-col>
+                            <v-col
+                              cols="12"
+                              sm="9"
+                            >
+                            <v-text-field
+                            v-model="peacefulEventDetail.memo"
+                            label="備註"
+                          ></v-text-field>
+                            </v-col>
+                            <v-col
+                            cols="12"
+                            sm="3"
+                          >
+                          <v-text-field
+                          label="金額"
+                          v-model="peacefulEventDetail.eventAmount"
+                          required
+                        ></v-text-field>
+                          </v-col>
+                            <v-col
+                            cols="12"
+                            sm="4"
+                          >
+                          <v-checkbox
+                          v-model="peacefulEventDetail.isCash"
+                          label="現金"
+                        ></v-checkbox>
+                          </v-col>
+                        </v-col>
+                        <v-col
+                        cols="12"
+                        sm="4"
+                      >
+                      <v-checkbox
+                      v-model="peacefulEventDetail.isBankTransfer"
+                      label="匯款"
+                    ></v-checkbox>
+                      </v-col>
+                      <v-col
+                      cols="12"
+                      sm="3"
+                    >
+                    <v-text-field
+                    label="平安宴(葷)人數"
+                    v-model="peacefulEventDetail.dinner_meat_count"
+                    required
+                  ></v-text-field>
+                    </v-col>
+                    <v-col
+                    cols="12"
+                    sm="3"
+                  >
+                  <v-text-field
+                  label="平安宴(素)人數"
+                  v-model="peacefulEventDetail.dinner_vegetable_count"
+                  required
+                ></v-text-field>
+                  </v-col>
+                  <v-col
+                  cols="12"
+                  sm="3"
+                >
+                <v-text-field
+                label="平安宴小孩人數"
+                v-model="peacefulEventDetail.dinner_free_count"
+                required
+              ></v-text-field>
+                </v-col>
+                          </v-row>
+                        </v-container>
+                      </v-card-text>
+                      <v-card-actions>
+                        <v-spacer></v-spacer>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="peacefulEventDialog = false"
+                        >
+                          關閉
+                        </v-btn>
+                        <v-btn
+                          color="blue darken-1"
+                          text
+                          @click="addPeacefulEvent"
+                        >
+                          新增
+                        </v-btn>
+                      </v-card-actions>
+                    </v-card>
+                  </v-dialog>
+                </v-row>
                  <v-row justify="center">
                    <v-dialog
                      v-model="eventDialog"
@@ -626,10 +774,9 @@
     let db = firebase.initializeApp(config).database();
     let userRef = db.ref("Member");
     let evnetRef = db.ref("Event");
+    let peaceEvnetRef = db.ref("PeacefulEvent");
     let lightRef = db.ref('User');
     let donationRef = db.ref('Donation');
-
-
 
     const App = {
       template: "#app-template",
@@ -640,6 +787,8 @@
 
           eventDescription: "",
           eventDialog: false,
+          peacefulEventDialog: false,
+
           lightDialog: false,
           donateDialog: false,
           selectUser: {},
@@ -693,6 +842,54 @@
             isCash: false,
             isBankTransfer: false,
             amount: 0,
+          },
+          peacefulEventDetail: {
+            name: "",
+            eventName: "",
+            address: "",
+            eventAmount: 0,
+            dinner_vegetable_count: 0,
+            dinner_meat_count: 0,
+            dinner_free_count: 0,
+            memo: "",
+            isCash: false,
+            isBankTransfer: false
+          },
+          peacefulEventOption:{
+            '圓明斗姥首':36000,
+            '中斗神君首':26000,
+            '東斗神君首':20000,
+            '南斗神君首':20000,
+            '西斗神君首':20000,
+            '北斗神君首':20000,
+            '北極玄元開天大上帝首':20000,
+            '北極真武大上帝首':20000,
+            '北極真武上帝首':20000,
+            '北極真武大帝首':20000,
+            '北極諸天上帝首':20000,
+            '玄武上帝首':20000,
+            '梁武帝皇首':20000,
+            '三清靖王':16000,
+            '張府天師首':16000,
+            '縣城隍爺首':16000,
+            '清水祖師首':16000,
+            '灶王公首':16000,
+            '天宮大帝首':16000,
+            '水官大帝首':16000,
+            '地官大帝首':16000,
+            '二郎神君首':16000,
+            '南無釋迦牟尼佛祖首':16000,
+            '天上聖母首':16000,
+            '中壇元帥大太子首':16000,
+            '中壇元帥二太子首':16000,
+            '中壇元帥三太子首':16000,
+            '保生大帝首':16000,
+            '神農大帝首':16000,
+            '文昌武帝首':16000,
+            '天宮武財神首':16000,
+            '註生娘娘首':16000,
+            '月老神君首':16000,
+            '平安首':6000,
           },
           overviewData: [],
           headers: [
@@ -762,6 +959,9 @@
               this.enableBlessedColumn[i] = false;
             }
           }
+        },
+        updatePeacefulEventAmount(selectObj){
+          this.peacefulEventDetail.eventAmount = this.peacefulEventOption[selectObj];
         },
         changeRoute(selectObj) {
 
@@ -852,6 +1052,26 @@
           });
           this.eventDialog = false;
         },
+        addPeacefulEvent: function () {
+          peaceEvnetRef.push({
+            userId: this.selectUser.key,
+            name: this.peacefulEventDetail.name,
+            eventName: this.peacefulEventDetail.eventName,
+            address: this.peacefulEventDetail.address,
+            phone: this.peacefulEventDetail.phone,
+            memo: this.peacefulEventDetail.memo,
+            isCash: this.peacefulEventDetail.isCash,
+            isBankTransfer: this.peacefulEventDetail.isBankTransfer,
+            eventAmount: this.peacefulEventDetail.amount,
+            dinner_vegetable_count: this.peacefulEventDetail.dinner_vegetable_count,
+            dinner_free_count: this.peacefulEventDetail.dinner_free_count,
+            dinner_free_count: this.peacefulEventDetail.dinner_free_count,
+
+            modifyTime: Date.now(),
+            createdTime: Date.now(),
+          });
+          this.peacefulEventDialog = false;
+        },
         addDonation: function () {
           donationRef.push({
             name: this.selectUser.name,
@@ -936,6 +1156,23 @@
             isBankTransfer: false,
             memo: ''
           }
+        },
+        registerPeacefulEvent: function (data) {
+          this.peacefulEventDialog = true;
+          this.selectUser = data;
+          this.peacefulEventDetail= {
+            name: this.selectUser.name,
+            eventName: "",
+            address: this.selectUser.address,
+            phone: this.selectUser.phone,
+            eventAmount: 0,
+            dinner_vegetable_count: 0,
+            dinner_meat_count: 0,
+            dinner_free_count: 0,
+            memo: "",
+            isCash: false,
+            isBankTransfer: false
+          };
         },
         registerEvent: function (data) {
           this.eventDialog = true;
