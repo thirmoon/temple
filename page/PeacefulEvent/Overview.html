@@ -105,6 +105,14 @@
             <template v-slot:item.total_amount="{ item }">
               {{getDisplayNumber(item.total_amount)}}
             </template>
+            <template slot="body.append">
+              <tr class="pink--text">
+                  <th class="title">總計</th>
+                  <th class="title">{{ getDisplayNumber(sumDuplicateField('unpiad_amount'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumDuplicateField('cash_amount'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumDuplicateField('bank_transfer_amount'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumDuplicateField('total_amount'))}}</th>
+              </tr>
           </v-data-table>
           </v-card>
           <br>
@@ -273,7 +281,7 @@
               { text: "總計", value: "totalCount" },
             ],
             uniqueEventHeaders: [
-              { text: "項目", value: "label" },
+              { text: "項目(一名)", value: "label" },
               { text: "姓名", value: "name" },
               { text: "未付款", value: "unpiad_amount" },
               { text: "現金", value: "cash_amount" },
@@ -281,7 +289,7 @@
               { text: "總計", value: "total_amount" },
             ],
             duplicateEventHeaders: [
-              { text: "項目", value: "label" },
+              { text: "項目(不限)", value: "label" },
               { text: "未付款", value: "unpiad_amount" },
               { text: "現金", value: "cash_amount" },
               { text: "匯款", value: "bank_transfer_amount" },
