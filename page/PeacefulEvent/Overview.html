@@ -54,7 +54,7 @@
             :items="uniqueEventSummary"
             class="elevation-1"
             item-key="key"
-            items-per-page="30"
+            :items-per-page="30"
             fixed-header
             height="285px">
             
@@ -113,6 +113,7 @@
                   <th class="title">{{ getDisplayNumber(sumDuplicateField('bank_transfer_amount'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumDuplicateField('total_amount'))}}</th>
               </tr>
+            </template>
           </v-data-table>
           </v-card>
           <br>
@@ -129,19 +130,13 @@
             <template v-slot:item.totalCount="{ item }">
               {{getDisplayNumberWithCount(item.totalCount)}}
             </template>
-            <template v-slot:item.dinner_vegetable_count="{ item }">
-              {{getDisplayNumberWithCount(item.dinner_vegetable_count)}}
-            </template>
-            <template v-slot:item.dinner_meat_count="{ item }">
-              {{getDisplayNumberWithCount(item.dinner_meat_count)}}
-            </template>
             <template slot="body.append">
               <tr class="pink--text">
                   <th class="title">總計</th>
-                  <th class="title">{{ getDisplayNumberWithCount(sumField('dinner_vegetable_count'))}}</th>
-                  <th class="title">{{ getDisplayNumberWithCount(sumField('dinner_meat_count'))}}</th>
+                  <th class="title">{{ sumField('dinner_vegetable_count')}}</th>
+                  <th class="title">{{ sumField('dinner_meat_count')}}</th>
                   <th class="title">{{ sumField('dinner_free_count')}}</th>
-                  <th class="title">{{ getDisplayNumberWithCount(sumField('totalCount'))}}</th>
+                  <th class="title">{{ sumField('totalCount')}}</th>
               </tr>
           </template>
           </v-data-table>
@@ -240,6 +235,7 @@
                 dinner_vegetable_count: 0,
                 dinner_meat_count: 0,
                 dinner_free_count: 0,
+                dinner_amount:0
               },
               {
                 label: "現金",
@@ -247,6 +243,7 @@
                 dinner_vegetable_count: 0,
                 dinner_meat_count: 0,
                 dinner_free_count: 0,
+                dinner_amount:0
               },
               {
                 label: "匯款",
@@ -254,6 +251,7 @@
                 dinner_vegetable_count: 0,
                 dinner_meat_count: 0,
                 dinner_free_count: 0,
+                dinner_amount:0
               }
             ],
 
@@ -279,6 +277,8 @@
               { text: "平安宴(葷)", value: "dinner_meat_count" },
               { text: "平安宴(小孩)", value: "dinner_free_count" },
               { text: "總計", value: "totalCount" },
+              { text: "金額", value: "dinner_amount" },
+
             ],
             uniqueEventHeaders: [
               { text: "項目(一名)", value: "label" },
@@ -453,16 +453,24 @@
             let self = this;
             this.overviewData.forEach(function (eventDetail) {
               let index = 0;
-
+              let freeLimit = 0;
+              if ( Object.keys(self.uniqueEventOption).includes(eventDetail.eventName)){
+                freeLimit=4;
+              }else if (Object.keys(self.duplicateEventOption).includes(eventDetail.eventName)){
+                freeLimit=2;
+              }
               if (eventDetail.isCash) {
                 index = 1;
               }else if(eventDetail.isBankTransfer){
                 index=2
               }
+
+              let totalCount = Number(eventDetail.dinner_vegetable_count)+Number(eventDetail.dinner_meat_count);
               self.dinnerSummary[index].dinner_vegetable_count += Number(eventDetail.dinner_vegetable_count);
               self.dinnerSummary[index].dinner_meat_count += Number(eventDetail.dinner_meat_count);
               self.dinnerSummary[index].dinner_free_count += Number(eventDetail.dinner_free_count);
-              self.dinnerSummary[index].totalCount += Number(eventDetail.dinner_vegetable_count)+Number(eventDetail.dinner_meat_count);
+              self.dinnerSummary[index].totalCount += totalCount;
+              self.dinnerSummary[index].dinner_amount += totalCount>freeLimit ? (totalCount-freeLimit)*500:0;
            
             })
            },
