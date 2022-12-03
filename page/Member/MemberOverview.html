@@ -187,20 +187,20 @@
                       </v-col>
                       <v-col
                       cols="12"
-                      sm="3"
+                      sm="2"
                     >
                     <v-text-field
-                    label="平安宴(葷)人數"
+                    label="平安宴(葷)"
                     v-model="peacefulEventDetail.dinner_meat_count"
                     required
                   ></v-text-field>
                     </v-col>
                     <v-col
                     cols="12"
-                    sm="3"
+                    sm="2"
                   >
                   <v-text-field
-                  label="平安宴(素)人數"
+                  label="平安宴(素)"
                   v-model="peacefulEventDetail.dinner_vegetable_count"
                   required
                 ></v-text-field>
@@ -210,10 +210,30 @@
                   sm="3"
                 >
                 <v-text-field
-                label="平安宴小孩人數"
+                label="平安宴小孩"
                 v-model="peacefulEventDetail.dinner_free_count"
                 required
               ></v-text-field>
+            </v-col>
+            <v-col
+            cols="12"
+            sm="2"
+          >
+          <v-checkbox
+          v-model="peacefulEventDetail.isCashDinner"
+          label="現金"
+        ></v-checkbox>
+          </v-col>
+        </v-col>
+        <v-col
+        cols="12"
+        sm="2"
+      >
+      <v-checkbox
+      v-model="peacefulEventDetail.isBankTransferDinner"
+      label="匯款"
+    ></v-checkbox>
+      </v-col>
                 </v-col>
                           </v-row>
                         </v-container>
@@ -856,7 +876,9 @@
             dinner_free_count: 0,
             memo: "",
             isCash: false,
-            isBankTransfer: false
+            isBankTransfer: false,
+            isCashDinner: false,
+            isBankTransferDinner: false
           },
           peacefulEventOption:{
             '圓明斗姥首':36000,
@@ -1065,10 +1087,13 @@
             memo: this.peacefulEventDetail.memo,
             isCash: this.peacefulEventDetail.isCash,
             isBankTransfer: this.peacefulEventDetail.isBankTransfer,
+            isCashDinner: this.peacefulEventDetail.isCashDinner,
+            isBankTransferDinner: this.peacefulEventDetail.isBankTransferDinner,
             eventAmount: this.peacefulEventDetail.eventAmount,
             dinner_vegetable_count: this.peacefulEventDetail.dinner_vegetable_count,
             dinner_meat_count: this.peacefulEventDetail.dinner_meat_count,
             dinner_free_count: this.peacefulEventDetail.dinner_free_count,
+            
             modifyTime: Date.now(),
             createdTime: Date.now(),
           });
@@ -1173,7 +1198,9 @@
             dinner_free_count: 0,
             memo: "",
             isCash: false,
-            isBankTransfer: false
+            isBankTransfer: false,
+            isCashDinner: false,
+            isBankTransferDinner: false,
           };
         },
         registerEvent: function (data) {

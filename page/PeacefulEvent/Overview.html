@@ -180,6 +180,10 @@
               <v-checkbox v-model="item.isCash" label="現金" class="payment-option"></v-checkbox>
               <v-checkbox v-model="item.isBankTransfer" label="匯款" class="payment-option"></v-checkbox>
             </template>
+            <template v-slot:item.paymentStatusDinner="{ item }" >
+              <v-checkbox v-model="item.isCashDinner" label="現金" class="payment-option"></v-checkbox>
+              <v-checkbox v-model="item.isBankTransferDinner" label="匯款" class="payment-option"></v-checkbox>
+            </template>
             <template v-slot:item.eventAmount="{ item }">
               <input  :name="item.eventAmount" v-model.trim="item.eventAmount" id="overview_phone">
             </template>
@@ -266,6 +270,9 @@
               { text: "平安宴(素)", value: "dinner_vegetable_count" },
               { text: "平安宴(葷)", value: "dinner_meat_count" },
               { text: "平安宴小孩", value: "dinner_free_count" },
+              { text: "平安宴付款狀態", value: "paymentStatusDinner" },
+
+              
               { text: "填寫日期", value: "createdTime" , width: '200px'},
               { text: "修改日期", value: "modifyTime" , width: '200px'},
               { text: "操作", value: "actions" },
@@ -459,9 +466,9 @@
               }else if (Object.keys(self.duplicateEventOption).includes(eventDetail.eventName)){
                 freeLimit=2;
               }
-              if (eventDetail.isCash) {
+              if (eventDetail.isCashDinner) {
                 index = 1;
-              }else if(eventDetail.isBankTransfer){
+              }else if(eventDetail.isBankTransferDinner){
                 index=2
               }
 
