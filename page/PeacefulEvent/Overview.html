@@ -57,6 +57,29 @@
             items-per-page="30"
             fixed-header
             height="285px">
+            
+            <template v-slot:item.unpiad_amount="{ item }">
+              {{getDisplayNumber(item.unpiad_amount)}}
+            </template>
+            <template v-slot:item.cash_amount="{ item }">
+              {{getDisplayNumber(item.cash_amount)}}
+            </template>
+            <template v-slot:item.bank_transfer_amount="{ item }">
+              {{getDisplayNumber(item.bank_transfer_amount)}}
+            </template>
+            <template v-slot:item.total_amount="{ item }">
+              {{getDisplayNumber(item.total_amount)}}
+            </template>
+            <template slot="body.append">
+              <tr class="pink--text">
+                  <th class="title">總計</th>
+                  <th class="title"></th>
+                  <th class="title">{{ getDisplayNumber(sumUniqueField('unpiad_amount'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumUniqueField('cash_amount'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumUniqueField('bank_transfer_amount'))}}</th>
+                  <th class="title">{{ getDisplayNumber(sumUniqueField('total_amount'))}}</th>
+              </tr>
+          </template>
           </v-data-table>
           </v-card>
           <br>
@@ -70,6 +93,18 @@
             item-key="key"
             fixed-header
             height="285px">
+            <template v-slot:item.unpiad_amount="{ item }">
+              {{getDisplayNumber(item.unpiad_amount)}}
+            </template>
+            <template v-slot:item.cash_amount="{ item }">
+              {{getDisplayNumber(item.cash_amount)}}
+            </template>
+            <template v-slot:item.bank_transfer_amount="{ item }">
+              {{getDisplayNumber(item.bank_transfer_amount)}}
+            </template>
+            <template v-slot:item.total_amount="{ item }">
+              {{getDisplayNumber(item.total_amount)}}
+            </template>
           </v-data-table>
           </v-card>
           <br>
@@ -84,21 +119,21 @@
             fixed-header
             height="285px">
             <template v-slot:item.totalCount="{ item }">
-              {{getDisplayNumber(item.totalCount)}}
+              {{getDisplayNumberWithCount(item.totalCount)}}
             </template>
             <template v-slot:item.dinner_vegetable_count="{ item }">
-              {{getDisplayNumber(item.dinner_vegetable_count)}}
+              {{getDisplayNumberWithCount(item.dinner_vegetable_count)}}
             </template>
             <template v-slot:item.dinner_meat_count="{ item }">
-              {{getDisplayNumber(item.dinner_meat_count)}}
+              {{getDisplayNumberWithCount(item.dinner_meat_count)}}
             </template>
             <template slot="body.append">
               <tr class="pink--text">
                   <th class="title">總計</th>
-                  <th class="title">{{ getDisplayNumber(sumField('dinner_vegetable_count'))}}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('dinner_meat_count'))}}</th>
+                  <th class="title">{{ getDisplayNumberWithCount(sumField('dinner_vegetable_count'))}}</th>
+                  <th class="title">{{ getDisplayNumberWithCount(sumField('dinner_meat_count'))}}</th>
                   <th class="title">{{ sumField('dinner_free_count')}}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('totalCount'))}}</th>
+                  <th class="title">{{ getDisplayNumberWithCount(sumField('totalCount'))}}</th>
               </tr>
           </template>
           </v-data-table>
@@ -232,8 +267,8 @@
             ],
             dinnerSummaryHeaders: [
               { text: "項目", value: "label" },
-              { text: "平安宴(葷)", value: "dinner_vegetable_count" },
-              { text: "平安宴(素)", value: "dinner_meat_count" },
+              { text: "平安宴(素)", value: "dinner_vegetable_count" },
+              { text: "平安宴(葷)", value: "dinner_meat_count" },
               { text: "平安宴(小孩)", value: "dinner_free_count" },
               { text: "總計", value: "totalCount" },
             ],
@@ -291,7 +326,6 @@
             '註生娘娘首':16000,
             '月老神君首':16000,
             '平安首':6000,
-
           },
             search: "",
           };
@@ -395,11 +429,17 @@
            
             })
            },
-          getDisplayNumber: function (number) {
+          getDisplayNumberWithCount: function (number) {
               if (number == undefined || number == null) {
             return 0;
             }
           return number + '(' + (number*500).toLocaleString()+')'
+          },
+          getDisplayNumber: function (number) {
+              if (number == undefined || number == null) {
+            return 0;
+            }
+          return number.toLocaleString();
           },
           GetDinnerSummary: function () {
             let self = this;
@@ -415,8 +455,6 @@
               self.dinnerSummary[index].dinner_meat_count += Number(eventDetail.dinner_meat_count);
               self.dinnerSummary[index].dinner_free_count += Number(eventDetail.dinner_free_count);
               self.dinnerSummary[index].totalCount += Number(eventDetail.dinner_vegetable_count)+Number(eventDetail.dinner_meat_count);
-            
-            
            
             })
            },
@@ -442,8 +480,13 @@
             }
           },
           sumField(key) {
-          // sum data in give key (property)
           return this.dinnerSummary.reduce((a, b) => a + (b[key] || 0), 0)
+        },
+        sumUniqueField(key) {
+          return this.uniqueEventSummary.reduce((a, b) => a + (b[key] || 0), 0)
+        },
+        sumDuplicateField(key) {
+          return this.duplicateEventSummary.reduce((a, b) => a + (b[key] || 0), 0)
         },
           copyEventDetail: function (eventDetail ) {
             eventRef.push({
