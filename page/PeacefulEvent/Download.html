@@ -2,7 +2,7 @@
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <title>慈善亭</title>
+    <title>慈善亭 | 平安大法會下載</title>
     <link
       rel="stylesheet"
       href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
@@ -100,25 +100,12 @@
           <h1 class="page-title">慈善亭 | 法會資料下載</h1>
           <h1 class="page-title">
             <a href="../Member/MemberOverview.html">信徒總覽 |</a>
-            <a href="EventOverview.html">法會報名總覽 |</a>
-            <a href="EventDownload.html">法會報名下載 |</a>
+            <a href="Overview.html">總覽 |</a>
+            <a href="Download.html">下載 |</a>
           </h1>
           <button v-on:click="loadAllData">載入所有資料</button>
           <button v-on:click="loadTodayData">載入當天修改資料</button>
           <br />
-
-          <button v-on:click="loadItem(1)">
-            載入梁皇寶懺超薦歷代祖先九玄七祖資料
-          </button>
-          <button v-on:click="loadItem(2)">載入超薦歷代祖先資料</button>
-          <button v-on:click="loadItem(3)">載入超薦個人累世冤親債主資料</button>
-          <button v-on:click="loadItem(4)">載入超薦無緣子女嬰靈資料</button>
-          <button v-on:click="loadItem(5)">
-            載入超薦親人+報恩(父、母、兄弟、姊妹、恩人)資料
-          </button>
-          <button v-on:click="loadItem(6)">
-            載入超薦動物靈(狗、貓寵物名)資料
-          </button>
 
           <br />
 
@@ -131,46 +118,31 @@
         <table class="table table-striped" id="tableExcel">
           <thead>
             <tr>
-              <td>功德主姓名</td>
-              <td>功德主姓名</td>
-              <td>功德主姓名</td>
-              <td>功德主姓名</td>
-              <td>功德主姓名</td>
-              <td>功德主姓名</td>
-              <td>參加法會項目</td>
-              <td>地址</td>
-              <td>姓名(姓氏)</td>
-              <td>姓名(姓氏)</td>
-              <td>姓名(姓氏)</td>
-              <td>姓名(姓氏)</td>
-              <td>電話</td>
+              <td>斗首名稱</td>
               <td>金額</td>
-              <td>付款狀態</td>
+              <td>姓名</td>
+              <td>付款方式</td>
+              <td>平安宴(素)</td>
+              <td>平安宴(葷)</td>
+              <td>平安宴(小孩)</td>
+              <td>平安宴付款方式</td>
+              <td>平安宴金額</td>
               <td>備註</td>
-              <td>修改時間</td>
-              <td>報名時間</td>
+            
             </tr>
           </thead>
           <tr v-for="data in overviewData">
-            <td>{{data.name}}</td>
-            <td>{{data.name2}}</td>
-            <td>{{data.name3}}</td>
-            <td>{{data.name4}}</td>
-            <td>{{data.name5}}</td>
-            <td>{{data.name6}}</td>
             <td>{{data.eventName}}</td>
-            <td>{{data.address}}</td>
-            <td>{{data.firstName}}</td>
-            <td>{{data.blessed2}}</td>
-            <td>{{data.blessed3}}</td>
-            <td>{{data.blessed4}}</td>
-            <td>{{data.phone}}</td>
-            <td>{{data.amount}}</td>
+            <td>{{data.eventAmount}}</td>
+            <td>{{data.name}}</td>
             <td>{{getPaymentStatus(data)}}</td>
+            <td>{{data.dinner_vegetable_count}}</td>
+            <td>{{data.dinner_meat_count}}</td>
+            <td>{{data.dinner_free_count}}</td>
+            <td>{{getDinnerPaymentStatus(data)}}</td>
+            <td>{{data.dinner_amount}}</td>
             <td>{{data.memo}}</td>
-
-            <td>{{getDisplayTime(data.modifyTime)}}</td>
-            <td>{{getDisplayTime(data.createdTime)}}</td>
+          
           </tr>
         </table>
       </ul>
@@ -189,7 +161,7 @@
       };
       this.searchResultData;
       let db = firebase.initializeApp(config).database();
-      let eventRef = db.ref("Event");
+      let eventRef = db.ref("PeacefulEvent");
       new Vue({
         el: "#app",
         data: {
@@ -230,50 +202,15 @@
           getPaymentStatus: function (data) {
             return data.isCash ? "現金" : data.isBankTransfer?"匯款":"未付款";
           },
+          getDinnerPaymentStatus: function (data) {
+            return data.isCashDinner ? "現金" : data.isBankTransferDinner?"匯款":"未付款";
+          },
           getDisplayTime: function (time) {
             if (time == undefined) {
               return null;
             }
             let dateTime = new Date(time);
             return dateTime.toISOString().slice(0, 10);
-          },
-          loadItem: function (eventNameId) {
-            let self = this;
-            this.overviewData = [];
-            let eventName = "";
-            switch (eventNameId) {
-              case 1:
-                eventName = "梁皇寶懺超薦歷代祖先九玄七祖";
-                break;
-              case 2:
-                eventName = "超薦歷代祖先";
-                break;
-              case 3:
-                eventName = "超薦個人累世冤親債主";
-                break;
-              case 4:
-                eventName = "超薦無緣子女嬰靈";
-                break;
-              case 5:
-                eventName = "超薦親人+報恩(父、母、兄弟、姊妹、恩人)";
-                break;
-              case 6:
-                eventName = "超薦動物靈(狗、貓寵物名)";
-                break;
-            }
-
-            eventRef.once("value", function (snapshot) {
-              snapshot.forEach(function (data) {
-                let eventDetail = data.val();
-                if (eventDetail.eventName == eventName) {
-                  eventDetail.key = data.key;
-                  self.overviewData.push(eventDetail);
-                }
-              });
-              self.overviewData = self.overviewData.sort(function (a, b) {
-                return a.address > b.address ? -1 : 1;
-              });
-            });
           },
           loadTodayData: function () {
             let self = this;
