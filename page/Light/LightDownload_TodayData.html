@@ -159,6 +159,32 @@
           <td> {{data.memo}}</td>
 
         </tr>
+        <tr v-for="data in summarys">
+
+          <td> 總計</td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> </td>
+          <td> {{data.lightType1Count}}</td>
+          <td> {{data.lightType2Count}}</td>
+          <td> {{data.lightType3Count}}</td>
+          <td> {{data.lightType4Count}}</td>
+          <td> {{data.lightType5Count}}</td>
+          <td> {{data.lightType6Count}}</td>
+          <td> {{data.lightType7Count}}</td>
+          <td> {{data.label}}</td>
+          <td> {{data.totalCount * 500}}</td>
+          <td> </td>
+          <td> </td>
+
+        </tr>
       </table>
     </ul>
   </div>
@@ -184,7 +210,43 @@
         today: null,
         addMultipleUserStyle: {
           display: 'none'
-        }
+        },
+        summarys: [
+            {
+              label: "未付款",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            },
+            {
+              label: "現金",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            },
+            {
+              label: "匯款",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            }
+          ],
+         
       },
       firebase: {
         Users: userRef.limitToLast(25),
@@ -193,6 +255,43 @@
         this.loadTodayData()
       },
       methods: {
+        GetSummary: function () {
+          let self = this;
+          this.overviewData.forEach(function (data) {
+            if(data.lightYear == lightYear){
+              let index = 0;
+            if (data.isCash) {
+                index = 1;
+              } else if (data.isBankTransfer) {
+                index = 2;
+              };
+              
+              if (data.lightType1) {
+                self.summarys[index].lightType1Count += 1;
+                self.summarys[index].totalCount += 1;
+              }  if (data.lightType2) {
+                self.summarys[index].lightType2Count += 1;
+                self.summarys[index].totalCount += 1;
+              }  if (data.lightType3) {
+                self.summarys[index].lightType3Count += 1;
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType4) {
+                self.summarys[index].lightType4Count += 1;
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType5) {
+                self.summarys[index].lightType5Count += 1;
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType6) {
+                self.summarys[index].lightType6Count += 1;
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType7) {
+                self.summarys[index].lightType7Count += 1;
+                self.summarys[index].totalCount += 1;
+              }
+            }
+
+          });
+        },
         getPaymentMethod: function (data) {
           return data.isBankTransfer ? "匯款" :
           data.isCash ? "現金":"未勾選" ;
@@ -233,6 +332,7 @@
             self.overviewData = self.overviewData.sort(function (a, b) {
               return a.address > b.address ? -1 : 1;
             });
+            self.GetSummary()
           });
         }
       }
