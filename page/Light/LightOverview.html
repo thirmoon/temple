@@ -316,21 +316,28 @@
               } else if (data.isBankTransfer) {
                 index = 2;
               };
-              self.summarys[index].totalCount += 1;
+              
               if (data.lightType1) {
                 self.summarys[index].lightType1Count += 1;
-              } else if (data.lightType2) {
+                self.summarys[index].totalCount += 1;
+              }  if (data.lightType2) {
                 self.summarys[index].lightType2Count += 1;
-              } else if (data.lightType3) {
+                self.summarys[index].totalCount += 1;
+              }  if (data.lightType3) {
                 self.summarys[index].lightType3Count += 1;
-              }else if (data.lightType4) {
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType4) {
                 self.summarys[index].lightType4Count += 1;
-              }else if (data.lightType5) {
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType5) {
                 self.summarys[index].lightType5Count += 1;
-              }else if (data.lightType6) {
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType6) {
                 self.summarys[index].lightType6Count += 1;
-              }else if (data.lightType7) {
+                self.summarys[index].totalCount += 1;
+              } if (data.lightType7) {
                 self.summarys[index].lightType7Count += 1;
+                self.summarys[index].totalCount += 1;
               }
             }
 
