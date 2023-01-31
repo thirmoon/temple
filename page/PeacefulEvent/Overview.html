@@ -331,7 +331,7 @@
             '縣城隍爺首':16000,
             '清水祖師首':16000,
             '灶王公首':16000,
-            '天宮大帝首':16000,
+            '天官大帝首':16000,
             '水官大帝首':16000,
             '地官大帝首':16000,
             '二郎神君首':16000,
@@ -344,8 +344,8 @@
           duplicateEventOption:{
             '保生大帝首':16000,
             '神農大帝首':16000,
-            '文昌武帝首':16000,
-            '天宮武財神首':16000,
+            '文昌帝君首':16000,
+            '天官武財神':16000,
             '註生娘娘首':16000,
             '月老神君首':16000,
             '平安首':6000,
@@ -434,6 +434,14 @@
 
             let self = this;
             this.overviewData.forEach(function (eventDetail) {
+              if(eventDetail.name=='林英傑'){
+                console.log(eventDetail)
+              }
+             //林英傑
+             //余成泰
+             //1.天宮武財神首改天官武財神
+             //2.文昌武帝首改文昌帝君首  余成泰
+             //3.天宮大帝首改天官大帝首  林英傑
               let index = 0;
               let eventIndex = Object.keys(self.uniqueEventOption).indexOf(eventDetail.eventName);
               if(eventIndex!=-1){
