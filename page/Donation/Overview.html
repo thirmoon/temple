@@ -384,7 +384,7 @@
           let self = this;
           this.overviewData.forEach(function (donation) {
             let index = 0;
-            let overYeayDate = new Date(2022, 11, 01);
+            let overYeayDate = new Date(2023, 02, 01);
 
             if (donation.amount > 0) {
               if (donation.isCash) {
@@ -392,12 +392,8 @@
               } else if (donation.isBankTransfer) {
                 index = 2;
               };
-              if(donation.item4 || donation.item6 
-              || (donation.item1 && new Date(donation.modifyTime) < overYeayDate)
-              || (donation.item7 && new Date(donation.modifyTime) < overYeayDate)
-              ){
-
-              }else{
+              if(new Date(donation.modifyTime) > overYeayDate)
+              {
                 self.balances[index].totalbalance += Number(donation.amount);
               }
            
@@ -405,11 +401,11 @@
 
               if (donation.item1 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item1Balance += Number(donation.amount);
-              } else if (donation.item2) {
+              } else if (donation.item2 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item2Balance += Number(donation.amount);
-              } else if (donation.item3) {
+              } else if (donation.item3 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item3Balance += Number(donation.amount);
-              } else if (donation.item5) {
+              } else if (donation.item5 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item5Balance += Number(donation.amount);
               }  else if (donation.item7 && new Date(donation.modifyTime) > overYeayDate) {
                 if (donation.memo && donation.memo.includes("桌")) {
@@ -417,21 +413,21 @@
                   self.tableCount += Number(tableValue);
                 }
                 self.balances[index].item7Balance += Number(donation.amount);
-              } else if (donation.item8) {
+              } else if (donation.item8 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item8Balance += Number(donation.amount);
-              } else if (donation.item9) {
+              } else if (donation.item9 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item9Balance += Number(donation.amount);
-              }else if (donation.item10) {
+              }else if (donation.item10 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item10Balance += Number(donation.amount);
-              }else if (donation.item11) {
+              }else if (donation.item11 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item11Balance += Number(donation.amount);
-              }else if (donation.item12) {
+              }else if (donation.item12 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item12Balance += Number(donation.amount);
-              }else if (donation.item13) {
+              }else if (donation.item13 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item13Balance += Number(donation.amount);
-              }else if (donation.item14) {
+              }else if (donation.item14 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item14Balance += Number(donation.amount);
-              }else if (donation.item15) {
+              }else if (donation.item15 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item15Balance += Number(donation.amount);
               }
               
