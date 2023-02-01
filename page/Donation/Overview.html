@@ -355,13 +355,18 @@
       methods: {
         loadData: function () {
           let self = this;
+          let overYeayDate = new Date(2023, 02, 01);
           this.balance = 0;
           this.overviewData = [];
           donationRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let donation = data.val();
-              donation.key = data.key;
-              self.overviewData.push(donation);
+            
+              if(new Date(donation.modifyTime) > overYeayDate){
+                donation.key = data.key;
+                self.overviewData.push(donation);
+              }
+             
             });
 
             self.overviewData = self.overviewData.sort(function (a, b) {
