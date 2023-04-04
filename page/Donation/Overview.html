@@ -197,7 +197,7 @@
               <v-btn elevation="1"  v-on:click="updateDonation(item)" >更新</v-btn>
               <v-btn elevation="1"  v-on:click="removeDonation(item)" >刪除</v-btn>
               <v-btn elevation="1"  v-on:click="copyDonation(item)" >複製</v-btn>
-
+              <v-btn elevation="1"  v-on:click="print(item)" >列印</v-btn>
             </template>
           </v-data-table>
         </v-card>
@@ -486,6 +486,9 @@
           })
           alert("複製完成");
           this.loadData();
+        },
+        print: function(data){
+          location.href = './Print.html?key=' + data.key;
         },
         getDisplayTime: function (time) {
           if (time == undefined) {
