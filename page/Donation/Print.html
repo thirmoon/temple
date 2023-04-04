@@ -39,6 +39,7 @@
         <td> 項目：{{getDonationType(userData)}}</td>
 
           <div>   合計 新台幣 {{userData.amount}} 元</div>
+          <div>    深植福田 特致謝忱 功德無量 闔家平安</div>
           <div>    台南市新化區口埤慈善亭 管理委員會</div>
 
           <br><br><br><br>
@@ -54,6 +55,7 @@
           <td> 項目：{{getDonationType(userData)}}</td>
   
             <div>   合計 新台幣 {{userData.amount}} 元</div>
+            <div>    深植福田 特致謝忱 功德無量 闔家平安</div>
             <div>    台南市新化區口埤慈善亭 管理委員會</div>
 <br>
 <br>
@@ -93,7 +95,6 @@
         userRef.child(params.key).once('value').then((snapshot) => {
             const data = snapshot.val();
             self.userData = data;
-            console.log( self.userData );
         });
       },
     
