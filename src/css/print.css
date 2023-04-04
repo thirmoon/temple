@@ -1,0 +1,17 @@
+#title {
+    font-size: 60x;
+    display: flex;
+    /* 水平置中 */
+    justify-content: center;    
+}
+#inspire{
+    font-size: 36px;
+    justify-content: center;    
+    font-family:DFKai-sb;
+    text-align: center;
+}
+
+#data-table{
+    
+    margin: 0 auto
+}

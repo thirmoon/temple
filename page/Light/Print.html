@@ -1,0 +1,152 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>慈善亭 | 點燈系統</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../src/css/overview.css">
+  <link rel="stylesheet" href="../../src/css/print.css">
+
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Roboto:100,300,400,500,700,900" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/@mdi/font@6.x/css/materialdesignicons.min.css" rel="stylesheet">
+  <link href="https://cdn.jsdelivr.net/npm/vuetify@2.x/dist/vuetify.min.css" rel="stylesheet">
+  <script src="../../dist/vuefire.js"></script>
+
+</head>
+
+<body>
+
+  <div id="app">
+
+    <ul>
+      <div id="app-table"></div>
+    </ul>
+  </div>
+  <script type="text/x-template" id="app-template">
+    <v-app id="inspire">
+        <h1  id='title'> 點燈祈福</h1>
+        <div>   中華民國 {{getDisplayDate(userData.createdTime)}} </div>
+        <div>    姓名：{{userData.name}}</div>
+        <div>    地址：{{userData.address}}</div>
+        <table  id='data-table'>
+            <tr id='title'>
+            
+            <tr>
+                <td> {{getDisplayLightType(userData.lightType1,'太歲燈')}}</td>
+                <td> {{getDisplayLightType(userData.lightType2,'財神燈')}}</td>
+                <td> {{getDisplayLightType(userData.lightType3),'文昌燈'}}</td>
+                <td> {{getDisplayLightType(userData.lightType4,'長明燈')}}</td>
+                <td> {{getDisplayLightType(userData.lightType5,'藥師燈')}}</td>
+                <td> {{getDisplayLightType(userData.lightType6,'光明燈')}}</td>
+                <td> {{getDisplayLightType(userData.lightType7,'姻緣燈')}}</td>
+            </tr>
+          </table>
+          <div>   合計 新台幣 {{getAmount(userData)}} 元</div>
+          <div>    台南新化區口埤慈善亭 管理委員會</div>
+<br>
+<br>
+
+
+          <h1  id='title'> 點燈祈福</h1>
+          <div>   中華民國 {{getDisplayDate(userData.createdTime)}} </div>
+          <div>    姓名：{{userData.name}}</div>
+          <div>    地址：{{userData.address}}</div>
+          <table  id='data-table'>
+              <tr id='title'>
+              
+              <tr>
+                  <td> {{getDisplayLightType(userData.lightType1,'太歲燈')}}</td>
+                  <td> {{getDisplayLightType(userData.lightType2,'財神燈')}}</td>
+                  <td> {{getDisplayLightType(userData.lightType3),'文昌燈'}}</td>
+                  <td> {{getDisplayLightType(userData.lightType4,'長明燈')}}</td>
+                  <td> {{getDisplayLightType(userData.lightType5,'藥師燈')}}</td>
+                  <td> {{getDisplayLightType(userData.lightType6,'光明燈')}}</td>
+                  <td> {{getDisplayLightType(userData.lightType7,'姻緣燈')}}</td>
+              </tr>
+            </table>
+            <div>   合計 新台幣 {{getAmount(userData)}} 元</div>
+            <div>    台南新化區口埤慈善亭 管理委員會</div>
+    </v-app>
+  </script>
+
+  <script>
+    /* global Vue, firebase */
+    let config = {
+      apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
+      authDomain: 'light-1a6d4.firebaseapp.com',
+      databaseURL: 'https://light-1a6d4.firebaseio.com/',
+      projectId: 'light-1a6d4',
+      storageBucket: 'light-1a6d4.appspot.com',
+      messagingSenderId: '66654715141'
+    }
+
+    let db = firebase.initializeApp(config).database()
+    let userRef = db.ref('User')
+    const App = {
+      template: '#app-template',
+      data() {
+        return {
+            userData:[]
+        }
+      },
+      firebase: {
+        Users: userRef.limitToLast(25),
+      },
+      beforeMount() {
+        let self = this;
+        const urlSearchParams = new URLSearchParams(window.location.search);
+        const params = Object.fromEntries(urlSearchParams.entries());
+        userRef.child(params.key).once('value').then((snapshot) => {
+            const data = snapshot.val();
+            self.userData = data;
+        });
+      },
+    
+      methods: {
+        getDisplayLightType: function (isLight,lightType) {
+          return isLight ? lightType + ' V':''
+        },
+        getDisplayDate(createdTime) {
+          let ct = new Date(createdTime);
+          let result = (ct.getFullYear() - 1911).toString() + '年' + (ct.getMonth() + 1).toString() + '月' +(ct.getDay() + 1).toString()+ '日';
+          if (result.includes('Na')) {
+            return '';
+          }
+          else {
+            return result;
+          }
+        },
+        getAmount: function (data) {
+        
+          let count = 0;
+          if(data.lightType1) count ++;
+          if(data.lightType2) count ++;
+          if(data.lightType3) count ++;
+          if(data.lightType4) count ++;
+          if(data.lightType5) count ++;
+          if(data.lightType6) count ++;
+          if(data.lightType7) count ++;
+
+          return count * 500;
+        },
+        
+      }
+    }
+    new Vue({
+      vuetify: new Vuetify(),
+      render: h => h(App)
+    }).$mount('#app-table')
+
+
+
+  </script>
+</body>
+
+</html>
