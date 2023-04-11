@@ -108,7 +108,7 @@
         <button v-on:click="loadItem10">載入祈安法會資料</button>
         <button v-on:click="loadItem11">載入超拔法會資料</button>
         <button v-on:click="loadItem2">載入增建/整修工程資料</button>
-        <button v-on:click="loadItem3">載入金身雕刻資料</button>
+        <button v-on:click="loadItem3">載入梁武帝金身資料</button>
         <button v-on:click="loadItem12">載入金身1資料</button>
         <button v-on:click="loadItem13">載入金身2資料</button>
         <button v-on:click="loadItem5">載入文昌筆資料</button>
@@ -250,7 +250,7 @@
         getItem:function(data){
           return data.item1 ? "油香功德金": 
                  data.item2 ? "增修/整修工程" :
-                 data.item3 ? "金身雕刻" :
+                 data.item3 ? "梁武帝金身" :
                  data.item4 ? "九龍椅" :
                  data.item5 ? "文昌筆" :
                  data.item6 ? "其他" :
