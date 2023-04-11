@@ -362,7 +362,7 @@
             snapshot.forEach(function (data) {
               let donation = data.val();
             
-              if(new Date(donation.createdTime) > overYeayDate){
+              if(new Date(donation.createdTime) > overYeayDate || donation.item3){
                 donation.key = data.key;
                 self.overviewData.push(donation);
               }
@@ -397,20 +397,20 @@
               } else if (donation.isBankTransfer) {
                 index = 2;
               };
-              if(new Date(donation.modifyTime) > overYeayDate)
+              if(new Date(donation.modifyTime) > overYeayDate|| donation.item3)
               {
                 self.balances[index].totalbalance += Number(donation.amount);
               }
            
 
-
+              if (donation.item3 ) {
+                self.balances[index].item3Balance += Number(donation.amount);
+              } 
               if (donation.item1 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item1Balance += Number(donation.amount);
               } else if (donation.item2 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item2Balance += Number(donation.amount);
-              } else if (donation.item3 && new Date(donation.modifyTime) > overYeayDate) {
-                self.balances[index].item3Balance += Number(donation.amount);
-              } else if (donation.item5 && new Date(donation.modifyTime) > overYeayDate) {
+              } else  if (donation.item5 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item5Balance += Number(donation.amount);
               }  else if (donation.item7 && new Date(donation.modifyTime) > overYeayDate) {
                 if (donation.memo && donation.memo.includes("桌")) {
