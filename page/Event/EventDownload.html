@@ -190,6 +190,7 @@
       this.searchResultData;
       let db = firebase.initializeApp(config).database();
       let eventRef = db.ref("Event");
+      let overYeayDate = new Date(2023, 01, 01);
       new Vue({
         el: "#app",
         data: {
@@ -219,8 +220,12 @@
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
-                eventDetail.key = data.key;
-                self.overviewData.push(eventDetail);
+                if(new Date(eventDetail.createdTime) > overYeayDate){
+                  eventDetail.key = data.key;
+
+                  self.overviewData.push(eventDetail);
+              }
+              
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
@@ -265,7 +270,9 @@
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
-                if (eventDetail.eventName == eventName) {
+                if (eventDetail.eventName == eventName && new Date(eventDetail.createdTime) > overYeayDate) {
+
+                  
                   eventDetail.key = data.key;
                   self.overviewData.push(eventDetail);
                 }
