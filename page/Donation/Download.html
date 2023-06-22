@@ -154,7 +154,7 @@
           <td> </td>
           <td> 現金</td>
           <td> {{cashBalance}}</td>
-          <td></td>
+          <td> {{tableCountByCash}}</td>
           <td> </td>
           <td></td>
           <td> </td>
@@ -164,7 +164,7 @@
           <td> </td>
           <td> 匯款</td>
           <td> {{bankTransferBalance}}</td>
-          <td></td>
+          <td> {{tableCountByBankTransfer}}</td>
           <td> </td>
           <td></td>
           <td> </td>
@@ -174,7 +174,7 @@
           <td> </td>
           <td> 總金額</td>
           <td> {{totalBalance}}</td>
-          <td></td>
+          <td> {{tableCountByTotal}}</td>
           <td> </td>
           <td></td>
           <td> </td>
@@ -205,6 +205,9 @@
         totalBalance:0,
         cashBalance:0,
         bankTransferBalance:0,
+        tableCountByCash:'',
+        tableCountByBankTransfer:'',
+        tableCountByTotal:'',
         today: null
       },
       firebase: {
@@ -234,6 +237,22 @@
         getMethod:function(data){
           return data.isCash ? "現金": data.isBankTransfer?"匯款":"尚未付款";
         },
+        updateTable:function(user){
+
+          let tableValue = Number(user.memo.replace("桌", ""));
+
+       
+          if(user.isCash){
+                  let tableCount = Number(this.tableCountByCash.replace("桌", ""))+tableValue;
+                  this.tableCountByCash=tableCount+"桌";
+                }
+                if(user.isBankTransfer){
+                  let tableCount = Number(this.tableCountByBankTransfer.replace("桌", ""))+tableValue;
+                  this.tableCountByBankTransfer=tableCount+"桌";
+                }
+                let tableCount = Number(this.tableCountByTotal.replace("桌", ""))+tableValue;
+                  this.tableCountByTotal=tableCount+"桌";
+        },
         updateBalance:function(user){
           if(user.isCash){
                   this.cashBalance+=Number(user.amount);
@@ -247,6 +266,9 @@
          this.cashBalance=0;
          this.bankTransferBalance=0;
          this.totalBalance=0;
+         this.tableCountByCash='';
+        this.tableCountByBankTransfer='';
+        this.tableCountByTotal='';
         },
         getItem:function(data){
           return data.item1 ? "油香功德金": 
@@ -393,6 +415,7 @@
                 user.key = data.key;
                 self.overviewData.push(user);
                 self.updateBalance(user);
+                self.updateTable(user);
               }
             });
             self.overviewData = self.overviewData.sort(function (a, b) {
