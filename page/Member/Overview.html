@@ -709,6 +709,7 @@
                               <v-checkbox
                                 v-model="donateDetail.item7"
                                 label="供品桌"
+                                @change="updateTable"
                               ></v-checkbox>
                             </v-col>
                              </v-row>
@@ -742,6 +743,7 @@
                         <v-text-field
                           v-model="donateDetail.amount"
                           label="金額"
+                          @change="updateTable"
                         ></v-text-field>
                       </v-col>
                             <v-col cols="12" sm="9">
@@ -1146,6 +1148,11 @@
             createdTime: Date.now(),
           });
           this.peacefulEventDialog = false;
+        },
+        updateTable:function(){
+          if(this.donateDetail.item7){
+            this.donateDetail.memo = this.donateDetail.amount/700 + "桌";
+          }
         },
         addDonation: function () {
           donationRef.push({
