@@ -380,10 +380,10 @@
           return this.balances.reduce((a, b) => a + (b[key] || 0), 0)
         },
         addByName: function () {
-          location.href = '../Member/MemberCreate.html?name=' + this.search;
+          location.href = '../Member/Create.html?name=' + this.search;
         },
         addByAddress: function () {
-          location.href = '../Member/MemberCreate.html?address=' + this.search;
+          location.href = '../Member/Create.html?address=' + this.search;
         },
         GetBalance: function () {
           let self = this;
