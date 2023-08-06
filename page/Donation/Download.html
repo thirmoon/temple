@@ -115,7 +115,9 @@
         <button v-on:click="loadItem14">載入購地資料</button>
         <button v-on:click="loadItem15">載入其他2資料</button>
         <button v-on:click="loadItem7">載入供品桌資料</button>
-
+        <button v-on:click="loadUnpaidItem">
+          載入未付款資料
+        </button>
         <br>
 
         <button type="button" onclick="downloadToExcel('tableExcel')">下載</button>
@@ -296,6 +298,23 @@
             let dateTime = new Date(time);
             return dateTime.toISOString().slice(0, 10);
         },
+        loadUnpaidItem: function () {
+          this.clearBalance();
+            let self = this;
+            this.overviewData = [];
+            donationRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let donationRef = data.val();
+                if (!donationRef.isCash && !donationRef.isBankTransfer && new Date(donationRef.createdTime) > overYeayDate) {
+                  donationRef.key = data.key;
+                  self.overviewData.push(donationRef);
+                }
+              });
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            });
+          },
         loadItem1: function () {
           this.clearBalance();
           let self = this;
