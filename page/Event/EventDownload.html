@@ -119,6 +119,9 @@
           <button v-on:click="loadItem(6)">
             載入超薦動物靈(狗、貓寵物名)資料
           </button>
+          <button v-on:click="loadUnpaidItem">
+            載入未付款資料
+          </button>
 
           <br />
 
@@ -241,6 +244,22 @@
             }
             let dateTime = new Date(time);
             return dateTime.toISOString().slice(0, 10);
+          },
+          loadUnpaidItem: function () {
+            let self = this;
+            this.overviewData = [];
+            eventRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let eventDetail = data.val();
+                if (!eventDetail.isCash && !eventDetail.isBankTransfer && new Date(eventDetail.createdTime) > overYeayDate) {
+                  eventDetail.key = data.key;
+                  self.overviewData.push(eventDetail);
+                }
+              });
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            });
           },
           loadItem: function (eventNameId) {
             let self = this;
