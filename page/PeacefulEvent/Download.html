@@ -105,6 +105,9 @@
           </h1>
           <button v-on:click="loadAllData">載入所有資料</button>
           <button v-on:click="loadTodayData">載入當天修改資料</button>
+          <button v-on:click="loadUnpaidItem">
+            載入未付款資料
+          </button>
           <br />
 
           <br />
@@ -211,6 +214,22 @@
             }
             let dateTime = new Date(time);
             return dateTime.toISOString().slice(0, 10);
+          },
+          loadUnpaidItem: function () {
+            let self = this;
+            this.overviewData = [];
+            eventRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let eventDetail = data.val();
+                if (!eventDetail.isCash && !eventDetail.isBankTransfer && new Date(eventDetail.createdTime) > overYeayDate) {
+                  eventDetail.key = data.key;
+                  self.overviewData.push(eventDetail);
+                }
+              });
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            });
           },
           loadTodayData: function () {
             let self = this;
