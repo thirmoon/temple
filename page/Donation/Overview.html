@@ -355,14 +355,14 @@
       methods: {
         loadData: function () {
           let self = this;
-          let overYeayDate = new Date(2023, 01, 01);
+          let overYeayDate = new Date(2023, 12, 01);
           this.balance = 0;
           this.overviewData = [];
           donationRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let donation = data.val();
             
-              if(new Date(donation.createdTime) > overYeayDate || donation.item3){
+              if(new Date(donation.createdTime) > overYeayDate || (donation.item3||donation.item14)){
                 donation.key = data.key;
                 self.overviewData.push(donation);
               }
