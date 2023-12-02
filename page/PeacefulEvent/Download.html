@@ -149,6 +149,14 @@
             <td>{{data.memo}}</td>
           
           </tr>
+          <tr>
+
+            <td> 總計</td>
+            <td> 斗首金額</td>
+            <td> {{total_eventAmount}}</td>
+            <td> 平安宴金額</td>
+            <td> {{total_dinner_amount}}</td>
+          </tr>   
         </table>
       </ul>
     </div>
@@ -173,6 +181,8 @@
         data: {
           overviewData: [],
           today: null,
+          total_dinner_amount:0,
+          total_eventAmount:0
         },
         firebase: {
           Users: eventRef.limitToLast(25),
@@ -194,6 +204,8 @@
           loadAllData: function () {
             let self = this;
             this.overviewData = [];
+            this.total_dinner_amount = 0;
+            this.total_eventAmount = 0;
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
@@ -201,12 +213,15 @@
                 if(new Date(eventDetail.createdTime) > overYeayDate){
                   eventDetail.key = data.key;
                   self.overviewData.push(eventDetail);
+                  self.total_dinner_amount += Number(eventDetail.dinner_amount);
+                  self.total_eventAmount += Number(eventDetail.eventAmount);
               }
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.eventName > b.eventName ? -1 : 1;
               });
             });
+           
           },
           getPaymentStatus: function (data) {
             return data.isCash ? "現金" : data.isBankTransfer?"匯款":"未付款";
@@ -224,12 +239,16 @@
           loadUnpaidItem: function () {
             let self = this;
             this.overviewData = [];
+            this.total_dinner_amount = 0;
+            this.total_eventAmount = 0;
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 if (!eventDetail.isCash && !eventDetail.isBankTransfer && new Date(eventDetail.createdTime) > overYeayDate) {
                   eventDetail.key = data.key;
                   self.overviewData.push(eventDetail);
+                  self.total_dinner_amount += Number(eventDetail.dinner_amount);
+                  self.total_eventAmount += Number(eventDetail.eventAmount);
                 }
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
@@ -245,14 +264,17 @@
             var d = q.getDate();
             var y = q.getFullYear();
             this.today = new Date(y, m, d);
+            this.total_dinner_amount = 0;
+            this.total_eventAmount = 0;
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 let modifyTime = new Date(eventDetail.modifyTime);
                 if (modifyTime > self.today) {
                   eventDetail.key = data.key;
-                  console.log(eventDetail)
                   self.overviewData.push(eventDetail);
+                  self.total_dinner_amount += Number(eventDetail.dinner_amount);
+                  self.total_eventAmount += Number(eventDetail.eventAmount);
                 }
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
