@@ -165,6 +165,7 @@
       this.searchResultData;
       let db = firebase.initializeApp(config).database();
       let eventRef = db.ref("PeacefulEvent");
+      let overYeayDate = new Date(2023, 12, 01);
       new Vue({
         el: "#app",
         data: {
@@ -195,7 +196,10 @@
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 eventDetail.key = data.key;
-                self.overviewData.push(eventDetail);
+                if(new Date(eventDetail.createdTime) > overYeayDate){
+                  eventDetail.key = data.key;
+                  self.overviewData.push(eventDetail);
+              }
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.eventName > b.eventName ? -1 : 1;

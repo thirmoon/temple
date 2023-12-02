@@ -374,11 +374,16 @@
           loadData: function () {
             let self = this;
             this.overviewData = [];
+            let overYeayDate = new Date(2023, 12, 01);
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 eventDetail.key = data.key;
-                self.overviewData.push(eventDetail);
+
+                if(new Date(eventDetail.createdTime) > overYeayDate){
+                  eventDetail.key = data.key;
+                  self.overviewData.push(eventDetail);
+              }
               });
 
               self.overviewData = self.overviewData.sort(function (a, b) {
