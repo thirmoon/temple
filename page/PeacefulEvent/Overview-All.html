@@ -37,9 +37,7 @@
           <h1 class="page-title">
             <a href="../Member/Overview.html">信徒總覽 |</a>
             <a href="Overview.html">總覽 |</a>
-            <a href="Overview-All.html">總覽(所有) |</a>
             <a href="Download.html">下載 |</a>
-            <a href="Download-All.html">下載(所有) |</a>
           </h1>
         </div>
       </section>
@@ -376,16 +374,16 @@
           loadData: function () {
             let self = this;
             this.overviewData = [];
-            let overYeayDate = new Date(2023, 11, 01);
+  
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 eventDetail.key = data.key;
 
-                if(new Date(eventDetail.createdTime) > overYeayDate){
+              
                   eventDetail.key = data.key;
                   self.overviewData.push(eventDetail);
-              }
+           
               });
 
               self.overviewData = self.overviewData.sort(function (a, b) {
