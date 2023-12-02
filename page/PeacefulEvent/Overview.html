@@ -399,10 +399,10 @@
           },
           UpdateDinnerAmount:function(eventDetail){
             let freeLimit = 0;
-              if ( Object.keys(this.uniqueEventOption).includes(eventDetail.eventName)){
-                freeLimit=4;
-              }else if (Object.keys(this.duplicateEventOption).includes(eventDetail.eventName)){
+              if ( eventDetail.eventName=="平安首"){
                 freeLimit=2;
+              }else{
+                freeLimit=4;
               }
               let count = Number(eventDetail.dinner_meat_count) + Number(eventDetail.dinner_vegetable_count);
               let dinnerAmount =  count-freeLimit> 0 ? (count-freeLimit)*500:0;

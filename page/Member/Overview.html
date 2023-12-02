@@ -1120,10 +1120,10 @@
         addPeacefulEvent: function () {
 
           let freeLimit = 0;
-              if ( Object.keys(this.uniqueEventOption).includes(this.peacefulEventDetail.eventName)){
-                freeLimit=4;
-              }else if (Object.keys(this.duplicateEventOption).includes(this.peacefulEventDetail.eventName)){
+              if ( this.peacefulEventDetail.eventName=="平安首"){
                 freeLimit=2;
+              }else {
+                freeLimit=4;
               }
 
           let count = Number(this.peacefulEventDetail.dinner_meat_count)
