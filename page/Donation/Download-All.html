@@ -1,0 +1,618 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>慈善亭 | 點燈系統</title>
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/css/bootstrap.min.css"
+    integrity="sha384-ggOyR0iXCbMQv3Xipma34MD+dH/1fQ784/j6cY/iJTQUOhcWr7x9JvoRxT2MZw1T" crossorigin="anonymous">
+  <link rel="stylesheet" href="../../src/css/overview.css">
+
+
+  <script src="https://www.gstatic.com/firebasejs/4.11.0/firebase.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/vue@2.x/dist/vue.js"></script>
+  <script src="../../dist/vuefire.js"></script>
+  <script language="JavaScript" type="text/javascript">
+
+    var idTmr;
+    function getExplorer() {
+      var explorer = window.navigator.userAgent;
+      //ie
+      if (explorer.indexOf("MSIE") >= 0) {
+        return 'ie';
+      }
+      //firefox
+      else if (explorer.indexOf("Firefox") >= 0) {
+        return 'Firefox';
+      }
+      //Chrome
+      else if (explorer.indexOf("Chrome") >= 0) {
+        return 'Chrome';
+      }
+      //Opera
+      else if (explorer.indexOf("Opera") >= 0) {
+        return 'Opera';
+      }
+      //Safari
+      else if (explorer.indexOf("Safari") >= 0) {
+        return 'Safari';
+      }
+    }
+    function downloadToExcel(tableid) {
+      if (getExplorer() == 'ie') {
+        var curTbl = document.getElementById(tableid);
+        var oXL = new ActiveXObject("Excel.Application");
+        var oWB = oXL.Workbooks.Add();
+        var xlsheet = oWB.Worksheets(1);
+        var sel = document.body.createTextRange();
+        sel.moveToElementText(curTbl);
+        sel.select();
+        sel.execCommand("Copy");
+        xlsheet.Paste();
+        oXL.Visible = true;
+        try {
+          var fname = oXL.Application.GetSaveAsFilename("Excel.xls", "Excel Spreadsheets (*.xls), *.xls");
+        } catch (e) {
+
+        } finally {
+          oWB.SaveAs(fname);
+          oWB.Close(savechanges = false);
+          oXL.Quit();
+          oXL = null;
+          idTmr = window.setInterval("Cleanup();", 1);
+        }
+      }
+      else {
+        tableToExcel(tableid)
+      }
+    }
+    function Cleanup() {
+      window.clearInterval(idTmr);
+      CollectGarbage();
+    }
+    var tableToExcel = (function () {
+      var uri = 'data:application/vnd.ms-excel;base64,',
+        template = '<html><head><meta charset="UTF-8"></head><body><table>{table}</table></body></html>',
+        base64 = function (s) { return window.btoa(unescape(encodeURIComponent(s))) },
+        format = function (s, c) {
+          return s.replace(/{(\w+)}/g,
+            function (m, p) { return c[p]; })
+        }
+      return function (table, name) {
+        if (!table.nodeType) table = document.getElementById(table)
+        var ctx = { worksheet: name || 'Worksheet', table: table.innerHTML }
+        window.location.href = uri + base64(format(template, ctx))
+      }
+    })()
+  </script>
+</head>
+
+<body>
+
+  <div id="app">
+    <section id="admin-wrapper">
+      <div id="form-wrapper">
+        <h1 class="page-title">慈善亭 | 油香功德金捐獻</h1>
+        <h1 class="page-title">
+          <a href="../Member/Overview.html">信徒總覽 |</a>
+          <a href="Overview.html">總覽 |</a>
+          <a href="Download.html">下載</a>
+        </h1>
+        <button v-on:click="loadAllData">載入所有資料</button>
+        <button v-on:click="loadTodayData">載入當天修改資料</button>
+        <br>
+
+        <button v-on:click="loadItem1">載入油香功德金資料</button>
+        <button v-on:click="loadItem8">載入高上帝聖誕資料</button>
+        <button v-on:click="loadItem9">載入玄天上帝聖誕資料</button>
+        <button v-on:click="loadItem10">載入祈安法會資料</button>
+        <button v-on:click="loadItem11">載入超拔法會資料</button>
+        <button v-on:click="loadItem2">載入增建/整修工程資料</button>
+        <button v-on:click="loadItem3">載入梁武帝金身資料</button>
+        <button v-on:click="loadItem12">載入金身1資料</button>
+        <button v-on:click="loadItem13">載入金身2資料</button>
+        <button v-on:click="loadItem5">載入文昌筆資料</button>
+        <button v-on:click="loadItem14">載入購地資料</button>
+        <button v-on:click="loadItem15">載入其他2資料</button>
+        <button v-on:click="loadItem7">載入供品桌資料</button>
+        <button v-on:click="loadUnpaidItem">
+          載入未付款資料
+        </button>
+        <br>
+
+        <button type="button" onclick="downloadToExcel('tableExcel')">下載</button>
+      </div>
+
+    </section>
+    <ul>
+      <table class="table table-striped" id="tableExcel">
+        <thead>
+          <tr>
+            <td>姓名</td>
+            <td>地址</td>
+            <td>電話</td>
+            <td>金額</td>
+            <td>捐款方式</td>
+            <td>項目</td>
+            <td>捐款日期</td>
+            <td>備註</td>
+
+          </tr>
+        </thead>
+        <tr v-for="data in overviewData">
+
+          <td> {{data.name}}</td>
+          <td> {{data.address}}</td>
+          <td> {{data.phone}}</td>
+          <td> {{data.amount}}</td>
+          <td> {{getMethod(data)}}</td>
+          <td> {{getItem(data)}}</td>
+          <td> {{getDisplayTime(data.modifyTime)}}</td>
+          <td> {{data.memo}}</td>
+
+        </tr>
+        <tr>
+          <td> </td>
+          <td> </td>
+          <td> 現金</td>
+          <td> {{cashBalance}}</td>
+          <td> {{tableCountByCash}}</td>
+          <td> </td>
+          <td></td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td> </td>
+          <td> </td>
+          <td> 匯款</td>
+          <td> {{bankTransferBalance}}</td>
+          <td> {{tableCountByBankTransfer}}</td>
+          <td> </td>
+          <td></td>
+          <td> </td>
+        </tr>
+        <tr>
+          <td> </td>
+          <td> </td>
+          <td> 總金額</td>
+          <td> {{totalBalance}}</td>
+          <td> {{tableCountByTotal}}</td>
+          <td> </td>
+          <td></td>
+          <td> </td>
+        </tr>
+      </table>
+    </ul>
+  </div>
+
+  <script>
+    /* global Vue, firebase */
+
+    let config = {
+      apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
+      authDomain: 'light-1a6d4.firebaseapp.com',
+      databaseURL: 'https://light-1a6d4.firebaseio.com/',
+      projectId: 'light-1a6d4',
+      storageBucket: 'light-1a6d4.appspot.com',
+      messagingSenderId: '66654715141'
+    }
+    this.searchResultData
+    let db = firebase.initializeApp(config).database()
+    let donationRef = db.ref('Donation')
+    let overYeayDate = new Date(2023, 12, 01);
+    new Vue({
+      el: '#app',
+      data: {
+        overviewData: [],
+        totalBalance:0,
+        cashBalance:0,
+        bankTransferBalance:0,
+        tableCountByCash:'',
+        tableCountByBankTransfer:'',
+        tableCountByTotal:'',
+        today: null
+      },
+      firebase: {
+        Users: donationRef.limitToLast(25),
+      },
+      methods: {
+        loadAllData: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let donation = data.val();
+              donation.key = data.key;
+              if(donation.amount !=0 ){
+                self.overviewData.push(donation);
+                self.updateBalance(donation);
+              }
+
+
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        getMethod:function(data){
+          return data.isCash ? "現金": data.isBankTransfer?"匯款":"尚未付款";
+        },
+        updateTable:function(user){
+
+          let tableValue = Number(user.memo.replace("桌", ""));
+
+       
+          if(user.isCash){
+                  let tableCount = Number(this.tableCountByCash.replace("桌", ""))+tableValue;
+                  this.tableCountByCash=tableCount+"桌";
+                }
+                if(user.isBankTransfer){
+                  let tableCount = Number(this.tableCountByBankTransfer.replace("桌", ""))+tableValue;
+                  this.tableCountByBankTransfer=tableCount+"桌";
+                }
+                let tableCount = Number(this.tableCountByTotal.replace("桌", ""))+tableValue;
+                  this.tableCountByTotal=tableCount+"桌";
+        },
+        updateBalance:function(user){
+          if(user.isCash){
+                  this.cashBalance+=Number(user.amount);
+                }
+                if(user.isBankTransfer){
+                  this.bankTransferBalance+=Number(user.amount);
+                }
+                this.totalBalance+=Number(user.amount);
+        },
+        clearBalance:function(){
+         this.cashBalance=0;
+         this.bankTransferBalance=0;
+         this.totalBalance=0;
+         this.tableCountByCash='';
+        this.tableCountByBankTransfer='';
+        this.tableCountByTotal='';
+        },
+        getItem:function(data){
+          return data.item1 ? "油香功德金": 
+                 data.item2 ? "增修/整修工程" :
+                 data.item3 ? "梁武帝金身" :
+                 data.item4 ? "九龍椅" :
+                 data.item5 ? "文昌筆" :
+                 data.item6 ? "其他" :
+                 data.item7 ? "供品桌" :
+                 data.item8 ? "高上帝聖誕" :
+                 data.item9 ? "玄天上帝聖誕" :
+                 data.item10 ? "祈安法會" :
+                 data.item11 ? "超拔法會" :
+                 data.item12 ? "金身1" :
+                 data.item13 ? "金身2" :
+                 data.item14 ? "購地" :
+                 data.item15 ? "其他2" :
+
+                "未勾選";
+        },
+        getDisplayTime:function(time){
+          if(time==undefined){
+              return null;
+            }
+            let dateTime = new Date(time);
+            return dateTime.toISOString().slice(0, 10);
+        },
+        loadUnpaidItem: function () {
+          this.clearBalance();
+            let self = this;
+            this.overviewData = [];
+            donationRef.once("value", function (snapshot) {
+              snapshot.forEach(function (data) {
+                let donationRef = data.val();
+                if (!donationRef.isCash && !donationRef.isBankTransfer ) {
+                  donationRef.key = data.key;
+                  self.overviewData.push(donationRef);
+                }
+              });
+              self.overviewData = self.overviewData.sort(function (a, b) {
+                return a.address > b.address ? -1 : 1;
+              });
+            });
+          },
+        loadItem1: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item1 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem2: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item2 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem3: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item3 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem4: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item4 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem5: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item5 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem6: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item6 == true) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem7: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item7 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+                self.updateTable(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem8: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item8 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem9: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item9 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem10: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item10 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem11: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item11 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem12: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item12 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem13: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item13 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem14: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item14 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+        loadItem15: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item15 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+
+        loadTodayData: function () {
+          let self = this;
+          this.overviewData = []
+          var q = new Date(Date.now());
+          var m = q.getMonth();
+          var d = q.getDate();
+          var y = q.getFullYear();
+          this.today = new Date(y, m, d);
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let donation = data.val();
+              let modifyTime = new Date(donation.modifyTime);
+              if (modifyTime > self.today) {
+                donation.key = data.key;
+                self.overviewData.push(donation);
+                self.updateBalance(donation);
+              }
+            });
+            self.overviewData = self.overviewData.sort(function (a, b) {
+              return a.address > b.address ? -1 : 1;
+            });
+          });
+        },
+      }
+    })
+  </script>
+</body>
+
+</html>
