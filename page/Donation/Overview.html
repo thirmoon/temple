@@ -398,12 +398,14 @@
               } else if (donation.isBankTransfer) {
                 index = 2;
               };
-              if(new Date(donation.modifyTime) > overYeayDate|| donation.item3)
+              if(new Date(donation.modifyTime) > overYeayDate|| (donation.item3||donation.item14))
               {
                 self.balances[index].totalbalance += Number(donation.amount);
               }
            
-
+              if (donation.item14 ) {
+                self.balances[index].item14Balance += Number(donation.amount);
+              } 
               if (donation.item3 ) {
                 self.balances[index].item3Balance += Number(donation.amount);
               } 
@@ -431,8 +433,6 @@
                 self.balances[index].item12Balance += Number(donation.amount);
               }else if (donation.item13 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item13Balance += Number(donation.amount);
-              }else if (donation.item14 && new Date(donation.modifyTime) > overYeayDate) {
-                self.balances[index].item14Balance += Number(donation.amount);
               }else if (donation.item15 && new Date(donation.modifyTime) > overYeayDate) {
                 self.balances[index].item15Balance += Number(donation.amount);
               }
