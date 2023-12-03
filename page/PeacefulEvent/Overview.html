@@ -399,7 +399,10 @@
           },
           UpdateDinnerAmount:function(eventDetail){
             let freeLimit = 0;
-              if ( eventDetail.eventName=="平安首"){
+            if(eventDetail.eventName==''){
+              freeLimit=0
+            }
+              else if ( eventDetail.eventName=="平安首"){
                 freeLimit=2;
               }else{
                 freeLimit=4;
