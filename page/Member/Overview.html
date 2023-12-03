@@ -1120,7 +1120,9 @@
         addPeacefulEvent: function () {
 
           let freeLimit = 0;
-              if ( this.peacefulEventDetail.eventName=="平安首"){
+          if(this.peacefulEventDetail.eventName==''){
+            freeLimit = 0;
+          } else if ( this.peacefulEventDetail.eventName=="平安首"){
                 freeLimit=2;
               }else {
                 freeLimit=4;
