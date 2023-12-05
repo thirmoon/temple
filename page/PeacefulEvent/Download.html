@@ -156,7 +156,23 @@
             <td> {{total_eventAmount}}</td>
             <td> 平安宴金額</td>
             <td> {{total_dinner_amount}}</td>
-          </tr>   
+          </tr>  
+          <tr>
+
+            <td> </td>
+            <td> 斗首現金金額</td>
+            <td> {{total_eventAmount_cash}}</td>
+            <td> 平安宴現金金額</td>
+            <td> {{total_dinner_amount_cash}}</td>
+          </tr> 
+          <tr>
+
+            <td> </td>
+            <td> 斗首匯款金額</td>
+            <td> {{total_eventAmount_bankTransfer}}</td>
+            <td> 平安宴匯款金額</td>
+            <td> {{total_dinner_amount_bankTransfer}}</td>
+          </tr>    
         </table>
       </ul>
     </div>
@@ -182,7 +198,11 @@
           overviewData: [],
           today: null,
           total_dinner_amount:0,
-          total_eventAmount:0
+          total_eventAmount:0,
+          total_dinner_amount_cash:0,
+          total_eventAmount_cash:0,
+          total_dinner_amount_bankTransfer:0,
+          total_eventAmount_bankTransfer:0
         },
         firebase: {
           Users: eventRef.limitToLast(25),
@@ -215,6 +235,18 @@
                   self.overviewData.push(eventDetail);
                   self.total_dinner_amount += Number(eventDetail.dinner_amount);
                   self.total_eventAmount += Number(eventDetail.eventAmount);
+                  if(eventDetail.isCash){
+                    self.total_eventAmount_cash+= Number(eventDetail.eventAmount);
+                  }
+                  if(eventDetail.isBankTransfer){
+                    self.total_eventAmount_bankTransfer+= Number(eventDetail.eventAmount);
+                  }
+                  if(eventDetail.isCashDinner){
+                    self.total_dinner_amount_cash+= Number(eventDetail.dinner_amount);
+                  }
+                  if(eventDetail.isBankTransferDinner){
+                    self.total_dinner_amount_bankTransfer+= Number(eventDetail.dinner_amount);
+                  }
               }
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
@@ -241,6 +273,10 @@
             this.overviewData = [];
             this.total_dinner_amount = 0;
             this.total_eventAmount = 0;
+            this.total_dinner_amount_cash=0;
+            this.total_eventAmount_cash=0;
+            this.total_dinner_amount_bankTransfer=0;
+            this.total_eventAmount_bankTransfer=0;
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
@@ -249,6 +285,18 @@
                   self.overviewData.push(eventDetail);
                   self.total_dinner_amount += Number(eventDetail.dinner_amount);
                   self.total_eventAmount += Number(eventDetail.eventAmount);
+                  if(eventDetail.isCash){
+                    self.total_eventAmount_cash+= Number(eventDetail.eventAmount);
+                  }
+                  if(eventDetail.isBankTransfer){
+                    self.total_eventAmount_bankTransfer+= Number(eventDetail.eventAmount);
+                  }
+                  if(eventDetail.isCashDinner){
+                    self.total_dinner_amount_cash+= Number(eventDetail.dinner_amount);
+                  }
+                  if(eventDetail.isBankTransferDinner){
+                    self.total_dinner_amount_bankTransfer+= Number(eventDetail.dinner_amount);
+                  }
                 }
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
@@ -266,6 +314,10 @@
             this.today = new Date(y, m, d);
             this.total_dinner_amount = 0;
             this.total_eventAmount = 0;
+            this.total_dinner_amount_cash=0;
+            this.total_eventAmount_cash=0;
+            this.total_dinner_amount_bankTransfer=0;
+            this.total_eventAmount_bankTransfer=0;
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
@@ -275,6 +327,18 @@
                   self.overviewData.push(eventDetail);
                   self.total_dinner_amount += Number(eventDetail.dinner_amount);
                   self.total_eventAmount += Number(eventDetail.eventAmount);
+                  if(eventDetail.isCash){
+                    self.total_eventAmount_cash+= Number(eventDetail.eventAmount);
+                  }
+                  if(eventDetail.isBankTransfer){
+                    self.total_eventAmount_bankTransfer+= Number(eventDetail.eventAmount);
+                  }
+                  if(eventDetail.isCashDinner){
+                    self.total_dinner_amount_cash+= Number(eventDetail.dinner_amount);
+                  }
+                  if(eventDetail.isBankTransferDinner){
+                    self.total_dinner_amount_bankTransfer+= Number(eventDetail.dinner_amount);
+                  }
                 }
               });
               self.overviewData = self.overviewData.sort(function (a, b) {
