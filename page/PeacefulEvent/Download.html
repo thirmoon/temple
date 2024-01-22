@@ -259,6 +259,9 @@
             return data.isCash ? "現金" : data.isBankTransfer?"匯款":"未付款";
           },
           getDinnerPaymentStatus: function (data) {
+            if(data.dinner_amount == 0 || data.dinner_amount==undefined){
+              return "免費"
+            }
             return data.isCashDinner ? "現金" : data.isBankTransferDinner?"匯款":"未付款";
           },
           getDisplayTime: function (time) {
