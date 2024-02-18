@@ -156,6 +156,11 @@
             <td> {{total_eventAmount}}</td>
             <td> 平安宴金額</td>
             <td> {{total_dinner_amount}}</td>
+            <td> 平安宴金額(葷)</td>
+            <td> {{total_dinner_amount＿meat}}</td>
+            <td> 平安宴金額(素)</td>
+            <td> {{total_dinner_amount_vegetable}}</td>
+            
           </tr>  
           <tr>
 
@@ -164,14 +169,24 @@
             <td> {{total_eventAmount_cash}}</td>
             <td> 平安宴現金金額</td>
             <td> {{total_dinner_amount_cash}}</td>
+            <td> 平安宴現金金額(葷)</td>
+            <td> {{total_dinner_amount＿meat_cash}}</td>
+            <td> 平安宴現金金額(素)</td>
+            <td> {{total_dinner_amount_vegetable__cash}}</td>
+         
           </tr> 
           <tr>
-
+           
             <td> </td>
             <td> 斗首匯款金額</td>
             <td> {{total_eventAmount_bankTransfer}}</td>
             <td> 平安宴匯款金額</td>
             <td> {{total_dinner_amount_bankTransfer}}</td>
+            <td> 平安宴匯款金額(葷)</td>
+            <td> {{total_dinner_amount＿meat_bankTransfer}}</td>
+            <td> 平安宴匯款金額(素)</td>
+            <td> {{total_dinner_amount_vegetable_bankTransfer}}</td>
+           
           </tr>    
         </table>
       </ul>
@@ -198,10 +213,16 @@
           overviewData: [],
           today: null,
           total_dinner_amount:0,
+          total_dinner_amount＿meat:0,
+          total_dinner_amount_vegetable:0,
           total_eventAmount:0,
           total_dinner_amount_cash:0,
+          total_dinner_amount＿meat_cash:0,
+          total_dinner_amount_vegetable__cash:0,
           total_eventAmount_cash:0,
           total_dinner_amount_bankTransfer:0,
+          total_dinner_amount＿meat_bankTransfer:0,
+          total_dinner_amount_vegetable_bankTransfer:0,
           total_eventAmount_bankTransfer:0
         },
         firebase: {
@@ -235,6 +256,10 @@
                   self.overviewData.push(eventDetail);
                   self.total_dinner_amount += Number(eventDetail.dinner_amount);
                   self.total_eventAmount += Number(eventDetail.eventAmount);
+
+                  self.total_dinner_amount＿meat+= Number(eventDetail.dinner_meat_count);
+                  self.total_dinner_amount_vegetable+= Number(eventDetail.dinner_vegetable_count);
+
                   if(eventDetail.isCash){
                     self.total_eventAmount_cash+= Number(eventDetail.eventAmount);
                   }
@@ -243,9 +268,14 @@
                   }
                   if(eventDetail.isCashDinner){
                     self.total_dinner_amount_cash+= Number(eventDetail.dinner_amount);
+                    self.total_dinner_amount_vegetable__cash+= Number(eventDetail.dinner_vegetable_count);
+                    self.total_dinner_amount＿meat_cash+= Number(eventDetail.dinner_meat_count);
                   }
                   if(eventDetail.isBankTransferDinner){
                     self.total_dinner_amount_bankTransfer+= Number(eventDetail.dinner_amount);
+                    self.total_dinner_amount＿meat_bankTransfer+= Number(eventDetail.dinner_meat_count);
+                    self.total_dinner_amount_vegetable_bankTransfer+= Number(eventDetail.dinner_vegetable_count);
+
                   }
               }
               });
@@ -288,6 +318,8 @@
                   self.overviewData.push(eventDetail);
                   self.total_dinner_amount += Number(eventDetail.dinner_amount);
                   self.total_eventAmount += Number(eventDetail.eventAmount);
+                  self.total_dinner_amount＿meat+= Number(eventDetail.dinner_meat_count);
+                  self.total_dinner_amount_vegetable+= Number(eventDetail.dinner_vegetable_count);
                   if(eventDetail.isCash){
                     self.total_eventAmount_cash+= Number(eventDetail.eventAmount);
                   }
@@ -296,9 +328,13 @@
                   }
                   if(eventDetail.isCashDinner){
                     self.total_dinner_amount_cash+= Number(eventDetail.dinner_amount);
+                    self.total_dinner_amount_vegetable__cash+= Number(eventDetail.dinner_vegetable_count);
+                    self.total_dinner_amount＿meat_cash+= Number(dinner_meat_count.dinner_meat_count);
                   }
                   if(eventDetail.isBankTransferDinner){
                     self.total_dinner_amount_bankTransfer+= Number(eventDetail.dinner_amount);
+                    self.total_dinner_amount＿meat_bankTransfer+= Number(eventDetail.dinner_meat_count);
+                    self.total_dinner_amount_vegetable_bankTransfer+= Number(eventDetail.dinner_vegetable_count);
                   }
                 }
               });
@@ -330,6 +366,9 @@
                   self.overviewData.push(eventDetail);
                   self.total_dinner_amount += Number(eventDetail.dinner_amount);
                   self.total_eventAmount += Number(eventDetail.eventAmount);
+
+                  self.total_dinner_amount＿meat+= Number(eventDetail.dinner_meat_count);
+                  self.total_dinner_amount_vegetable+= Number(eventDetail.dinner_vegetable_count);
                   if(eventDetail.isCash){
                     self.total_eventAmount_cash+= Number(eventDetail.eventAmount);
                   }
@@ -338,9 +377,13 @@
                   }
                   if(eventDetail.isCashDinner){
                     self.total_dinner_amount_cash+= Number(eventDetail.dinner_amount);
+                    self.total_dinner_amount_vegetable__cash+= Number(eventDetail.dinner_vegetable_count);
+                    self.total_dinner_amount＿meat_cash+= Number(eventDetail.dinner_meat_count);
                   }
                   if(eventDetail.isBankTransferDinner){
                     self.total_dinner_amount_bankTransfer+= Number(eventDetail.dinner_amount);
+                    self.total_dinner_amount＿meat_bankTransfer+= Number(eventDetail.dinner_meat_count);
+                    self.total_dinner_amount_vegetable_bankTransfer+= Number(eventDetail.dinner_vegetable_count);
                   }
                 }
               });
