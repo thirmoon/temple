@@ -436,7 +436,14 @@
               let user = data.val();
               if (user.item7 == true && new Date(user.createdTime) > overYeayDate) {
                 user.key = data.key;
-                self.overviewData.push(user);
+
+                const match =  user.memo.match(/(\d+)桌/);
+                  let tableValue = match ? match[1] : nulll;
+                 for (let i =0; i <Number(tableValue);i++){
+                  self.overviewData.push(user);
+                 }
+
+               
                 self.updateBalance(user);
                 self.updateTable(user);
               }
