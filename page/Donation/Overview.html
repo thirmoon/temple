@@ -418,7 +418,9 @@
                 self.balances[index].item5Balance += Number(donation.amount);
               }  else if (donation.item7 && new Date(donation.modifyTime) > overYeayDate) {
                 if (donation.memo && donation.memo.includes("桌")) {
-                  let tableValue = donation.memo.replace("桌", "");
+
+                  const match =  donation.memo.match(/(\d+)桌/);
+                  let tableValue = match ? match[1] : nulll;
                   self.tableCount += Number(tableValue);
                 }
                 self.balances[index].item7Balance += Number(donation.amount);
