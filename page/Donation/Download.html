@@ -209,9 +209,9 @@
         totalBalance:0,
         cashBalance:0,
         bankTransferBalance:0,
-        tableCountByCash:'',
-        tableCountByBankTransfer:'',
-        tableCountByTotal:'',
+        tableCountByCash:0,
+        tableCountByBankTransfer:0,
+        tableCountByTotal:0,
         today: null
       },
       firebase: {
@@ -243,18 +243,20 @@
         },
         updateTable:function(user){
 
-          let tableValue = Number(user.memo.replace("桌", ""));
 
+          const match =  user.memo.match(/(\d+)桌/);
+                  let tableValue = match ? match[1] : nulll;
+                  self.tableCount += Number(tableValue);
        
           if(user.isCash){
-                  let tableCount = Number(this.tableCountByCash.replace("桌", ""))+tableValue;
+                  let tableCount = Number(this.tableCountByCash.replace("桌", ""))+ Number(tableValue);
                   this.tableCountByCash=tableCount+"桌";
                 }
                 if(user.isBankTransfer){
-                  let tableCount = Number(this.tableCountByBankTransfer.replace("桌", ""))+tableValue;
+                  let tableCount = Number(this.tableCountByBankTransfer.replace("桌", ""))+ Number(tableValue);
                   this.tableCountByBankTransfer=tableCount+"桌";
                 }
-                let tableCount = Number(this.tableCountByTotal.replace("桌", ""))+tableValue;
+                let tableCount = Number(this.tableCountByTotal.replace("桌", ""))+ Number(tableValue);
                   this.tableCountByTotal=tableCount+"桌";
         },
         updateBalance:function(user){
