@@ -380,7 +380,7 @@
           loadData: function () {
             let self = this;
             this.overviewData = [];
-            let overYeayDate = new Date(2024, 10, 20);
+            let overYeayDate = new Date(2024, 9, 20);
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
