@@ -119,7 +119,7 @@
           </button>
           <label for="dropdown">選擇年份</label>
           <select id="year" v-model="selectedYear">
-            <option v-for="data in yearOption" :key="data" :value="data">
+            <option v-for="data in availableYears" :key="data" :value="data">
                 {{ data }}
             </option>
         </select>
@@ -186,7 +186,7 @@
           overviewData: [],
           displayData:[],
           today: null,
-          yearOption: [2022, 2023, 2024, 2025],
+          availableYears: [],
           selectedYear:0,
         },
         firebase: {
@@ -222,7 +222,7 @@
                 return a.eventName > b.eventName ? -1 : 1;
               });
               self.displayData = self.overviewData;
-
+              self.generateAvailableYears()
             });
           },
           getPaymentStatus: function (data) {
@@ -241,6 +241,12 @@
             let dateTime = new Date(time);
             return dateTime.toISOString().slice(0, 10);
           },
+          generateAvailableYears: function () {
+                const years = this.overviewData.map(eventDetail => 
+                        new Date(eventDetail.createdTime).getFullYear()
+                    );
+                    this.availableYears= [...new Set(years)].sort(); // 去重並排序
+          },
           loadUnpaidItem: function () {
             let self = this;
             this.overviewData = [];
@@ -255,6 +261,8 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+              self.displayData = self.overviewData;
+              self.generateAvailableYears()
             });
           },
           loadTodayData: function () {
@@ -277,6 +285,8 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+              self.displayData = self.overviewData;
+              self.generateAvailableYears()
             });
           },
         },
