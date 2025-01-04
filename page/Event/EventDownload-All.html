@@ -131,6 +131,13 @@
           <button type="button" onclick="downloadToExcel('tableExcel')">
             下載
           </button>
+
+          <label for="dropdown">選擇年份</label>
+          <select id="year" v-model="selectedYear">
+            <option v-for="data in availableYears" :key="data" :value="data">
+                {{ data }}
+            </option>
+        </select>
         </div>
       </section>
       <ul>
@@ -157,7 +164,7 @@
               <td>報名時間</td>
             </tr>
           </thead>
-          <tr v-for="data in overviewData">
+          <tr v-for="data in displayData">
             <td>{{data.name}}</td>
             <td>{{data.name2}}</td>
             <td>{{data.name3}}</td>
@@ -198,9 +205,17 @@
       let eventRef = db.ref("Event");
       new Vue({
         el: "#app",
+        watch: {
+          selectedYear(newYear) {
+            this.displayData = this.overviewData.filter(   eventDetail =>  new Date(eventDetail.createdTime).getFullYear() === newYear);
+          },
+        },
         data: {
           overviewData: [],
           today: null,
+          availableYears: [],
+          selectedYear:0,
+          displayData:[],
         },
         firebase: {
           Users: eventRef.limitToLast(25),
@@ -219,6 +234,12 @@
               window.location.href = 'Login.html';
             }
           },
+          generateAvailableYears: function () {
+                const years = this.overviewData.map(eventDetail => 
+                        new Date(eventDetail.createdTime).getFullYear()
+                    );
+                    this.availableYears= [...new Set(years)].sort(); // 去重並排序
+          },
           loadAllData: function () {
             let self = this;
             this.overviewData = [];
@@ -233,6 +254,8 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+              self.displayData = self.overviewData;
+              self.generateAvailableYears()
             });
           },
           loadAllDataWithPaper: function () {
@@ -257,6 +280,8 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+              self.displayData = self.overviewData;
+              self.generateAvailableYears()
             });
           },
           getPaymentStatus: function (data) {
@@ -283,6 +308,8 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+              self.displayData = self.overviewData;
+              self.generateAvailableYears()
             });
           },
           loadItem: function (eventNameId) {
@@ -323,6 +350,8 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+              self.displayData = self.overviewData;
+              self.generateAvailableYears()
             });
           },
           loadTodayData: function () {
@@ -345,6 +374,8 @@
               self.overviewData = self.overviewData.sort(function (a, b) {
                 return a.address > b.address ? -1 : 1;
               });
+              self.displayData = self.overviewData;
+              self.generateAvailableYears()
             });
           },
         },
