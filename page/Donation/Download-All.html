@@ -124,6 +124,13 @@
         <br>
 
         <button type="button" onclick="downloadToExcel('tableExcel')">下載</button>
+
+        <label for="dropdown">選擇年份</label>
+        <select id="year" v-model="selectedYear">
+          <option v-for="data in availableYears" :key="data" :value="data">
+              {{ data }}
+          </option>
+      </select>
       </div>
 
     </section>
@@ -137,12 +144,13 @@
             <td>金額</td>
             <td>捐款方式</td>
             <td>項目</td>
+            <td>修改日期</td>
             <td>捐款日期</td>
             <td>備註</td>
 
           </tr>
         </thead>
-        <tr v-for="data in overviewData">
+        <tr v-for="data in displayData">
 
           <td> {{data.name}}</td>
           <td> {{data.address}}</td>
@@ -151,6 +159,7 @@
           <td> {{getMethod(data)}}</td>
           <td> {{getItem(data)}}</td>
           <td> {{getDisplayTime(data.modifyTime)}}</td>
+          <td> {{getDisplayTime(data.createdTime)}}</td>
           <td> {{data.memo}}</td>
 
         </tr>
@@ -205,6 +214,13 @@
     let overYeayDate = new Date(2023, 11, 01);
     new Vue({
       el: '#app',
+      watch: {
+          selectedYear(newYear) {
+            this.clearBalance();
+            this.displayData = this.overviewData.filter(   detail =>  new Date(detail.createdTime).getFullYear() === newYear);
+            this.updateBalanceByDisplayData()
+          },
+        },
       data: {
         overviewData: [],
         totalBalance:0,
@@ -213,7 +229,10 @@
         tableCountByCash:'',
         tableCountByBankTransfer:'',
         tableCountByTotal:'',
-        today: null
+        today: null,
+        availableYears: [],
+        selectedYear:0,
+        displayData:[],
       },
       firebase: {
         Users: donationRef.limitToLast(25),
@@ -234,9 +253,7 @@
 
 
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         getMethod:function(data){
@@ -257,6 +274,15 @@
                 }
                 let tableCount = Number(this.tableCountByTotal.replace("桌", ""))+tableValue;
                   this.tableCountByTotal=tableCount+"桌";
+        },
+        updateBalanceByDisplayData:function(){
+          
+          let self = this
+          this.displayData.forEach(function(user) {
+            self.updateBalance(user)
+        });
+
+     
         },
         updateBalance:function(user){
           if(user.isCash){
@@ -301,6 +327,19 @@
             let dateTime = new Date(time);
             return dateTime.toISOString().slice(0, 10);
         },
+        generateAvailableYears: function () {
+                const years = this.overviewData.map(donationDetail => 
+                        new Date(donationDetail.createdTime).getFullYear()
+                    );
+                    this.availableYears= [...new Set(years)].sort(); // 去重並排序
+          },
+        refreshData : function () {
+          this.overviewData = this.overviewData.sort(function (a, b) {
+                return a.modifyTime > b.modifyTime ? -1 : 1;
+              });
+              this.displayData = this.overviewData;
+              this.generateAvailableYears()
+        },
         loadUnpaidItem: function () {
           this.clearBalance();
             let self = this;
@@ -313,9 +352,7 @@
                   self.overviewData.push(donationRef);
                 }
               });
-              self.overviewData = self.overviewData.sort(function (a, b) {
-                return a.modifyTime > b.modifyTime ? -1 : 1;
-              });
+                self.refreshData()
             });
           },
         loadItem1: function () {
@@ -331,9 +368,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem2: function () {
@@ -349,9 +384,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem3: function () {
@@ -367,9 +400,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem4: function () {
@@ -385,9 +416,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem5: function () {
@@ -403,9 +432,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem6: function () {
@@ -421,9 +448,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem7: function () {
@@ -440,9 +465,7 @@
                 self.updateTable(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem8: function () {
@@ -458,9 +481,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem9: function () {
@@ -476,9 +497,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem10: function () {
@@ -494,9 +513,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem11: function () {
@@ -512,9 +529,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem12: function () {
@@ -530,9 +545,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem13: function () {
@@ -548,9 +561,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem14: function () {
@@ -566,9 +577,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
         loadItem15: function () {
@@ -584,9 +593,7 @@
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
 
@@ -608,9 +615,7 @@
                 self.updateBalance(donation);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
+            self.refreshData()
           });
         },
       }
