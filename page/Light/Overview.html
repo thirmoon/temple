@@ -96,7 +96,12 @@
       <v-btn elevation="2"  v-on:click="addByAddress" >以地址新增</v-btn>
       <v-btn elevation="2"  v-on:click="loadTodayData" >顯示今天修改資料</v-btn>
       <v-btn elevation="2"  v-on:click="loadYeaylyData" >今年度資料</v-btn>
-
+      <label for="dropdown">選擇年份</label>
+      <select id="yearSelector" v-model="selectedYear">
+        <option v-for="data in availableYears" :key="data" :value="data">
+            {{ data }}
+        </option>
+    </select>
 
       </ul>
       <v-card>
@@ -106,7 +111,7 @@
         </v-card-title>
         <v-data-table 
           :headers="headers" 
-          :items="overviewData" 
+          :items="displayData" 
           class="elevation-1" 
           item-key="key"
           fixed-header
@@ -200,9 +205,21 @@
     let userRef = db.ref('User')
     const App = {
       template: '#app-template',
+      watch: {
+          selectedYear(newYear) {
+            this.displayData = this.overviewData.filter(detail => {
+            const createdDate = new Date(detail.createdTime);
+            const startDate = new Date(newYear - 1, 9, 1); // 2022 年 10 月 1 日
+            const endDate = new Date(newYear, 9, 1); // 2023 年 10 月 1 日
+              
+            return createdDate >= startDate && createdDate < endDate;
+});
+          },
+        },
       data() {
         return {
           overviewData: [],
+          displayData:[],
           summarys: [
             {
               label: "未付款",
@@ -274,7 +291,9 @@
             { text: "總計", value: "totalCount" },
 
           ],
-          search: ''
+          search: '',
+          availableYears: [],
+          selectedYear:0,
 
         }
       },
@@ -297,16 +316,26 @@
               user.key = data.key;
               self.overviewData.push(user);
             });
-
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.address > b.address ? -1 : 1;
-            });
-            self.GetSummary(); 
+            self.refreshData()
           });
+        },
+        refreshData : function () {
+          this.overviewData = this.overviewData.sort(function (a, b) {
+                return a.modifyTime > b.modifyTime ? -1 : 1;
+              });
+              this.displayData = this.overviewData;
+              this.generateAvailableYears()
+              this.GetSummary(); 
         },
         sumField(key) {
           return this.summarys.reduce((a, b) => a + (b[key] || 0), 0)
         },
+        generateAvailableYears: function () {
+                const years = this.overviewData.map(donationDetail => 
+                        new Date(donationDetail.createdTime).getFullYear()
+                    );
+                    this.availableYears= [...new Set(years)].sort(); // 去重並排序
+          },
         GetSummary: function () {
           let self = this;
           this.overviewData.forEach(function (data) {
@@ -378,9 +407,7 @@
                 self.overviewData.push(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.address > b.address ? -1 : 1;
-            });
+            self.refreshData()
           });
 
         },
@@ -396,9 +423,7 @@
                 self.overviewData.push(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.address > b.address ? -1 : 1;
-            });
+            self.refreshData()
           });
 
         },
@@ -415,9 +440,7 @@
               }
             });
             if (self.overviewData.length > 0) {
-              self.overviewData = self.overviewData.sort(function (a, b) {
-                return a.address > b.address ? -1 : 1;
-              });
+              self.refreshData()
             }
             else {
               alert('無此資料');
