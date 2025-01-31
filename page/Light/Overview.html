@@ -68,9 +68,9 @@
           <template v-slot:item.lightType6Count="{ item }">
             {{getDisplayNumber(item.lightType6Count)}}
           </template>
-          <template v-slot:item.lightType7Count="{ item }">
+          <!-- <template v-slot:item.lightType7Count="{ item }">
             {{getDisplayNumber(item.lightType7Count)}}
-          </template>
+          </template> -->
           <template v-slot:item.totalCount="{ item }">
             {{getDisplayNumber(item.totalCount)}}
           </template>
@@ -83,7 +83,7 @@
                 <th class="title">{{ getDisplayNumber(sumField('lightType4Count'))}}</th>
                 <th class="title">{{ getDisplayNumber(sumField('lightType5Count'))}}</th>
                 <th class="title">{{ getDisplayNumber(sumField('lightType6Count'))}}</th>
-                <th class="title">{{ getDisplayNumber(sumField('lightType7Count'))}}</th>
+                <!-- <th class="title">{{ getDisplayNumber(sumField('lightType7Count'))}}</th> -->
                 <th class="title">{{ getDisplayNumber(sumField('totalCount'))}}</th>
             </tr>
         </template>
@@ -157,9 +157,9 @@
           <template v-slot:item.lightType6="{ item }">
             <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType6">
           </template>
-          <template v-slot:item.lightType7="{ item }">
+          <!-- <template v-slot:item.lightType7="{ item }">
             <input type="checkbox"   id="overview_option"  v-model.trim="item.lightType7">
-          </template>
+          </template> -->
           <template v-slot:item.isCash="{ item }">
             <input type="checkbox"   id="overview_option"  v-model.trim="item.isCash">
           </template>
@@ -270,7 +270,7 @@
             { text: '長明燈', value: 'lightType4' },
             { text: '藥師燈', value: 'lightType5' },
             { text: '光明燈', value: 'lightType6' },
-            { text: '姻緣燈', value: 'lightType7' },
+            //{ text: '姻緣燈', value: 'lightType7' },
             { text: '操作', value: 'actions' },
             { text: '現金', value: 'isCash' },
             { text: '匯款', value: 'isBankTransfer' },
@@ -287,7 +287,7 @@
             { text: "長明燈", value: "lightType4Count" },
             { text: "藥師燈", value: "lightType5Count" },
             { text: '光明燈', value: 'lightType6Count' },
-            { text: "姻緣燈", value: "lightType7Count" },
+            //{ text: "姻緣燈", value: "lightType7Count" },
             { text: "總計", value: "totalCount" },
 
           ],
