@@ -261,7 +261,8 @@
         },
         updateTable:function(user){
 
-          let tableValue = Number(user.memo.replace("桌", ""));
+         let match = user.memo.match(/^(\d+)桌/);
+         let tableValue = match ? Number(match[1]) : 0; 
 
        
           if(user.isCash){
@@ -280,6 +281,7 @@
           let self = this
           this.displayData.forEach(function(user) {
             self.updateBalance(user)
+            self.updateTable(user)
         });
 
      
