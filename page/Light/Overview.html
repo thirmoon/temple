@@ -311,6 +311,7 @@
         loadData: function () {
           let self = this;
           this.overviewData = []
+         
           userRef.once("value", function (snapshot) {
 
             snapshot.forEach(function (data) {
@@ -323,6 +324,41 @@
           });
         },
         refreshData : function () {
+          this.summarys= [
+            {
+              label: "未付款",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            },
+            {
+              label: "現金",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            },
+            {
+              label: "匯款",
+              totalCount: 0,
+              lightType1Count: 0,
+              lightType2Count: 0,
+              lightType3Count: 0,
+              lightType4Count: 0,
+              lightType5Count: 0,
+              lightType6Count: 0,
+              lightType7Count: 0
+            }
+          ];
           this.overviewData = this.overviewData.sort(function (a, b) {
                 return a.modifyTime > b.modifyTime ? -1 : 1;
               });
