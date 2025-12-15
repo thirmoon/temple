@@ -158,7 +158,10 @@
   <script>
     /* global Vue, firebase */
 
-    let lightYear = 114;
+    const now = new Date();
+    const isAfterOct1 = now >= new Date(now.getFullYear(), 9, 1);
+    const lightYear = now.getFullYear() - 1911 + (isAfterOct1 ? 1 : 0);
+   
     let config = {
       apiKey: 'AIzaSyBJykOkltgTEmq5bTCA5pxUUCI52Tghx6g',
       authDomain: 'light-1a6d4.firebaseapp.com',
