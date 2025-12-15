@@ -801,10 +801,14 @@
     let peaceEvnetRef = db.ref("PeacefulEvent");
     let lightRef = db.ref('User');
     let donationRef = db.ref('Donation');
-
+    
+   
     const App = {
       template: "#app-template",
       data() {
+          const now = new Date();
+          const isAfterOct1 = now >= new Date(now.getFullYear(), 9, 1);
+          const lightYear = now.getFullYear() - 1911 + (isAfterOct1 ? 1 : 0);
         return {
           enableNameColumn: [true, true, false, false, false, false],
           enableBlessedColumn: [true, false, false, false],
@@ -824,7 +828,7 @@
             lightType5: false,
             lightType6: false,
             lightType7: false,
-            lightYear: 114,
+            lightYear: lightYear,
             memo: '',
             isCash: false,
             isBankTransfer: false
