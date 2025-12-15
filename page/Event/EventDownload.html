@@ -196,7 +196,7 @@
       this.searchResultData;
       let db = firebase.initializeApp(config).database();
       let eventRef = db.ref("Event");
-      let overYeayDate = new Date(2024, 11, 01);
+      let overYearDate = new Date(new Date().getFullYear(), 9, 1);
       new Vue({
         el: "#app",
         data: {
