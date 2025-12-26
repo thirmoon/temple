@@ -308,7 +308,7 @@
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 
-                if(new Date(eventDetail.createdTime) > overYeayDate){
+                if(new Date(eventDetail.createdTime) > overYearDate){
                   eventDetail.key = data.key;
 
                   self.overviewData.push(eventDetail);
