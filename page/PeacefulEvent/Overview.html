@@ -387,7 +387,7 @@
                 let eventDetail = data.val();
                 eventDetail.key = data.key;
 
-                if(new Date(eventDetail.createdTime) > overYeayDate){
+                if(new Date(eventDetail.createdTime) > overYearDate){
                   eventDetail.key = data.key;
                   self.overviewData.push(eventDetail);
               }
