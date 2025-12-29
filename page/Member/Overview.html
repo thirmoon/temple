@@ -1241,6 +1241,9 @@
             createdTime: Date.now()
           });
           this.lightDialog = false;
+          const now = new Date();
+          const isAfterOct1 = now >= new Date(now.getFullYear(), 9, 1);
+          const lightYear = now.getFullYear() - 1911 + (isAfterOct1 ? 1 : 0);
           this.lightDetail = {
             lightType1: false,
             lightType2: false,
@@ -1249,7 +1252,7 @@
             lightType5: false,
             lightType6: false,
             lightType7: false,
-            lightYear: this.lightYear,
+            lightYear: lightYear,
             isCash: false,
             isBankTransfer: false,
             memo: ''
