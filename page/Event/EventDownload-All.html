@@ -207,7 +207,15 @@
         el: "#app",
         watch: {
           selectedYear(newYear) {
-            this.displayData = this.overviewData.filter(   eventDetail =>  new Date(eventDetail.createdTime).getFullYear() === newYear);
+
+            
+              const startDate = new Date(newYear - 1, 9, 1); // 10/01
+    const endDate   = new Date(newYear, 9, 1);     // 10/01
+
+    this.displayData = this.overviewData.filter(eventDetail => {
+        const createdTime = new Date(eventDetail.createdTime);
+        return createdTime >= startDate && createdTime < endDate;
+    });
           },
         },
         data: {
