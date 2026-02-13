@@ -247,11 +247,17 @@
             this.overviewData = [];
             this.total_dinner_amount = 0;
             this.total_eventAmount = 0;
+            const now = new Date();
+            const startDate = new Date(now.getFullYear() - 1, 8, 1); // 9/01 (月份8)
+            const endDate = new Date(now.getFullYear(), 8, 1);       // 今年
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 eventDetail.key = data.key;
-                if(new Date(eventDetail.createdTime) > overYeayDate){
+                if (
+                new Date(eventDetail.createdTime) >= startDate &&
+                new Date(eventDetail.createdTime) < endDate
+              ){
                   eventDetail.key = data.key;
                   self.overviewData.push(eventDetail);
                   self.total_dinner_amount += Number(eventDetail.dinner_amount);
