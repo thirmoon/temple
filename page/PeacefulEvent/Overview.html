@@ -386,8 +386,8 @@
             let overYearDate = new Date(new Date().getFullYear(), 9, 1);
 
             const now = new Date();
-            const startDate = new Date(now.getFullYear() - 1, 8, 1); // 9/01 (月份8)
-            const endDate = new Date(now.getFullYear(), 8, 1);       // 今年
+            const startDate = new Date(now.getFullYear() - 1, 9, 1); // 9/01 (月份8)
+            const endDate = new Date(now.getFullYear(), 9, 1);       // 今年
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();

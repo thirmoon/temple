@@ -303,12 +303,19 @@
           loadData: function () {
             let self = this;
             this.overviewData = [];
+
+            const now = new Date();
+            const startDate = new Date(now.getFullYear() - 1, 9, 1); // 9/01 (月份8)
+            const endDate = new Date(now.getFullYear(), 9, 1);       // 今年
             let overYearDate = new Date(new Date().getFullYear(), 9, 1);
+
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
                 
-                if(new Date(eventDetail.createdTime) > overYearDate){
+                if(
+                   new Date(eventDetail.createdTime) >= startDate &&
+                 new Date(eventDetail.createdTime) < endDate  ){
                   eventDetail.key = data.key;
 
                   self.overviewData.push(eventDetail);
