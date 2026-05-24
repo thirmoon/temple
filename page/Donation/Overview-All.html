@@ -64,9 +64,7 @@
             <template v-slot:item.item2Balance="{ item }">
               {{getDisplayNumber(item.item2Balance)}}
             </template>
-            <template v-slot:item.item3Balance="{ item }">
-              {{getDisplayNumber(item.item3Balance)}}
-            </template>
+      
             <template v-slot:item.item12Balance="{ item }">
               {{getDisplayNumber(item.item12Balance)}}
             </template>
@@ -94,13 +92,14 @@
                   <th class="title">{{ getDisplayNumber(sumField('item10Balance')) }}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item11Balance')) }}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item2Balance'))}}</th>
-                  <th class="title">{{ getDisplayNumber(sumField('item3Balance'))}}</th>
+                 
                   <th class="title">{{ getDisplayNumber(sumField('item12Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item13Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item5Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item14Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item15Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('item7Balance'))}}</th>
+                   <th class="title">{{ getDisplayNumber(sumField('item16Balance'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumField('totalbalance'))}}</th>
               </tr>
           </template>
@@ -189,6 +188,9 @@
             <template v-slot:item.item7="{ item }">
               <input type="checkbox"  v-model.trim="item.item7">
             </template>
+               <template v-slot:item.item16="{ item }">
+              <input type="checkbox"  v-model.trim="item.item16">
+            </template>
             <template v-slot:item.memo="{ item }">
               <input  :name="item.memo" v-model.trim="item.memo">
             </template>
@@ -244,7 +246,8 @@
               item12Balance: 0,
               item13Balance: 0,
               item14Balance: 0,
-              item15Balance: 0
+              item15Balance: 0,
+                item16Balance: 0
 
             },
             {
@@ -264,7 +267,8 @@
               item12Balance: 0,
               item13Balance: 0,
               item14Balance: 0,
-              item15Balance: 0
+              item15Balance: 0,
+                  item16Balance: 0
             },
             {
               label: "匯款",
@@ -283,7 +287,8 @@
               item12Balance: 0,
               item13Balance: 0,
               item14Balance: 0,
-              item15Balance: 0
+              item15Balance: 0,
+                  item16Balance: 0
 
             }
           ],
@@ -321,6 +326,7 @@
             { text: "購地", value: "item14" },
             { text: "其他2", value: "item15" },
             { text: "供品桌", value: "item7" },
+              { text: "愛心物資", value: "item16" },
             { text: "備註", value: "memo" },
             { text: "日期", value: "modifiedDate" },
             { text: "操作", value: "actions" },
@@ -340,6 +346,7 @@
             { text: "購地", value: "item14Balance" },
             { text: "其他2", value: "item15Balance" },
             { text: "供品桌", value: "item7Balance" },
+              { text: "愛心物資", value: "item16Balance" },
             { text: "總計", value: "totalbalance" },
 
           ],
@@ -429,6 +436,8 @@
                 self.balances[index].item13Balance += Number(donation.amount);
               }else if (donation.item15 ) {
                 self.balances[index].item15Balance += Number(donation.amount);
+              }else if (donation.item16 ) {
+                self.balances[index].item16Balance += Number(donation.amount);
               }
               
 

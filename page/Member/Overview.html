@@ -707,6 +707,13 @@
                                 @change="updateTable"
                               ></v-checkbox>
                             </v-col>
+                             <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="donateDetail.item16"
+                                label="愛心物資"
+                                @change="updateTable"
+                              ></v-checkbox>
+                            </v-col>
                              </v-row>
                             <v-row>
                             <v-col
@@ -847,6 +854,7 @@
             item14: false,
             item15: false,
             item7: false,
+            item16:false,
             memo: ''
           },
           eventDetail: {
@@ -1164,6 +1172,9 @@
           if(this.donateDetail.item7){
             this.donateDetail.memo = this.donateDetail.amount/800 + "桌";
           }
+          if(this.donateDetail.item16){
+            this.donateDetail.memo = this.donateDetail.amount/1200 + "桌";
+          }
         },
         addDonation: function () {
           donationRef.push({
@@ -1187,6 +1198,7 @@
             item14: this.donateDetail.item14,
             item15: this.donateDetail.item15,
             item7: this.donateDetail.item7,
+            item16: this.donateDetail.item16,
             modifyTime: Date.now(),
             createdTime: Date.now()
           })
@@ -1208,6 +1220,7 @@
             item14: false,
             item15: false,
             item7: false,
+            item16:false,
             memo: ''
           }
         },

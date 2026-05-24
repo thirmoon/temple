@@ -117,6 +117,8 @@
         <button v-on:click="loadItem14">載入購地資料</button>
         <button v-on:click="loadItem15">載入其他2資料</button>
         <button v-on:click="loadItem7">載入供品桌資料</button>
+        <button v-on:click="loadItem16">載入愛心物資資料</button>
+
         <button v-on:click="loadUnpaidItem">
           載入未付款資料
         </button>
@@ -317,7 +319,7 @@
                  data.item13 ? "金身2" :
                  data.item14 ? "購地" :
                  data.item15 ? "其他2" :
-
+                 data.item15 ? "愛心物資" :
                 "未勾選";
         },
         getDisplayTime:function(time){
@@ -459,6 +461,23 @@
             snapshot.forEach(function (data) {
               let user = data.val();
               if (user.item7 == true ) {
+                user.key = data.key;
+                self.overviewData.push(user);
+                self.updateBalance(user);
+                self.updateTable(user);
+              }
+            });
+            self.refreshData()
+          });
+        },
+          loadItem16: function () {
+          this.clearBalance();
+          let self = this;
+          this.overviewData = []
+          donationRef.once("value", function (snapshot) {
+            snapshot.forEach(function (data) {
+              let user = data.val();
+              if (user.item16 == true ) {
                 user.key = data.key;
                 self.overviewData.push(user);
                 self.updateBalance(user);
