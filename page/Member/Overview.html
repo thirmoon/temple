@@ -714,6 +714,13 @@
                                 @change="updateTable"
                               ></v-checkbox>
                             </v-col>
+                               <v-col cols="12"sm="3">
+                              <v-checkbox
+                                v-model="donateDetail.item17"
+                                label="中殿壁畫改木雕工程"
+                                @change="updateTable"
+                              ></v-checkbox>
+                            </v-col>
                              </v-row>
                             <v-row>
                             <v-col
@@ -855,6 +862,8 @@
             item15: false,
             item7: false,
             item16:false,
+            item17:false,
+
             memo: ''
           },
           eventDetail: {
@@ -1199,6 +1208,8 @@
             item15: this.donateDetail.item15,
             item7: this.donateDetail.item7,
             item16: this.donateDetail.item16,
+            item17: this.donateDetail.item17,
+
             modifyTime: Date.now(),
             createdTime: Date.now()
           })
@@ -1221,6 +1232,8 @@
             item15: false,
             item7: false,
             item16:false,
+            item17:false,
+
             memo: ''
           }
         },
