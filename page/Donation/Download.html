@@ -104,20 +104,20 @@
         <button v-on:click="loadTodayData">載入當天修改資料</button>
         <br>
 
-        <button v-on:click="loadItem1">載入油香功德金資料</button>
-        <button v-on:click="loadItem8">載入高上帝聖誕資料</button>
-        <button v-on:click="loadItem9">載入玄天上帝聖誕資料</button>
-        <button v-on:click="loadItem10">載入祈安法會資料</button>
-        <button v-on:click="loadItem11">載入超拔法會資料</button>
-        <button v-on:click="loadItem2">載入增建/整修工程資料</button>
-        <button v-on:click="loadItem12">載入金身1資料</button>
-        <button v-on:click="loadItem13">載入金身2資料</button>
-        <button v-on:click="loadItem5">載入文昌筆資料</button>
-        <button v-on:click="loadItem14">載入購地資料</button>
-        <button v-on:click="loadItem15">載入其他2資料</button>
-        <button v-on:click="loadItem7">載入供品桌資料</button>
-         <button v-on:click="loadItem16">載入愛心物資資料</button>
-           <button v-on:click="loadItem17">載入中殿壁畫改木雕工程資料</button>
+        <button v-on:click="loadByItem('item1')">載入油香功德金資料</button>
+        <button v-on:click="loadByItem('item8')">載入高上帝聖誕資料</button>
+        <button v-on:click="loadByItem('item9')">載入玄天上帝聖誕資料</button>
+        <button v-on:click="loadByItem('item10')">載入祈安法會資料</button>
+        <button v-on:click="loadByItem('item11')">載入超拔法會資料</button>
+        <button v-on:click="loadByItem('item2')">載入增建/整修工程資料</button>
+        <button v-on:click="loadByItem('item12')">載入金身1資料</button>
+        <button v-on:click="loadByItem('item13')">載入金身2資料</button>
+        <button v-on:click="loadByItem('item5')">載入文昌筆資料</button>
+        <button v-on:click="loadByItem('item14')">載入購地資料</button>
+        <button v-on:click="loadByItem('item15')">載入其他2資料</button>
+        <button v-on:click="loadByItem('item7')">載入供品桌資料</button>
+        <button v-on:click="loadByItem('item16')">載入愛心物資資料</button>
+        <button v-on:click="loadByItem('item17')">載入中殿壁畫改木雕工程資料</button>
 
          
 
@@ -323,316 +323,29 @@
               });
             });
           },
-        loadItem1: function () {
+        loadByItem: function (itemKey) {
           this.clearBalance();
           let self = this;
-          this.overviewData = []
+          this.overviewData = [];
           donationRef.once("value", function (snapshot) {
             snapshot.forEach(function (data) {
               let user = data.val();
-              if (user.item1 == true && new Date(user.createdTime) > overYeayDate) {
+              if (user[itemKey] == true && new Date(user.createdTime) > overYeayDate) {
                 user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem2: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item2 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem3: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item3 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem4: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item4 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem5: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item5 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem6: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item6 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem7: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item7 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-
-                const match =  user.memo.match(/(\d+)桌/);
-                  let tableValue = match ? match[1] : nulll;
-                 for (let i =0; i <Number(tableValue);i++){
+                if (itemKey === 'item7' && user.memo) {
+                  const match = user.memo.match(/(\d+)桌/);
+                  const tableCount = match ? Number(match[1]) : 1;
+                  for (let i = 0; i < tableCount; i++) {
+                    self.overviewData.push(user);
+                  }
+                  self.updateTable(user);
+                } else {
                   self.overviewData.push(user);
-                 }
-
-               
-                self.updateBalance(user);
-                self.updateTable(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem16: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item16 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
+                }
                 self.updateBalance(user);
               }
             });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-          loadItem17: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item17 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem8: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item8 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem9: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item9 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem10: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item10 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem11: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item11 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem12: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item12 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem13: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item13 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem14: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item14 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
-              return a.modifyTime > b.modifyTime ? -1 : 1;
-            });
-          });
-        },
-        loadItem15: function () {
-          this.clearBalance();
-          let self = this;
-          this.overviewData = []
-          donationRef.once("value", function (snapshot) {
-            snapshot.forEach(function (data) {
-              let user = data.val();
-              if (user.item15 == true && new Date(user.createdTime) > overYeayDate) {
-                user.key = data.key;
-                self.overviewData.push(user);
-                self.updateBalance(user);
-              }
-            });
-            self.overviewData = self.overviewData.sort(function (a, b) {
+            self.overviewData.sort(function (a, b) {
               return a.modifyTime > b.modifyTime ? -1 : 1;
             });
           });
