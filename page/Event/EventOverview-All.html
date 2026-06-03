@@ -413,15 +413,25 @@
           },
           copyEventDetail: function (eventDetail ) {
             eventRef.push({
-              name:  eventDetail.name,
-              userId:  eventDetail.userId,
-              eventName: "",
-              firstName: "",
-              address: "",
-              phone: "",
-              memo: "",
-              isFinish: false,
-              amount: 0
+              name:      eventDetail.name,
+              name2:     eventDetail.name2 || "",
+              name3:     eventDetail.name3 || "",
+              name4:     eventDetail.name4 || "",
+              name5:     eventDetail.name5 || "",
+              name6:     eventDetail.name6 || "",
+              userId:    eventDetail.userId,
+              eventName: eventDetail.eventName || "",
+              firstName: eventDetail.firstName || "",
+              blessed2:  eventDetail.blessed2 || "",
+              blessed3:  eventDetail.blessed3 || "",
+              blessed4:  eventDetail.blessed4 || "",
+              address:   eventDetail.address || "",
+              phone:     eventDetail.phone || "",
+              memo:      "",
+              isFinish:  false,
+              amount:    0,
+              createdTime: Date.now(),
+              modifyTime:  Date.now()
             })
             alert("複製完成");
             this.loadData();
