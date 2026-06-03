@@ -809,16 +809,15 @@
     let peaceEvnetRef = db.ref("PeacefulEvent");
     let lightRef = db.ref('User');
     let donationRef = db.ref('Donation');
-    const now = new Date();
-          const isAfterOct1 = now >= new Date(now.getFullYear(), 9, 1);
-          const lightYear = now.getFullYear() - 1911 + (isAfterOct1 ? 1 : 0);
+
+    function getCurrentLightYear() {
+      const now = new Date();
+      return now.getFullYear() - 1911 + (now >= new Date(now.getFullYear(), 9, 1) ? 1 : 0);
+    }
    
     const App = {
       template: "#app-template",
       data() {
-          const now = new Date();
-          const isAfterOct1 = now >= new Date(now.getFullYear(), 9, 1);
-          const lightYear = now.getFullYear() - 1911 + (isAfterOct1 ? 1 : 0);
         return {
           enableNameColumn: [true, true, false, false, false, false],
           enableBlessedColumn: [true, false, false, false],
@@ -838,7 +837,7 @@
             lightType5: false,
             lightType6: false,
             lightType7: false,
-            lightYear: lightYear,
+            lightYear: getCurrentLightYear(),
             memo: '',
             isCash: false,
             isBankTransfer: false
@@ -1261,9 +1260,6 @@
             createdTime: Date.now()
           });
           this.lightDialog = false;
-          const now = new Date();
-          const isAfterOct1 = now >= new Date(now.getFullYear(), 9, 1);
-          const lightYear = now.getFullYear() - 1911 + (isAfterOct1 ? 1 : 0);
           this.lightDetail = {
             lightType1: false,
             lightType2: false,
@@ -1272,7 +1268,7 @@
             lightType5: false,
             lightType6: false,
             lightType7: false,
-            lightYear: lightYear,
+            lightYear: getCurrentLightYear(),
             isCash: false,
             isBankTransfer: false,
             memo: ''
