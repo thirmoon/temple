@@ -202,7 +202,6 @@
       storageBucket: 'light-1a6d4.appspot.com',
       messagingSenderId: '66654715141'
     }
-    this.searchResultData
     let db = firebase.initializeApp(config).database()
     let donationRef = db.ref('Donation')
     let overYeayDate = new Date(2023, 11, 01);
@@ -245,23 +244,16 @@
         getMethod:function(data){
           return data.isCash ? "現金": data.isBankTransfer?"匯款":"尚未付款";
         },
-        updateTable:function(user){
-
-
-          const match =  user.memo.match(/(\d+)桌/);
-                  let tableValue = match ? match[1] : nulll;
-                  self.tableCount += Number(tableValue);
-       
-          if(user.isCash){
-                  let tableCount = Number(this.tableCountByCash.replace("桌", ""))+ Number(tableValue);
-                  this.tableCountByCash=tableCount+"桌";
-                }
-                if(user.isBankTransfer){
-                  let tableCount = Number(this.tableCountByBankTransfer.replace("桌", ""))+ Number(tableValue);
-                  this.tableCountByBankTransfer=tableCount+"桌";
-                }
-                let tableCount = Number(this.tableCountByTotal.replace("桌", ""))+ Number(tableValue);
-                  this.tableCountByTotal=tableCount+"桌";
+        updateTable: function (user) {
+          const match = user.memo.match(/(\d+)桌/);
+          const tableValue = match ? Number(match[1]) : 0;
+          if (user.isCash) {
+            this.tableCountByCash = (Number(this.tableCountByCash.replace("桌", "")) + tableValue) + "桌";
+          }
+          if (user.isBankTransfer) {
+            this.tableCountByBankTransfer = (Number(this.tableCountByBankTransfer.replace("桌", "")) + tableValue) + "桌";
+          }
+          this.tableCountByTotal = (Number(this.tableCountByTotal.replace("桌", "")) + tableValue) + "桌";
         },
         updateBalance:function(user){
           if(user.isCash){

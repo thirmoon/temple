@@ -374,7 +374,7 @@
       },
       methods: {
         loadData: function () {
-          let self = this;2
+          let self = this;
           let overYeayDate = new Date(2024, 11, 01);
           this.balance = 0;
           this.overviewData = [];
@@ -437,8 +437,8 @@
               }  else if (donation.item7 && new Date(donation.modifyTime) > overYeayDate) {
                 if (donation.memo && donation.memo.includes("桌")) {
 
-                  const match =  donation.memo.match(/(\d+)桌/);
-                  let tableValue = match ? match[1] : nulll;
+                  const match = donation.memo.match(/(\d+)桌/);
+                  const tableValue = match ? Number(match[1]) : 0;
                   self.tableCount += Number(tableValue);
                 }
                 self.balances[index].item7Balance += Number(donation.amount);

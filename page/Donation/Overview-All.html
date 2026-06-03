@@ -373,8 +373,7 @@
       },
       methods: {
         loadData: function () {
-          let self = this;2
-         
+          let self = this;
           this.balance = 0;
           this.overviewData = [];
           donationRef.once("value", function (snapshot) {
@@ -472,9 +471,8 @@
 
           if (yes) {
             donationRef.child(data.key).remove();
-            this.loadData()
+            this.loadData();
           }
-          this.loadData();
         },
         copyDonation: function (donation) {
           donationRef.push({
