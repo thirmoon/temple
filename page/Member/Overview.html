@@ -814,6 +814,30 @@
       const now = new Date();
       return now.getFullYear() - 1911 + (now >= new Date(now.getFullYear(), 9, 1) ? 1 : 0);
     }
+
+    function getDefaultDonateDetail() {
+      return {
+        amount: 0,
+        isCash: false,
+        isBankTransfer: false,
+        item1: false,
+        item2: false,
+        item3: false,
+        item5: false,
+        item7: false,
+        item8: false,
+        item9: false,
+        item10: false,
+        item11: false,
+        item12: false,
+        item13: false,
+        item14: false,
+        item15: false,
+        item16: false,
+        item17: false,
+        memo: ''
+      };
+    }
    
     const App = {
       template: "#app-template",
@@ -842,28 +866,7 @@
             isCash: false,
             isBankTransfer: false
           },
-          donateDetail: {
-            amount: 0,
-            isCash: false,
-            isBankTransfer: false,
-            item1: false,
-            item8: false,
-            item9: false,
-            item10: false,
-            item11: false,
-            item2: false,
-            item3: false,
-            item12: false,
-            item13: false,
-            item5: false,
-            item14: false,
-            item15: false,
-            item7: false,
-            item16:false,
-            item17:false,
-
-            memo: ''
-          },
+          donateDetail: getDefaultDonateDetail(),
           eventDetail: {
             name: "",
             name2: "",
@@ -1212,28 +1215,7 @@
             createdTime: Date.now()
           })
           this.donateDialog = false;
-          this.donateDetail = {
-            amount: 0,
-            isCash: false,
-            isBankTransfer: false,
-            item1: false,
-            item8: false,
-            item9: false,
-            item10: false,
-            item11: false,
-            item2: false,
-            item3: false,
-            item12: false,
-            item13: false,
-            item5: false,
-            item14: false,
-            item15: false,
-            item7: false,
-            item16:false,
-            item17:false,
-
-            memo: ''
-          }
+          this.donateDetail = getDefaultDonateDetail();
         },
         addLighting: function () {
           lightRef.push({
