@@ -123,7 +123,7 @@
         },
         getDisplayDate(createdTime) {
           let ct = new Date(createdTime);
-          let result = (ct.getFullYear() - 1911).toString() + '年' + (ct.getMonth() + 1).toString() + '月' +(ct.getDay() + 1).toString()+ '日';
+          let result = (ct.getFullYear() - 1911).toString() + '年' + (ct.getMonth() + 1).toString() + '月' + ct.getDate().toString() + '日';
           if (result.includes('Na')) {
             return '';
           }
