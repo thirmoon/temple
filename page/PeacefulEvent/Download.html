@@ -248,8 +248,10 @@
             this.total_dinner_amount = 0;
             this.total_eventAmount = 0;
             const now = new Date();
-            const startDate = new Date(now.getFullYear() - 1, 9, 1); // 9/01 (月份8)
-            const endDate = new Date(now.getFullYear(), 9, 1);       // 今年
+            const thisOct = new Date(now.getFullYear(), 9, 1);
+            const isAfterOct = now >= thisOct;
+            const startDate = isAfterOct ? thisOct : new Date(now.getFullYear() - 1, 9, 1);
+            const endDate = isAfterOct ? new Date(now.getFullYear() + 1, 9, 1) : thisOct;
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
