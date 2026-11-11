@@ -411,7 +411,7 @@
                 freeLimit=4;
               }
               let count = Number(eventDetail.dinner_meat_count) + Number(eventDetail.dinner_vegetable_count);
-              let dinnerAmount =  count-freeLimit> 0 ? (count-freeLimit)*500:0;
+              let dinnerAmount =  count-freeLimit> 0 ? (count-freeLimit)*700:0;
               eventDetail.dinner_amount = dinnerAmount;
           },
           getDuplicateLabel: function (label,count) {
@@ -492,7 +492,7 @@
               if (number == undefined || number == null) {
             return 0;
             }
-          return number + '(' + (number*500).toLocaleString()+')'
+          return number + '(' + (number*700).toLocaleString()+')'
           },
           getDisplayNumber: function (number) {
               if (number == undefined || number == null) {
