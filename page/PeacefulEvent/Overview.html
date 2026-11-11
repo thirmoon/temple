@@ -317,7 +317,9 @@
             uniqueEventSummary:[],
             duplicateEventSummary:[],
             uniqueEventOption:{
-            '圓明斗姥首':38000,
+            '天靈高上帝首':108000,
+            '玄穹高上帝首':88000,
+            '圓明斗姥首':66000,
             '中斗神君首':26000,
             '東斗神君首':20000,
             '南斗神君首':20000,
@@ -357,7 +359,7 @@
             '月老神君首':16000,
 
             '仁聖大帝首':16000,
-            '平安首':6000,
+            '平安首':7000,
           },
             search: "",
           };
@@ -386,8 +388,10 @@
             let overYearDate = new Date(new Date().getFullYear(), 9, 1);
 
             const now = new Date();
-            const startDate = new Date(now.getFullYear() - 1, 9, 1); // 9/01 (月份8)
-            const endDate = new Date(now.getFullYear(), 9, 1);       // 今年
+            const thisOct = new Date(now.getFullYear(), 9, 1);
+            const isAfterOct = now >= thisOct;
+            const startDate = isAfterOct ? thisOct : new Date(now.getFullYear() - 1, 9, 1);
+            const endDate = isAfterOct ? new Date(now.getFullYear() + 1, 9, 1) : thisOct;
             eventRef.once("value", function (snapshot) {
               snapshot.forEach(function (data) {
                 let eventDetail = data.val();
