@@ -193,6 +193,7 @@
                     label="平安宴(葷)"
                     v-model="peacefulEventDetail.dinner_meat_count"
                     required
+                    @change="updateDinnerAmount"
                   ></v-text-field>
                     </v-col>
                     <v-col
@@ -203,6 +204,7 @@
                   label="平安宴(素)"
                   v-model="peacefulEventDetail.dinner_vegetable_count"
                   required
+                  @change="updateDinnerAmount"
                 ></v-text-field>
                   </v-col>
                   <v-col
@@ -895,6 +897,7 @@
             dinner_vegetable_count: 0,
             dinner_meat_count: 0,
             dinner_free_count: 0,
+            dinner_amount: 0,
             memo: "",
             isCash: false,
             isBankTransfer: false,
@@ -1058,6 +1061,17 @@
         },
         updatePeacefulEventAmount(selectObj){
           this.peacefulEventDetail.eventAmount = this.peacefulEventOption[selectObj];
+          this.updateDinnerAmount();
+        },
+        updateDinnerAmount(){
+          let count = Number(this.peacefulEventDetail.dinner_meat_count)
+                    + Number(this.peacefulEventDetail.dinner_vegetable_count);
+          if(this.peacefulEventDetail.eventName == ''){
+            this.peacefulEventDetail.dinner_amount = count * 1200;
+          } else {
+            let freeLimit = this.peacefulEventDetail.eventName == '平安首' ? 2 : 4;
+            this.peacefulEventDetail.dinner_amount = count > freeLimit ? (count - freeLimit) * 700 : 0;
+          }
         },
         changeRoute(selectObj) {
 
@@ -1150,17 +1164,7 @@
         },
         addPeacefulEvent: function () {
 
-          let freeLimit = 0;
-          if(this.peacefulEventDetail.eventName==''){
-            freeLimit = 0;
-          } else if ( this.peacefulEventDetail.eventName=="平安首"){
-                freeLimit=2;
-              }else {
-                freeLimit=4;
-              }
-
-          let count = Number(this.peacefulEventDetail.dinner_meat_count)
-                    +Number(this.peacefulEventDetail.dinner_vegetable_count)
+          this.updateDinnerAmount();
           peaceEvnetRef.push({
             userId: this.selectUser.key,
             name: this.peacefulEventDetail.name,
@@ -1176,7 +1180,7 @@
             dinner_vegetable_count: this.peacefulEventDetail.dinner_vegetable_count,
             dinner_meat_count: this.peacefulEventDetail.dinner_meat_count,
             dinner_free_count: this.peacefulEventDetail.dinner_free_count,
-            dinner_amount: count>freeLimit ? (count-freeLimit) *700: 0,
+            dinner_amount: this.peacefulEventDetail.dinner_amount,
             modifyTime: Date.now(),
             createdTime: Date.now(),
           });
@@ -1274,6 +1278,7 @@
             dinner_vegetable_count: 0,
             dinner_meat_count: 0,
             dinner_free_count: 0,
+            dinner_amount: 0,
             memo: "",
             isCash: false,
             isBankTransfer: false,

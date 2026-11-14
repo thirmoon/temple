@@ -416,18 +416,13 @@
             });
           },
           UpdateDinnerAmount:function(eventDetail){
-            let freeLimit = 0;
-            if(eventDetail.eventName==''){
-              freeLimit=0
-            }
-              else if ( eventDetail.eventName=="平安首"){
-                freeLimit=2;
-              }else{
-                freeLimit=4;
-              }
               let count = Number(eventDetail.dinner_meat_count) + Number(eventDetail.dinner_vegetable_count);
-              let dinnerAmount =  count-freeLimit> 0 ? (count-freeLimit)*700:0;
-              eventDetail.dinner_amount = dinnerAmount;
+              if(eventDetail.eventName==''){
+                eventDetail.dinner_amount = count * 1200;
+              } else {
+                let freeLimit = eventDetail.eventName == '平安首' ? 2 : 4;
+                eventDetail.dinner_amount = count > freeLimit ? (count - freeLimit) * 700 : 0;
+              }
           },
           getDuplicateLabel: function (label,count) {
             return label +"("+count+")";
