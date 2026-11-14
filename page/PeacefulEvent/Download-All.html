@@ -248,10 +248,12 @@
             return dateTime.toISOString().slice(0, 10);
           },
           generateAvailableYears: function () {
-                const years = this.overviewData.map(eventDetail => 
-                        new Date(eventDetail.createdTime).getFullYear()
-                    );
-                    this.availableYears= [...new Set(years)].sort(); // 去重並排序
+                const years = this.overviewData.map(eventDetail => {
+                        const d = new Date(eventDetail.createdTime);
+                        // 10月以後屬於下一個年度
+                        return d.getMonth() >= 9 ? d.getFullYear() + 1 : d.getFullYear();
+                    });
+                    this.availableYears= [...new Set(years)].sort();
           },
           loadUnpaidItem: function () {
             let self = this;
