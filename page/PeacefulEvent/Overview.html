@@ -94,9 +94,11 @@
             :headers="duplicateEventHeaders"
             :items="duplicateEventSummary"
             class="elevation-1"
-            item-key="key"
+            item-key="label"
             fixed-header
-            height="285px">
+            height="285px"
+            show-expand
+            :single-expand="false">
             <template v-slot:item.label="{ item }">
               {{getDuplicateLabel(item.label,item.count)}}
             </template>
@@ -112,9 +114,18 @@
             <template v-slot:item.total_amount="{ item }">
               {{getDisplayNumber(item.total_amount)}}
             </template>
+            <template v-slot:expanded-item="{ headers, item }">
+              <td :colspan="headers.length" style="padding: 8px 16px; background: #f5f5f5;">
+                <span v-if="item.names.length === 0">（無報名者）</span>
+                <span v-for="(n, i) in item.names" :key="i">
+                  {{ n }}<span v-if="i < item.names.length - 1">、</span>
+                </span>
+              </td>
+            </template>
             <template slot="body.append">
               <tr class="pink--text">
                   <th class="title">總計</th>
+                  <th class="title"></th>
                   <th class="title">{{ getDisplayNumber(sumDuplicateField('unpiad_amount'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumDuplicateField('cash_amount'))}}</th>
                   <th class="title">{{ getDisplayNumber(sumDuplicateField('bank_transfer_amount'))}}</th>
@@ -450,7 +461,8 @@
                   cash_amount:0,
                   bank_transfer_amount:0,
                   total_amount:0,
-                  count:0
+                  count:0,
+                  names:[]
                 }
               )
             }
@@ -493,6 +505,7 @@
               }
               self.duplicateEventSummary[eventIndex].total_amount += Number(eventDetail.eventAmount);
               self.duplicateEventSummary[eventIndex].count++;
+              if(eventDetail.name) self.duplicateEventSummary[eventIndex].names.push(eventDetail.name);
               }
             
            
