@@ -580,16 +580,20 @@
             eventRef.push({
               name:  eventDetail.name,
               userId:  eventDetail.userId,
-              eventName: "",
+              eventName: eventDetail.eventName,
               phone:eventDetail.phone,
               address: eventDetail.address,
-              eventAmount: 0,
+              eventAmount: eventDetail.eventAmount,
               dinner_vegetable_count: 0,
               dinner_meat_count: 0,
               dinner_free_count: 0,
+              dinner_amount: 0,
               memo: "",
               isCash: false,
-              isBankTransfer: false
+              isBankTransfer: false,
+              isCashDinner: false,
+              isBankTransferDinner: false,
+              createdTime: Date.now()
             })
             alert("複製完成");
             this.loadData();
